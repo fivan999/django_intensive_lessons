@@ -14,8 +14,18 @@ venv\Scripts\activate
 ```
 
 Установите нужные зависимости
+
+Для запуска
 ```
-pip install -r requirements.txt
+pip install -r base_requirements.txt
+```
+Для разработки
+```
+pip install -r dev_requirements.txt
+```
+Для тестов
+```
+pip install -r test_requirements.txt
 ```
 ### Запуск
 Создайте .env файл в папке shop.<br>
@@ -23,7 +33,7 @@ pip install -r requirements.txt
 В нем нужно указать значения:<br>
 - SECRET_KEY (ваш секретный ключ, по умолчанию - default)<br>
 - DEBUG (включать ли режим дебага, по умолчанию - True)<br>
-- ALLOWED_HOSTS (если включен DEBUG, он ['*'], иначе по умолчанию  - [])<br>
+- ALLOWED_HOSTS (если включен DEBUG, он ['*'], иначе по умолчанию  - 127.0.0.1)<br>
 
 Запустите проект:
 ```
