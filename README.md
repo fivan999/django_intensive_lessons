@@ -23,7 +23,7 @@ pip install -r base_requirements.txt
 ```
 pip install -r dev_requirements.txt
 ```
-Для
+Для тестов
 ```
 pip install -r test_requirements.txt
 ```
