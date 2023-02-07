@@ -4,7 +4,7 @@
 
 ### Клонировать репозиторий
 ```
-git clone https://github.com/fivan999.django_intensive_lessons
+git clone https://github.com/fivan999/django_intensive_lessons
 ```
 ### Установка зависимостей
 Создайте виртуальное окружение и активируйте его
@@ -14,8 +14,18 @@ venv\Scripts\activate
 ```
 
 Установите нужные зависимости
+
+Для запуска
 ```
-pip install -r requirements.txt
+pip install -r base_requirements.txt
+```
+Для разработки
+```
+pip install -r dev_requirements.txt
+```
+Для тестирования
+```
+pip install -r test_requirements.txt
 ```
 ### Запуск
 Создайте .env файл в папке shop.<br>
