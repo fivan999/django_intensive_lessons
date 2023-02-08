@@ -1,5 +1,6 @@
 # django_intensive_lessons
 [![Python package](https://github.com/fivan999/django_intensive_lessons/actions/workflows/python-package.yml/badge.svg?branch=main)](https://github.com/fivan999/django_intensive_lessons/actions/workflows/python-package.yml)
+[![flake8 Lint](https://github.com/fivan999/django_intensive_lessons/actions/workflows/flake8.yml/badge.svg?branch=main)](https://github.com/fivan999/django_intensive_lessons/actions/workflows/flake8.yml)
 ## Установка и запуск
 
 ### Клонировать репозиторий
