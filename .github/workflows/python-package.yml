@@ -5,7 +5,7 @@ name: Python package
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "devel" ]
   pull_request:
     branches: [ "main", "develop" ]
 
@@ -30,14 +30,9 @@ jobs:
           pip install -r base_requirements.txt
           pip install -r test_requirements.txt
           pip install -r dev_requirements.txt
-
-      - uses: actions/checkout@v3
-      - name: Set up Python environment
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
+  
       - name: flake8 Lint
-т        with:
+        with:
           plugins: "flake8-import-order==0.18.2 pep8-naming==0.13.3 flake8-quotes==3.3.2"
         run: |
           flake8 . --count --show-source --statistics
