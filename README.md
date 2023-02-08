@@ -17,15 +17,15 @@ venv\Scripts\activate
 
 Для запуска
 ```
-pip install -r base_requirements.txt
+pip install -r requirements/base.txt
 ```
 Для разработки
 ```
-pip install -r dev_requirements.txt
+pip install -r dev_requirements/dev.txt
 ```
 Для тестов
 ```
-pip install -r test_requirements.txt
+pip install -r test_requirements/test.txt
 ```
 ### Запуск
 Создайте .env файл в папке shop.<br>
