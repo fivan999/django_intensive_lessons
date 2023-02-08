@@ -22,9 +22,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: flake8 Lint
+        uses: py-actions/flake8@v2
         with:
           plugins: "flake8-import-order==0.18.2 pep8-naming==0.13.3 flake8-quotes==3.3.2"
         run: |
-          pip install -r dev_requirements.txt
           flake8 . --count --show-source --statistics
           black . --check
