@@ -34,6 +34,7 @@ pip install -r test_requirements.txt
 - SECRET_KEY (ваш секретный ключ, по умолчанию - default)<br>
 - DEBUG (включать ли режим дебага, по умолчанию - True)<br>
 - ALLOWED_HOSTS (если включен DEBUG, он ['*'], иначе по умолчанию  - 127.0.0.1)<br>
+Пример .env файла - .env.example
 
 Запустите проект:
 ```
