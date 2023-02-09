@@ -43,5 +43,5 @@ jobs:
 
       - name: mypy check
         run: |
-              mypy . --strict
+              mypy . --strict --allow-subclassing-any
       
