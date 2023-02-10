@@ -36,7 +36,7 @@ jobs:
               flake8 . --count --show-source --statistics
               black . --check
               mypy . --strict --allow-subclassing-any
-              pylint . --rcfile="../pyproject.toml"
+              pylint . --rcfile="pyproject.toml"
       
       - name: flake8 Lint
         uses: py-actions/flake8@v2
