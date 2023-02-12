@@ -27,7 +27,8 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY', default='default')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', default='True') == 'True'
+DEBUG_ENV = os.getenv('DEBUG', default='True').lower()
+DEBUG = DEBUG_ENV in ('true', 'y', '1', 'yes', 't')
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +58,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
 ]
 
 ROOT_URLCONF = 'shop.urls'

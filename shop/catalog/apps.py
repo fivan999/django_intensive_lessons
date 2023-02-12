@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class CatalogConfig(AppConfig):
-    """Base configuration class for Catalog application"""
+    """Базовый класс для приложения catalog"""
 
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'catalog'

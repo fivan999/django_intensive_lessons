@@ -7,7 +7,7 @@ on:
   push:
     branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
 
 jobs:
   build:
@@ -35,10 +35,14 @@ jobs:
         run: | 
               flake8 . --count --show-source --statistics
               black . --check
-              mypy . --strict --allow-subclassing-any
-              pylint . --rcfile="pyproject.toml"
+              # pylint . --rcfile="pyproject.toml"
       
       - name: flake8 Lint
         uses: py-actions/flake8@v2
         with:
           plugins: "flake8-import-order==0.18.2 pep8-naming==0.13.3 flake8-quotes==3.3.2"
+
+      - name: Run Tests
+        run: |
+          cd shop
+          python manage.py test

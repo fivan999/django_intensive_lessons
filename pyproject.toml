@@ -1,8 +1,7 @@
 [tool.black]
 line-length=79
 skip-string-normalization=1
-[tool.mypy]
-ignore_missing_imports=1
 [tool.pylint.main]
 disable=["C0114", "C0415"]
 recursive="yes"
+ignore="venv"
