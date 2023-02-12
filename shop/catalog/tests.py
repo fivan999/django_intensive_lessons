@@ -1,4 +1,8 @@
+from typing import Any
+
 from django.test import Client, TestCase
+
+from parameterized import parameterized
 
 
 class StaticUrlTests(TestCase):
@@ -9,15 +13,25 @@ class StaticUrlTests(TestCase):
         response = Client().get('/catalog')
         self.assertEqual(response.status_code, 301)
 
-    def test_item_detail_endpoint(self) -> None:
+    @parameterized.expand(
+        [
+            [1, 200],
+            [0, 200],
+            ['aboba', 404],
+            ['s', 404],
+            [33, 200],
+            [999, 200],
+            [1, 200],
+            [-1, 404],
+            [-0, 200],
+        ]
+    )
+    def test_item_detail_endpoint(self, test_case: Any, expected: Any) -> None:
         """тестируем отдельные товары"""
-        test_cases = [1, 0, 'aboba', 's', 33, 999, '1']
-
-        for test_case in test_cases:
-            response = Client().get(f'/catalog/{test_case}')
-            if isinstance(test_case, int) or (
-                isinstance(test_case, str) and test_case.isdigit()
-            ):
-                self.assertEqual(response.status_code, 200, test_case)
-            else:
-                self.assertEqual(response.status_code, 404, test_case)
+        response = Client().get(f'/catalog/{test_case}')
+        self.assertEqual(
+            response.status_code,
+            expected,
+            f'Expected: {expected}, got: {response.status_code}, '
+            f'testcase: {test_case}',
+        )
