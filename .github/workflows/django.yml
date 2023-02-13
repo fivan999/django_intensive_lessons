@@ -29,4 +29,5 @@ jobs:
 
     - name: Run Tests
       run: |
+        cd shop
         python manage.py test

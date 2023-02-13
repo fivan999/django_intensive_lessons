@@ -1,5 +1,6 @@
 # django_intensive_lessons
 [![Python package](https://github.com/fivan999/django_intensive_lessons/actions/workflows/python-package.yml/badge.svg?branch=main)](https://github.com/fivan999/django_intensive_lessons/actions/workflows/python-package.yml)
+[![Django CI](https://github.com/fivan999/django_intensive_lessons/actions/workflows/django.yml/badge.svg)](https://github.com/fivan999/django_intensive_lessons/actions/workflows/django.yml)
 ## Установка и запуск
 
 ### Клонировать репозиторий
