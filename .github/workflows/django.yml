@@ -25,9 +25,8 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements/base.txt
-        pip install -r requirements/dev.txt
+        pip install -r requirements/test.txt
 
     - name: Run Tests
       run: |
-        cd shop
-        python manage.py test
+        python shop/manage.py test
