@@ -9,4 +9,4 @@ class GraderZeroIntConverter:
 
     def to_url(self, value: int) -> str:
         """сконвертируем из числа в url"""
-        return str(value)
+        return f'{value}/'
