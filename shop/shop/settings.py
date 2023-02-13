@@ -27,8 +27,13 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY', default='default')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG_ENV = os.getenv('DEBUG', default='True').lower()
-DEBUG = DEBUG_ENV in ('true', 'y', '1', 'yes', 't')
+DEBUG = os.getenv('DEBUG', default='True').lower() in (
+    'true',
+    'y',
+    '1',
+    'yes',
+    't',
+)
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
@@ -47,8 +52,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
 ]
+
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,6 +67,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+if os.environ.get('REVERSE_RUSSIAN_WORDS', default='false').lower() in (
+    'true',
+    'y',
+    '1',
+    'yes',
+    't',
+):
+    MIDDLEWARE.append('catalog.middleware.ReverseMiddleware')
 
 INTERNAL_IPS = os.environ.get('INTERNAL_IPS', default='127.0.0.1').split()
 

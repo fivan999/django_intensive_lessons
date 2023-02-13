@@ -1,5 +1,6 @@
 # django_intensive_lessons
 [![Python package](https://github.com/fivan999/django_intensive_lessons/actions/workflows/python-package.yml/badge.svg?branch=main)](https://github.com/fivan999/django_intensive_lessons/actions/workflows/python-package.yml)
+[![Django CI](https://github.com/fivan999/django_intensive_lessons/actions/workflows/django.yml/badge.svg)](https://github.com/fivan999/django_intensive_lessons/actions/workflows/django.yml)
 ## Установка и запуск
 
 ### Клонировать репозиторий
@@ -34,7 +35,8 @@ pip install -r test_requirements/test.txt
 - SECRET_KEY (ваш секретный ключ, по умолчанию - default)<br>
 - DEBUG (включать ли режим дебага, по умолчанию - True)<br>
 - ALLOWED_HOSTS (если включен DEBUG, он ['*'], иначе по умолчанию - 127.0.0.1)<br>
-- INTERNAL_IPS (для debug_toolbar, по умолчанию - 127.0.0.1)
+- INTERNAL_IPS (для debug_toolbar, по умолчанию - 127.0.0.1) <br>
+- REVERSE_RUSSIAN_WORDS (нужен ли переворот русских слов при каждом 10м GET запросе, по умолчанию - false)<br>
 Пример .env файла - .env.example
 
 Запустите проект:
