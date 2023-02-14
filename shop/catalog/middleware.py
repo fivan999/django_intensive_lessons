@@ -18,19 +18,19 @@ class ReverseRussianMiddleware:
             self.counter += 1
             if self.counter % 10 == 0:
                 words = response.content.decode()
-                return HttpResponse(reverse_russian_words(words))
+                return HttpResponse(self.reverse_russian_words(words))
         return response
 
-
-def reverse_russian_words(text: str) -> str:
-    """переворачиваем русские слова в тексте"""
-    result = ''
-    russian_word = ''
-    for symbol in text:
-        if bool(re.search('[а-я]', symbol.lower())):
-            russian_word += symbol
-        else:
-            result += russian_word[::-1]
-            result += symbol
-            russian_word = ''
-    return result + russian_word[::-1]
+    @staticmethod
+    def reverse_russian_words(text: str) -> str:
+        """переворачиваем русские слова в тексте"""
+        result = ''
+        russian_word = ''
+        for symbol in text:
+            if bool(re.search('[а-я]', symbol.lower())):
+                russian_word += symbol
+            else:
+                result += russian_word[::-1]
+                result += symbol
+                russian_word = ''
+        return result + russian_word[::-1]

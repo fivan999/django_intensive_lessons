@@ -1,11 +1,11 @@
 from typing import Any
 
 from django.conf import settings
-from django.test import Client, TestCase
+from django.test import Client, TestCase, override_settings
 
 from parameterized import parameterized
 
-from .middleware import reverse_russian_words
+from .middleware import ReverseRussianMiddleware
 
 
 class StaticUrlTests(TestCase):
@@ -95,57 +95,40 @@ class StaticUrlTests(TestCase):
 class TestReverseRussianWordsMiddleware(TestCase):
     """тестируем работоспособность ReverseRussianMiddleware"""
 
-    default_middleware = [
-        'django.middleware.security.SecurityMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-        'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    disabled = settings.MIDDLEWARE
+    enabled = settings.MIDDLEWARE + [
+        'catalog.middleware.ReverseRussianMiddleware',
     ]
 
+    @override_settings(MIDDLEWARE=disabled)
     def test_home_status_code_without_reverse(self) -> None:
         """тестируем статус код без reverse middleware"""
-        settings.MIDDLEWARE = (
-            TestReverseRussianWordsMiddleware.default_middleware
-        )
-
         response = Client().get('')
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(MIDDLEWARE=disabled)
     def test_home_content_without_middleware(self) -> None:
         """тестируем контент страницы без reverse middleware"""
-        settings.MIDDLEWARE = (
-            TestReverseRussianWordsMiddleware.default_middleware
-        )
-
         client = Client()
         responses = [client.get('').content.decode() for _ in range(10)]
         self.assertEqual(
             len(set(responses)), 1, 'Значения ответов не одинаковые'
         )
 
+    @override_settings(MIDDLEWARE=enabled)
     def test_home_status_code_with_middleware(self) -> None:
         """тестируем статус код с reverse middleware"""
-        settings.MIDDLEWARE = (
-            TestReverseRussianWordsMiddleware.default_middleware
-        ) + ['catalog.middleware.ReverseRussianMiddleware']
-
         response = Client().get('')
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(MIDDLEWARE=enabled)
     def test_home_content_with_middleware(self) -> None:
         """тестируем контент страницы с reverse middleware"""
-        settings.MIDDLEWARE = (
-            TestReverseRussianWordsMiddleware.default_middleware
-        ) + ['catalog.middleware.ReverseRussianMiddleware']
-
         client = Client()
         responses = [client.get('').content.decode() for _ in range(10)]
         test_passed = (
             len(set(responses[0:-1])) == 1
-            and reverse_russian_words(responses[0]) == responses[-1]
+            and ReverseRussianMiddleware.reverse_russian_words(responses[0])
+            == responses[-1]
         )
         self.assertEqual(test_passed, True)
