@@ -96,6 +96,9 @@ class TestReverseRussianWordsMiddleware(TestCase):
     """тестируем работоспособность ReverseRussianMiddleware"""
 
     disabled = settings.MIDDLEWARE
+    disabled.remove(
+        'catalog.middleware.ReverseRussianMiddleware'
+    )
     enabled = settings.MIDDLEWARE + [
         'catalog.middleware.ReverseRussianMiddleware',
     ]
