@@ -66,14 +66,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'catalog.middleware.ReverseRussianMiddleware',
 ]
 
 REVERSE_RUSSIAN_WORDS = os.environ.get(
     'REVERSE_RUSSIAN_WORDS', default='false'
 ).lower() in ('true', 'y', '1', 'yes', 't')
-
-if REVERSE_RUSSIAN_WORDS:
-    MIDDLEWARE.append('catalog.middleware.ReverseRussianMiddleware')
 
 INTERNAL_IPS = os.environ.get('INTERNAL_IPS', default='127.0.0.1').split()
 

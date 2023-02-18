@@ -1,6 +1,5 @@
 from typing import Any
 
-from django.conf import settings
 from django.test import Client, TestCase, override_settings
 
 from parameterized import parameterized
@@ -95,20 +94,13 @@ class StaticUrlTests(TestCase):
 class TestReverseRussianWordsMiddleware(TestCase):
     """тестируем работоспособность ReverseRussianMiddleware"""
 
-    disabled = settings.MIDDLEWARE
-    if 'catalog.middleware.ReverseRussianMiddleware' in disabled:
-        disabled.remove('catalog.middleware.ReverseRussianMiddleware')
-    enabled = settings.MIDDLEWARE + [
-        'catalog.middleware.ReverseRussianMiddleware',
-    ]
-
-    @override_settings(MIDDLEWARE=disabled)
+    @override_settings(REVERSE_RUSSIAN_WORDS=False)
     def test_home_status_code_without_reverse(self) -> None:
         """тестируем статус код без reverse middleware"""
         response = Client().get('')
         self.assertEqual(response.status_code, 200)
 
-    @override_settings(MIDDLEWARE=disabled)
+    @override_settings(REVERSE_RUSSIAN_WORDS=False)
     def test_home_content_without_middleware(self) -> None:
         """тестируем контент страницы без reverse middleware"""
         client = Client()
@@ -117,13 +109,13 @@ class TestReverseRussianWordsMiddleware(TestCase):
             len(set(responses)), 1, 'Значения ответов не одинаковые'
         )
 
-    @override_settings(MIDDLEWARE=enabled)
+    @override_settings(REVERSE_RUSSIAN_WORDS=True)
     def test_home_status_code_with_middleware(self) -> None:
         """тестируем статус код с reverse middleware"""
         response = Client().get('')
         self.assertEqual(response.status_code, 200)
 
-    @override_settings(MIDDLEWARE=enabled)
+    @override_settings(REVERSE_RUSSIAN_WORDS=True)
     def test_home_content_with_middleware(self) -> None:
         """тестируем контент страницы с reverse middleware"""
         client = Client()
