@@ -1,5 +1,4 @@
-import catalog.validators
-
+import django.core.validators
 import django.db.models
 
 
@@ -31,7 +30,7 @@ class AbstractCatalogModelWithSlug(AbstractCatalogModel):
         'Уникальное поле',
         help_text='Уникальное для каждого элемента поле',
         validators=[
-            catalog.validators.slug_validator,
+            django.core.validators.validate_slug,
         ],
         unique=True,
         max_length=200

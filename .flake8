@@ -7,4 +7,4 @@ exclude =
     env/
 
 per-file-ignores = 
-    */migrations/*:E501,I201
+    */migrations/*:E501,I201,I100

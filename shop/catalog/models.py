@@ -19,10 +19,13 @@ class Category(Core.models.AbstractCatalogModelWithSlug):
     """модель Category"""
 
     weight = django.db.models.PositiveSmallIntegerField(
-        'Вес',
+        verbose_name='Вес',
         help_text=(
             'Введите вес товара (положительное целое число от 0 до 32767)'
         ),
+        validators=[
+            django.core.validators.MaxValueValidator(32767),
+        ],
         default=100
     )
 
@@ -36,7 +39,7 @@ class Item(Core.models.AbstractCatalogModel):
     """модель Item"""
 
     text = django.db.models.TextField(
-        'Описание',
+        verbose_name='Описание',
         help_text='Введите описание',
         validators=[
             catalog.validators.awesome_validator,
@@ -44,12 +47,14 @@ class Item(Core.models.AbstractCatalogModel):
     )
     category = django.db.models.ForeignKey(
         Category,
+        verbose_name='Категория',
         on_delete=django.db.models.CASCADE,
         related_name='catalog_items',
         help_text='Категория, к которой принадлежит товар'
     )
     tags = django.db.models.ManyToManyField(
         Tag,
+        verbose_name='Тэги',
         related_name='catalog_items',
         help_text='Тэги товара'
     )
