@@ -1,6 +1,7 @@
 [tool.black]
 line-length=79
 skip-string-normalization=1
+exclude=["*/migrations/", "venv/", "env/"]
 [tool.pylint.main]
 disable=["C0114", "C0415"]
 recursive="yes"

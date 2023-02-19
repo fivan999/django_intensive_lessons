@@ -1,0 +1,10 @@
+[flake8]
+ignore = 
+    W503
+
+exclude = 
+    venv/,
+    env/
+
+per-file-ignores = 
+    */migrations/*:E501,I201
