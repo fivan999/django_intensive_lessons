@@ -185,7 +185,7 @@ class ModelsTests(TestCase):
             f'Ошибка создания slug модели: {test_case}'
         )
 
-    @parameterized.expand([(-1,), (-32767,), (32768,)])
+    @parameterized.expand([(-1,), (-32767,), (32768,), (0,)])
     def test_create_invalid_weight(self, test_case: int) -> None:
         """тестируем создание невалидного weight"""
         start_count = Category.objects.count()
@@ -205,7 +205,7 @@ class ModelsTests(TestCase):
             f'Ошибка создания weight модели: {test_case}'
         )
 
-    @parameterized.expand([(1,), (32767,), (0,)])
+    @parameterized.expand([(1,), (32767,), (15000,)])
     def test_create_valid_weight(self, test_case: int) -> None:
         """тестируем создание валидного weight"""
         start_count = Category.objects.count()
@@ -227,5 +227,5 @@ class ModelsTests(TestCase):
     def tearDown(self):
         """чистим бд после каждого теста"""
         Item.objects.all().delete()
-        Tag.obects.all().delete()
+        Tag.objects.all().delete()
         Category.objects.all().delete()
