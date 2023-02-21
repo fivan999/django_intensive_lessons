@@ -1,12 +1,12 @@
-import Core.models
-
 import catalog.validators
+
+import core.models
 
 import django.core.validators
 import django.db.models
 
 
-class Tag(Core.models.AbstractCatalogModelWithSlug):
+class Tag(core.models.AbstractCatalogModelWithSlug):
     """модель Tag"""
 
     class Meta:
@@ -15,7 +15,7 @@ class Tag(Core.models.AbstractCatalogModelWithSlug):
         db_table = 'catalog_tag'
 
 
-class Category(Core.models.AbstractCatalogModelWithSlug):
+class Category(core.models.AbstractCatalogModelWithSlug):
     """модель Category"""
 
     weight = django.db.models.PositiveSmallIntegerField(
@@ -25,6 +25,7 @@ class Category(Core.models.AbstractCatalogModelWithSlug):
         ),
         validators=[
             django.core.validators.MaxValueValidator(32767),
+            django.core.validators.MinValueValidator(1),
         ],
         default=100
     )
@@ -35,7 +36,7 @@ class Category(Core.models.AbstractCatalogModelWithSlug):
         db_table = 'catalog_category'
 
 
-class Item(Core.models.AbstractCatalogModel):
+class Item(core.models.AbstractCatalogModel):
     """модель Item"""
 
     text = django.db.models.TextField(

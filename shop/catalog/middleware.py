@@ -28,7 +28,7 @@ class ReverseRussianMiddleware:
         result = ''
         russian_word = ''
         for symbol in text:
-            if bool(re.search('[а-я]', symbol.lower())):
+            if re.fullmatch('[а-я]', symbol.lower()):
                 russian_word += symbol
             else:
                 result += russian_word[::-1]
