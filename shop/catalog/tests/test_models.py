@@ -200,7 +200,7 @@ class ModelsTests(TestCase):
             self.item.save()
 
         self.assertEqual(
-            Tag.objects.count(),
+            Category.objects.count(),
             start_count,
             f'Ошибка создания weight модели: {test_case}'
         )
@@ -219,10 +219,7 @@ class ModelsTests(TestCase):
         self.item.save()
 
         self.assertEqual(
-            Tag.objects.count(),
+            Category.objects.count(),
             start_count + 1,
             f'Ошибка создания weight модели: {test_case}'
         )
-
-    def tearDown(self):
-        Category.objects.all().delete()

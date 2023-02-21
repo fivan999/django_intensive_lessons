@@ -25,7 +25,7 @@ class Category(core.models.AbstractCatalogModelWithSlug):
         ),
         validators=[
             django.core.validators.MaxValueValidator(32767),
-            django.core.validators.MinValueValidator(1),
+            django.core.validators.MinValueValidator(0),
         ],
         default=100
     )

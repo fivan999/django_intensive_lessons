@@ -6,12 +6,12 @@ class AbstractCatalogModel(django.db.models.Model):
     """абстрактая модель для Catalog"""
 
     is_published = django.db.models.BooleanField(
-        'Опубликован',
+        verbose_name='Опубликован',
         help_text='Опубликован или нет',
         default=True
     )
     name = django.db.models.CharField(
-        'Имя',
+        verbose_name='Имя',
         help_text='Введите имя',
         max_length=150
     )
@@ -27,7 +27,7 @@ class AbstractCatalogModelWithSlug(AbstractCatalogModel):
     """абстрактная модель для Catalog с полем slug"""
 
     slug = django.db.models.CharField(
-        'Уникальное поле',
+        verbose_name='Уникальное поле',
         help_text='Уникальное для каждого элемента поле',
         validators=[
             django.core.validators.validate_slug,
