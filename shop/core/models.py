@@ -2,16 +2,16 @@ import django.core.validators
 import django.db.models
 
 
-class AbstractCatalogModel(django.db.models.Model):
+class AbstractNameTextModel(django.db.models.Model):
     """абстрактая модель для Catalog"""
 
     is_published = django.db.models.BooleanField(
-        verbose_name='Опубликован',
+        verbose_name='опубликован',
         help_text='Опубликован или нет',
         default=True
     )
     name = django.db.models.CharField(
-        verbose_name='Имя',
+        verbose_name='имя',
         help_text='Введите имя',
         max_length=150
     )
@@ -23,11 +23,11 @@ class AbstractCatalogModel(django.db.models.Model):
         return self.name[:15]
 
 
-class AbstractCatalogModelWithSlug(AbstractCatalogModel):
+class AbstractSlugModel(django.db.models.Model):
     """абстрактная модель для Catalog с полем slug"""
 
     slug = django.db.models.CharField(
-        verbose_name='Уникальное поле',
+        verbose_name='уникальное поле',
         help_text='Уникальное для каждого элемента поле',
         validators=[
             django.core.validators.validate_slug,
