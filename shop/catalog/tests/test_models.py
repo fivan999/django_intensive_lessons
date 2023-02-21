@@ -223,3 +223,9 @@ class ModelsTests(TestCase):
             start_count + 1,
             f'Ошибка создания weight модели: {test_case}'
         )
+
+    def tearDown(self):
+        """чистим бд после каждого теста"""
+        Item.objects.all().delete()
+        Tag.obects.all().delete()
+        Category.objects.all().delete()

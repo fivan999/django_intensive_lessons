@@ -16,6 +16,3 @@ def awesome_validator(value: str) -> None:
             current_word = ''
     if current_word not in ('роскошно', 'превосходно'):
         raise ValidationError('Нет слова превосходно или роскошно')
-
-
-# def validate_must_contain(*values):
