@@ -1,0 +1,135 @@
+[
+{
+    "model": "catalog.tag",
+    "pk": 1,
+    "fields": {
+        "is_published": true,
+        "name": "Тэг 1",
+        "slug": "secure1"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 2,
+    "fields": {
+        "is_published": true,
+        "name": "Тэг 2",
+        "slug": "secure2"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 3,
+    "fields": {
+        "is_published": true,
+        "name": "Тэг 3",
+        "slug": "secure3"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 4,
+    "fields": {
+        "is_published": true,
+        "name": "Тэг 4",
+        "slug": "secure4"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 5,
+    "fields": {
+        "is_published": true,
+        "name": "Тэг 5",
+        "slug": "secure5"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "is_published": true,
+        "name": "Категория 1",
+        "slug": "secure1",
+        "weight": 100
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+        "is_published": true,
+        "name": "Категория 2",
+        "slug": "secure2",
+        "weight": 100
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 1,
+    "fields": {
+        "is_published": true,
+        "name": "Товар1",
+        "text": "роскошно",
+        "category": 2,
+        "tags": [
+            1
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 2,
+    "fields": {
+        "is_published": true,
+        "name": "Товар 2",
+        "text": "Превосходно",
+        "category": 3,
+        "tags": [
+            3
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 3,
+    "fields": {
+        "is_published": true,
+        "name": "Товар 3",
+        "text": "абема роскошно",
+        "category": 2,
+        "tags": [
+            2,
+            5
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 4,
+    "fields": {
+        "is_published": true,
+        "name": "Товар 4",
+        "text": "Утюг (превосходное)",
+        "category": 2,
+        "tags": [
+            2,
+            4
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 5,
+    "fields": {
+        "is_published": true,
+        "name": "Абоба",
+        "text": "Роскошное пальте",
+        "category": 3,
+        "tags": [
+            4,
+            5
+        ]
+    }
+}
+]

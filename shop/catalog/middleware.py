@@ -1,5 +1,6 @@
 import re
 
+from django.conf import settings
 from django.http import HttpRequest, HttpResponse
 
 
@@ -14,7 +15,7 @@ class ReverseRussianMiddleware:
     def __call__(self, request: HttpRequest) -> HttpResponse:
         """обрабатываем запрос"""
         response = self.get_response(request)
-        if request.method == 'GET':
+        if request.method == 'GET' and settings.REVERSE_RUSSIAN_WORDS:
             self.counter += 1
             if self.counter % 10 == 0:
                 words = response.content.decode()
@@ -27,7 +28,7 @@ class ReverseRussianMiddleware:
         result = ''
         russian_word = ''
         for symbol in text:
-            if bool(re.search('[а-я]', symbol.lower())):
+            if re.fullmatch('[а-я]', symbol.lower()):
                 russian_word += symbol
             else:
                 result += russian_word[::-1]

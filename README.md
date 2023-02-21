@@ -22,11 +22,11 @@ pip install -r requirements/base.txt
 ```
 Для разработки
 ```
-pip install -r dev_requirements/dev.txt
+pip install -r requirements/dev.txt
 ```
 Для тестов
 ```
-pip install -r test_requirements/test.txt
+pip install -r requirements/test.txt
 ```
 ### Запуск
 Создайте .env файл в папке shop.<br>
@@ -43,3 +43,5 @@ pip install -r test_requirements/test.txt
 ```
 python shop/manage.py runserver
 ```
+## БД
+![](./resourses/db.png)
