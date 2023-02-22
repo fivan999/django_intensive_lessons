@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('is_published', models.BooleanField(default=True, help_text='Опубликован или нет', verbose_name='Опубликован')),
                 ('name', models.CharField(help_text='Введите имя', max_length=150, verbose_name='Имя')),
-                ('text', models.TextField(help_text='Введите описание', validators=[catalog.validators.awesome_validator], verbose_name='Описание')),
+                ('text', models.TextField(help_text='Введите описание', verbose_name='Описание')),
                 ('category', models.ForeignKey(help_text='Категория, к которой принадлежит товар', on_delete=django.db.models.deletion.CASCADE, related_name='catalog_items', to='catalog.category')),
                 ('tags', models.ManyToManyField(help_text='Тэги товара', related_name='catalog_items', to='catalog.Tag')),
             ],

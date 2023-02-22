@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='item',
             name='text',
-            field=models.TextField(help_text='Введите описание', validators=[catalog.validators.awesome_validator], verbose_name='описание'),
+            field=models.TextField(help_text='Введите описание', verbose_name='описание'),
         ),
         migrations.AlterField(
             model_name='tag',

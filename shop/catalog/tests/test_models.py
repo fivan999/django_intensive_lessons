@@ -229,3 +229,4 @@ class ModelsTests(TestCase):
         Item.objects.all().delete()
         Tag.objects.all().delete()
         Category.objects.all().delete()
+        super(ModelsTests, self).tearDown()
