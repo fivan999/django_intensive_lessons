@@ -29,11 +29,20 @@ class AbstractSlugModel(django.db.models.Model):
     slug = django.db.models.SlugField(
         verbose_name='уникальное поле',
         help_text='Уникальное для каждого элемента поле',
-        validators=[
-            django.core.validators.validate_slug,
-        ],
         unique=True,
         max_length=200
+    )
+
+    class Meta:
+        abstract = True
+
+
+class AbstractKeywordModel(django.db.models.Model):
+    """абстрактная модель с полем keyword"""
+
+    keyword = django.db.models.CharField(
+        editable=False,
+        max_length=150
     )
 
     class Meta:
