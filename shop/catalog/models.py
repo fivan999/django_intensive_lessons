@@ -45,7 +45,7 @@ class Item(core.models.AbstractNameTextModel):
         verbose_name='описание',
         help_text='Введите описание',
         validators=[
-            catalog.validators.awesome_validator,
+            catalog.validators.ValidateMustContain('превосходно', 'роскошно'),
         ]
     )
     category = django.db.models.ForeignKey(

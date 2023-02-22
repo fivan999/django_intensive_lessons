@@ -19,14 +19,14 @@ class AbstractNameTextModel(django.db.models.Model):
     class Meta:
         abstract = True
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name[:15]
 
 
 class AbstractSlugModel(django.db.models.Model):
     """абстрактная модель для Catalog с полем slug"""
 
-    slug = django.db.models.CharField(
+    slug = django.db.models.SlugField(
         verbose_name='уникальное поле',
         help_text='Уникальное для каждого элемента поле',
         validators=[
