@@ -13,23 +13,21 @@ from parameterized import parameterized
 class ModelsTests(TestCase):
     """тестируем модели"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         """настройки перед тестированием"""
-        super().setUpClass()
-
-        cls.category = Category.objects.create(
+        self.category = Category.objects.create(
             is_published=True,
             name='Тестовая категория',
             slug='test_slug',
             weight=100
         )
 
-        cls.tag = Tag.objects.create(
+        self.tag = Tag.objects.create(
             is_published=True,
             name='Тестовый тэг',
             slug='test_slug'
         )
+        super(ModelsTests, self).setUp()
 
     @parameterized.expand(
         [
