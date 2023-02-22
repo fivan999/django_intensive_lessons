@@ -1,5 +1,8 @@
+import re
+
 import django.core.validators
 import django.db.models
+from django.core.exceptions import ValidationError
 
 
 class AbstractNameTextModel(django.db.models.Model):
@@ -47,3 +50,29 @@ class AbstractKeywordModel(django.db.models.Model):
 
     class Meta:
         abstract = True
+
+    def clean(self, *args, **kwargs) -> None:
+        normalized_name = self.normalize_models_name(self.name)
+        for item in self.__class__.objects.all():
+            if item.keyword == normalized_name:
+                raise ValidationError('Уже есть тэг с похожим именем')
+        self.keyword = normalized_name
+        super(AbstractKeywordModel, self).clean(*args, **kwargs)
+
+    @staticmethod
+    def normalize_models_name(value: str) -> str:
+        """нормализуем имя модели"""
+        # похожие русские буквы заменяем на английские
+        replace_letters = {
+            'е': 'e',
+            'о': 'o',
+            'с': 'c',
+            'х': 'x',
+            'а': 'a',
+            'у': 'y',
+        }
+        result = ''
+        for symbol in value.lower():
+            if re.fullmatch('[а-яa-z0-9]', symbol):
+                result += replace_letters.get(symbol, symbol)
+        return result

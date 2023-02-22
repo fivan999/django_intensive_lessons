@@ -1,11 +1,9 @@
 import catalog.validators
 
 import core.models
-from core.utils import normalize_models_name
 
 import django.core.validators
 import django.db.models
-from django.core.exceptions import ValidationError
 
 
 class Tag(
@@ -19,14 +17,6 @@ class Tag(
         verbose_name = 'тэг'
         verbose_name_plural = 'тэги'
         db_table = 'catalog_tag'
-
-    def clean(self, *args, **kwargs) -> None:
-        normalized_name = normalize_models_name(self.name)
-        for item in Tag.objects.all():
-            if item.keyword == normalized_name:
-                raise ValidationError('Уже есть категория с похожим именем')
-        self.keyword = normalized_name
-        super(Tag, self).clean(*args, **kwargs)
 
 
 class Category(
@@ -52,14 +42,6 @@ class Category(
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
         db_table = 'catalog_category'
-
-    def clean(self, *args, **kwargs) -> None:
-        normalized_name = normalize_models_name(self.name)
-        for item in Category.objects.all():
-            if item.keyword == normalized_name:
-                raise ValidationError('Уже есть тэг с похожим именем')
-        self.keyword = normalized_name
-        super(Category, self).clean(*args, **kwargs)
 
 
 class Item(core.models.AbstractNameTextModel):
