@@ -1,10 +1,16 @@
+from catalog.models import Item
+
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
 
 def item_list(request: HttpRequest) -> HttpResponse:
     """Страница со всеми элементами"""
-    return render(request, 'catalog/list.html')
+    context = {
+        'items': Item.objects.all()
+    }
+    print(context['items'][0].main_image.image.url)
+    return render(request, 'catalog/list.html', context=context)
 
 
 def item_detail(request: HttpRequest, item_num: int) -> HttpResponse:

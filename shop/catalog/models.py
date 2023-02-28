@@ -1,9 +1,12 @@
 import catalog.validators
 
+from ckeditor.fields import RichTextField
+
 import core.models
 
 import django.core.validators
 import django.db.models
+from django.urls import reverse
 
 
 class Tag(
@@ -47,7 +50,7 @@ class Category(
 class Item(core.models.AbstractNameTextModel):
     """модель Item"""
 
-    text = django.db.models.TextField(
+    text = RichTextField(
         verbose_name='описание',
         help_text='Введите описание',
         validators=[
@@ -72,3 +75,40 @@ class Item(core.models.AbstractNameTextModel):
         verbose_name = 'товар'
         verbose_name_plural = 'товары'
         db_table = 'catalog_item'
+
+    def get_absolute_url(self) -> str:
+        """путь к item_detail"""
+        return reverse('item_detail', kwargs={'item_num': self.pk})
+
+
+class ImageToItem(core.models.AbstractImageModel):
+    """модель Image"""
+
+    item = django.db.models.OneToOneField(
+        Item,
+        verbose_name='превью',
+        related_name='main_image',
+        on_delete=django.db.models.CASCADE,
+        help_text='Главное изображение для товара'
+    )
+
+    class Meta:
+        verbose_name = 'главное изображение'
+        verbose_name_plural = 'главные изображения'
+        db_table = 'catalog_image'
+
+
+class GaleryToItem(core.models.AbstractImageModel):
+    """модель Galery"""
+
+    item = django.db.models.ForeignKey(
+        Item,
+        verbose_name='галерея',
+        related_name='galery',
+        on_delete=django.db.models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = 'изображение'
+        verbose_name_plural = 'галерея изображений'
+        db_table = 'catalog_galery'
