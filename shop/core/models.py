@@ -55,9 +55,11 @@ class AbstractKeywordModel(django.db.models.Model):
     def clean(self, *args, **kwargs) -> None:
         """переопределение метода clean"""
         normalized_name = self.normalize_models_name(self.name)
-        for item in self.__class__.objects.all():
-            if item.keyword == normalized_name:
-                raise ValidationError('Уже есть тэг с похожим именем')
+        if (
+            self.__class__.objects.filter(keyword=normalized_name).
+            exclude(id=self.id).count() > 0
+        ):
+            raise ValidationError('Уже есть тэг с похожим именем')
         self.keyword = normalized_name
         super(AbstractKeywordModel, self).clean(*args, **kwargs)
 

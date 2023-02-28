@@ -9,13 +9,15 @@ def item_list(request: HttpRequest) -> HttpResponse:
     context = {
         'items': Item.objects.all()
     }
-    print(context['items'][0].main_image.image.url)
     return render(request, 'catalog/list.html', context=context)
 
 
 def item_detail(request: HttpRequest, item_num: int) -> HttpResponse:
     """Страница с одним элементом"""
-    return HttpResponse(f'<body><h1>Подробно элемент {item_num}</h1></body>')
+    context = {
+        'item_pk': item_num
+    }
+    return render(request, 'catalog/detail.html', context=context)
 
 
 def grader_zero_int_item_detail(

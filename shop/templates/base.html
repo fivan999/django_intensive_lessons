@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{% static 'js/bootstrap.bundle.min.js' %}">
     <title>{% block title %}{% endblock %}</title>
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100">
     {% include 'includes/header.html' %}
     <main>
       {% block content %}Контента нет{% endblock %}
