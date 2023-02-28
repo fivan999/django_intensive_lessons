@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'django_dump_load_utf8',
     'sorl.thumbnail',
     'django_cleanup.apps.CleanupConfig',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 if DEBUG:
@@ -164,3 +166,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'

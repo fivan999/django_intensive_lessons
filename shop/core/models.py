@@ -3,6 +3,7 @@ import re
 import django.core.validators
 import django.db.models
 from django.core.exceptions import ValidationError
+from django.utils.html import mark_safe
 
 
 class AbstractNameTextModel(django.db.models.Model):
@@ -52,6 +53,7 @@ class AbstractKeywordModel(django.db.models.Model):
         abstract = True
 
     def clean(self, *args, **kwargs) -> None:
+        """переопределение метода clean"""
         normalized_name = self.normalize_models_name(self.name)
         for item in self.__class__.objects.all():
             if item.keyword == normalized_name:
@@ -70,9 +72,35 @@ class AbstractKeywordModel(django.db.models.Model):
             'х': 'x',
             'а': 'a',
             'у': 'y',
+            'р': 'p',
+            'м': 'm',
+            'т': 't',
         }
         result = ''
         for symbol in value.lower():
             if re.fullmatch('[а-яa-z0-9]', symbol):
                 result += replace_letters.get(symbol, symbol)
         return result
+
+
+class AbstractImageModel(django.db.models.Model):
+    """абстрактная модель с картинкой"""
+
+    image = django.db.models.ImageField(
+        verbose_name='картинка',
+        upload_to='catalog/',
+        help_text='Загрузите картинку',
+    )
+
+    def image_thumb(self):
+        """вывод изображения"""
+        if self.image:
+            return mark_safe(
+                f'<img src="{self.image.url}" width="50">'
+            )
+        return 'Нет изображения'
+
+    image_thumb.short_description = 'картинка'
+
+    class Meta:
+        abstract = True

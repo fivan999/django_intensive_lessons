@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block title %}О нас{% endblock %}
+
 {% block content %}
-    <h1>О сайте</h1>
+<div class="container col-xxl-8">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+      <div class="col-10 col-sm-8 col-lg-6">
+        <img src="{% static 'img/about_main.jpeg' %}" class="img-fluid border rounded-3 shadow-lg " width="100%">
+      </div>
+      <div class="col-lg-6">
+        <h1 class="display-5 fw-bold lh-1 mb-3">О нас</h1>
+        <p class="lead">Крутой интернет-магазин для самых избирательных и требовательных людей. В нашем ассортименте есть всё, что вам нужно и не только.</p>
+        <div class="d-grid gap-2 d-md-flex">
+          <a href="{% url 'item_list' %}"><button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Вперёд!</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
