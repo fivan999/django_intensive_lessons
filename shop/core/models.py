@@ -5,8 +5,6 @@ import django.db.models
 from django.core.exceptions import ValidationError
 from django.utils.html import mark_safe
 
-from sorl.thumbnail import get_thumbnail
-
 
 class AbstractNameTextModel(django.db.models.Model):
     """абстрактая модель для Catalog"""
