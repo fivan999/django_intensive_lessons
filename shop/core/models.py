@@ -3,7 +3,8 @@ import re
 import django.core.validators
 import django.db.models
 from django.core.exceptions import ValidationError
-from django.utils.html import mark_safe
+
+from sorl.thumbnail import get_thumbnail
 
 
 class AbstractNameTextModel(django.db.models.Model):
@@ -94,15 +95,11 @@ class AbstractImageModel(django.db.models.Model):
         help_text='Загрузите картинку',
     )
 
-    def image_thumb(self):
-        """вывод изображения"""
-        if self.image:
-            return mark_safe(
-                f'<img src="{self.image.url}" width="50">'
-            )
-        return 'Нет изображения'
-
-    image_thumb.short_description = 'картинка'
+    def get_image_300x300(self):
+        """обрезаем картинку"""
+        return get_thumbnail(
+            self.image, '300x300', crop='center', quality=60
+        )
 
     class Meta:
         abstract = True
