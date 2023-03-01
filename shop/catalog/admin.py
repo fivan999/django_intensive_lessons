@@ -5,13 +5,11 @@ import django.contrib.admin
 
 class ImageToItemAdmin(django.contrib.admin.TabularInline):
     model = catalog.models.ImageToItem
-    readonly_fields = ('image_thumb',)
 
 
 class GaleryToItemAdmin(django.contrib.admin.TabularInline):
     model = catalog.models.GaleryToItem
     extra = 1
-    readonly_fields = ('image_thumb',)
 
 
 @django.contrib.admin.register(catalog.models.Item)
@@ -21,16 +19,12 @@ class ItemAdmin(django.contrib.admin.ModelAdmin):
     list_display = (
         'name',
         'is_published',
-        'get_image',
+        'image_thumb',
     )
     inlines = (ImageToItemAdmin, GaleryToItemAdmin, )
     list_editable = ('is_published',)
     list_display_links = ('name',)
     filter_horizontal = ('tags',)
-
-    @django.contrib.admin.display(description='фото товара')
-    def get_image(self, obj):
-        return obj.main_image.image_thumb()
 
 
 @django.contrib.admin.register(catalog.models.Tag)

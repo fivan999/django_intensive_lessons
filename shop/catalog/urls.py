@@ -6,6 +6,8 @@ from . import views
 
 register_converter(converters.GraderZeroIntConverter, 'grader_zero_int')
 
+app_name = 'catalog'
+
 urlpatterns = [
     path('', views.item_list, name='item_list'),
     path('<int:item_num>/', views.item_detail, name='item_detail'),

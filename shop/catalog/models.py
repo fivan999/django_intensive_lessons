@@ -7,6 +7,7 @@ import core.models
 import django.core.validators
 import django.db.models
 from django.urls import reverse
+from django.utils.html import mark_safe
 
 
 class Tag(
@@ -76,9 +77,20 @@ class Item(core.models.AbstractNameTextModel):
         verbose_name_plural = 'товары'
         db_table = 'catalog_item'
 
+    def image_thumb(self):
+        """вывод изображения"""
+        if self.main_image:
+            return mark_safe(
+                f'<img src="{self.main_image.get_image_300x300().url}" '
+                'width="50">'
+            )
+        return 'Нет изображения'
+
+    image_thumb.short_description = 'картинка'
+
     def get_absolute_url(self) -> str:
         """путь к item_detail"""
-        return reverse('item_detail', kwargs={'item_num': self.pk})
+        return reverse('catalog:item_detail', kwargs={'item_num': self.pk})
 
 
 class ImageToItem(core.models.AbstractImageModel):

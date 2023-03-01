@@ -6,25 +6,23 @@
 {% block title %}Каталог товаров{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1 class="display-5 fw-bold lh-1 mb-3">Каталог товаров</h1>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        {% for item in items %}
-            <div class="col">
-                <div class="card shadow-sm">
-                    {% thumbnail item.main_image.image "300x300" crop="center" quality=60 as cropped_image %}
-                        <img class="bg-placeholder-img card-img-top" src="{{ cropped_image.url }}" width="{{ cropped_image.width }}" height="{{ cropped_image.height }}" style="object-fit: contain;">
-                    {% endthumbnail %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ item.name|safe }}</h5>
-                        <p class="card-text">{{ item.text|safe }}</p>
-                        <!-- <p class="card-text text-muted">Категория: {{ item.category }}</p>
-                        <p class="card-text text-muted">Тэги: {% for tag in item.tags.all %}{{ tag.name }}{% if forloop.last != True %}, {% endif %}{% endfor %}</p> -->
-                        <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Смотреть</a>
-                    </div>
-                </div>
+  <div class="container mb-4">
+    <h1 class="display-5 fw-bold lh-1 mb-3">Каталог товаров</h1>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      {% for item in items %}
+        <div class="col col-12 col-md-6 col-xl-3">
+          <div class="card shadow-sm">
+            <img class="bg-placeholder-img card-img-top" src="{{ item.main_image.image.url }}" width="300" height="300" style="object-fit: contain;">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.name|safe }}</h5>
+              <p class="card-text">{{ item.text|safe }}</p>
+              <!-- <p class="card-text text-muted">Категория: {{ item.category }}</p>
+              <p class="card-text text-muted">Тэги: {% for tag in item.tags.all %}{{ tag.name }}{% if forloop.last != True %}, {% endif %}{% endfor %}</p> -->
+              <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Смотреть</a>
             </div>
-        {% endfor %}
+          </div>
         </div>
+      {% endfor %}
     </div>
+  </div>
 {% endblock %}

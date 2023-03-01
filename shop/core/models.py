@@ -3,7 +3,8 @@ import re
 import django.core.validators
 import django.db.models
 from django.core.exceptions import ValidationError
-from django.utils.html import mark_safe
+
+from sorl.thumbnail import get_thumbnail
 
 
 class AbstractNameTextModel(django.db.models.Model):
@@ -55,9 +56,11 @@ class AbstractKeywordModel(django.db.models.Model):
     def clean(self, *args, **kwargs) -> None:
         """переопределение метода clean"""
         normalized_name = self.normalize_models_name(self.name)
-        for item in self.__class__.objects.all():
-            if item.keyword == normalized_name:
-                raise ValidationError('Уже есть тэг с похожим именем')
+        if (
+            self.__class__.objects.filter(keyword=normalized_name).
+            exclude(id=self.id).count() > 0
+        ):
+            raise ValidationError('Уже есть тэг с похожим именем')
         self.keyword = normalized_name
         super(AbstractKeywordModel, self).clean(*args, **kwargs)
 
@@ -92,15 +95,11 @@ class AbstractImageModel(django.db.models.Model):
         help_text='Загрузите картинку',
     )
 
-    def image_thumb(self):
-        """вывод изображения"""
-        if self.image:
-            return mark_safe(
-                f'<img src="{self.image.url}" width="50">'
-            )
-        return 'Нет изображения'
-
-    image_thumb.short_description = 'картинка'
+    def get_image_300x300(self):
+        """обрезаем картинку"""
+        return get_thumbnail(
+            self.image, '300x300', crop='center', quality=60
+        )
 
     class Meta:
         abstract = True

@@ -1,0 +1,200 @@
+[
+{
+    "model": "catalog.tag",
+    "pk": 1,
+    "fields": {
+        "is_published": true,
+        "name": "Техника",
+        "slug": "secure1",
+        "keyword": "texникa"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 2,
+    "fields": {
+        "is_published": true,
+        "name": "Овощи",
+        "slug": "secure2",
+        "keyword": "oвoщи"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 3,
+    "fields": {
+        "is_published": true,
+        "name": "Фрукты",
+        "slug": "secure3",
+        "keyword": "фpyкtы"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 4,
+    "fields": {
+        "is_published": true,
+        "name": "Баллистика",
+        "slug": "secure4",
+        "keyword": "бaллиctикa"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 5,
+    "fields": {
+        "is_published": true,
+        "name": "Ядерное оружие",
+        "slug": "secure5",
+        "keyword": "ядepнoeopyжиe"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "is_published": true,
+        "name": "Для дома",
+        "slug": "secure1",
+        "keyword": "длядoma",
+        "weight": 100
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "is_published": true,
+        "name": "Еда",
+        "slug": "secure2",
+        "keyword": "eдa",
+        "weight": 100
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+        "is_published": true,
+        "name": "Ракеты",
+        "slug": "secure3",
+        "keyword": "paкetы",
+        "weight": 100
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 4,
+    "fields": {
+        "is_published": true,
+        "name": "Утюг",
+        "text": "<p>превосходно гладит</p>",
+        "category": 1,
+        "tags": [
+            1
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 5,
+    "fields": {
+        "is_published": true,
+        "name": "Помидор",
+        "text": "<p>Превосходно помидор</p>",
+        "category": 2,
+        "tags": [
+            2
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 6,
+    "fields": {
+        "is_published": true,
+        "name": "Яблоко",
+        "text": "<p>Превосходно зеленое яблоко</p>",
+        "category": 1,
+        "tags": [
+            3
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 7,
+    "fields": {
+        "is_published": true,
+        "name": "Ракетный комплекс \"Ярс\"",
+        "text": "<p>Превосходно баллистическая ракета</p>",
+        "category": 3,
+        "tags": [
+            4,
+            5
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 8,
+    "fields": {
+        "is_published": true,
+        "name": "Тополь-М",
+        "text": "<p>Роскошно баллистическая ракета</p>",
+        "category": 3,
+        "tags": [
+            4,
+            5
+        ]
+    }
+},
+{
+    "model": "catalog.imagetoitem",
+    "pk": 2,
+    "fields": {
+        "image": "catalog/aboba.jpeg",
+        "item": 4
+    }
+},
+{
+    "model": "catalog.imagetoitem",
+    "pk": 3,
+    "fields": {
+        "image": "catalog/помидор.jpg",
+        "item": 5
+    }
+},
+{
+    "model": "catalog.imagetoitem",
+    "pk": 4,
+    "fields": {
+        "image": "catalog/яблоко.jpg",
+        "item": 6
+    }
+},
+{
+    "model": "catalog.imagetoitem",
+    "pk": 5,
+    "fields": {
+        "image": "catalog/ярс.jpeg",
+        "item": 7
+    }
+},
+{
+    "model": "catalog.imagetoitem",
+    "pk": 6,
+    "fields": {
+        "image": "catalog/тополь.jpg",
+        "item": 8
+    }
+},
+{
+    "model": "catalog.galerytoitem",
+    "pk": 2,
+    "fields": {
+        "image": "catalog/aboba_TtyXGdP.jpeg",
+        "item": 4
+    }
+}
+]
