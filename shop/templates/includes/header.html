@@ -1,8 +1,6 @@
 {% load static %}
 {% load i18n %}
 
-{% get_current_language as LANGUAGE_CODE %}
-
 <header class="p-3 text-dark ">
   <div class="container p-2 border-bottom">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
@@ -13,20 +11,20 @@
       {% with request.resolver_match.view_name as view_name %}
         <ul class="nav nav-tabs col-12 col-md-auto mb-2 justify-content-center mb-md-0">
           <li>
-            <a href="{% url 'homepage:homepage' %}" class="nav-link text-dark {% if view_name == 'homepage:homepage' %}active{% endif %}">{% if LANGUAGE_CODE != 'ru' %}Main page{% else %}Главная страница{% endif %}</a>
+            <a href="{% url 'homepage:homepage' %}" class="nav-link text-dark {% if view_name == 'homepage:homepage' %}active{% endif %}">{% translate 'Главная страница' %}</a>
           </li>
           <li>
-            <a href="{% url 'catalog:item_list' %}" class="nav-link text-dark {% if view_name == 'catalog:item_list' or view_name == 'catalog:item_detail' %}active{% endif %}">{% if LANGUAGE_CODE != 'ru' %}Product catalog{% else %}Каталог товаров{% endif %}</a>
+            <a href="{% url 'catalog:item_list' %}" class="nav-link text-dark {% if view_name == 'catalog:item_list' or view_name == 'catalog:item_detail' %}active{% endif %}">{% translate 'Каталог товаров' %}</a>
           </li>
           <li>
-            <a href="{% url 'about:about' %}" class="nav-link text-dark {% if view_name == 'about:about' %}active{% endif %}">{% if LANGUAGE_CODE != 'ru' %}About us{% else %}О нас{% endif %}</a>
+            <a href="{% url 'about:about' %}" class="nav-link text-dark {% if view_name == 'about:about' %}active{% endif %}">{% translate 'О нас' %}</a>
           </li>
         </ul>
       {% endwith %}
 
       <div class="text-end">
-        <button type="button" class="btn btn-outline-dark me-2">{% if LANGUAGE_CODE != 'ru' %}Sign in{% else %}Войти{% endif %}</button>
-        <button type="button" class="btn btn-primary">{% if LANGUAGE_CODE != 'ru' %}Sign up{% else %}Зарегистрироваться{% endif %}</button>
+        <button type="button" class="btn btn-outline-dark me-2">{% translate 'Войти' %}</button>
+        <button type="button" class="btn btn-primary">{% translate 'Зарегистрироваться' %}</button>
       </div>
     </div>
   </div>
