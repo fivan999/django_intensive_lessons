@@ -168,3 +168,30 @@ MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar_Basic': [
+            ['Source', '-', 'Bold', 'Italic']
+        ],
+        'toolbar_YourCustomToolbarConfig': [
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript',
+                       'Superscript']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent',
+                       'Indent', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight',
+                       'JustifyBlock']},
+            {'name': 'insert',
+             'items': ['Flash', 'Smiley',
+                       'SpecialChar']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            {'name': 'styles', 'items': ['Font']},
+            {'name': 'styles', 'items': ['FontSize']},
+            {'name': 'styles', 'items': ['Styles']},
+        ],
+        'toolbar': 'YourCustomToolbarConfig',
+        'tabSpaces': 4,
+    }
+}
