@@ -48,8 +48,25 @@ class Category(
         db_table = 'catalog_category'
 
 
+class ItemManager(django.db.models.Manager):
+    def get_published_items(self) -> django.db.models.QuerySet:
+        """возвращаем опубликованные товары"""
+        return (
+            self.get_queryset().filter(
+                is_published=True, category__is_published=True
+            ).select_related('category', 'main_image').prefetch_related(
+                django.db.models.Prefetch(
+                    'tags',
+                    queryset=Tag.objects.filter(is_published=True).only('name')
+                )
+            )
+        )
+
+
 class Item(core.models.AbstractNameTextModel):
     """модель Item"""
+
+    objects = ItemManager()
 
     text = RichTextField(
         verbose_name='описание',
@@ -71,6 +88,11 @@ class Item(core.models.AbstractNameTextModel):
         related_name='catalog_items',
         help_text='Тэги товара'
     )
+    is_on_main = django.db.models.BooleanField(
+        verbose_name='на главной',
+        help_text='Отображать ли товар на главной странице',
+        default=False
+    )
 
     class Meta:
         verbose_name = 'товар'
@@ -81,8 +103,7 @@ class Item(core.models.AbstractNameTextModel):
         """вывод изображения"""
         if self.main_image:
             return mark_safe(
-                f'<img src="{self.main_image.get_image_300x300().url}" '
-                'width="50">'
+                f'<img src="{self.main_image.get_image_50x50().url}">'
             )
         return 'Нет изображения'
 

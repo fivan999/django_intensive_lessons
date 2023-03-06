@@ -1,10 +1,21 @@
 import re
+import secrets
 
 import django.core.validators
 import django.db.models
 from django.core.exceptions import ValidationError
 
 from sorl.thumbnail import get_thumbnail
+
+
+def generate_image_path(obj: django.db.models.Model, filename: str) -> str:
+    """генерируем файловый пусть к картинке"""
+    filename = (
+        filename[:filename.rfind('.')]
+        + secrets.token_hex(6)
+        + filename[filename.rfind('.'):]
+    )
+    return f'catalog/{obj.item.id}/{filename}'
 
 
 class AbstractNameTextModel(django.db.models.Model):
@@ -91,14 +102,14 @@ class AbstractImageModel(django.db.models.Model):
 
     image = django.db.models.ImageField(
         verbose_name='картинка',
-        upload_to='catalog/',
+        upload_to=generate_image_path,
         help_text='Загрузите картинку',
     )
 
-    def get_image_300x300(self):
+    def get_image_50x50(self):
         """обрезаем картинку"""
         return get_thumbnail(
-            self.image, '300x300', crop='center', quality=60
+            self.image, '50x50', crop='center', quality=60
         )
 
     class Meta:
