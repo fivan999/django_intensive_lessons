@@ -14,14 +14,14 @@
     <meta name="description" content="Крутой интернет-магазин для самых избирательных и требовательных людей. В нашем ассортименте есть всё, что вам нужно и не только." />
     <meta name="keywords" content="интернет магазин, онлайн магазин" />
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'js/bootstrap.bundle.min.js' %}" />
-    <title>{% block title %}{% endblock %}</title>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <title>{% block title %}{% endblock title %}</title>
   </head>
   <body class="d-flex flex-column min-vh-100">
-    {% include 'includes/header.html' %}
+    {% include "includes/header.html" %}
     <main>
-      {% block content %}Контента нет{% endblock %}
+      {% block content %}Контента нет{% endblock content %}
     </main>
-    {% include 'includes/footer.html' %}
+    {% include "includes/footer.html" %}
   </body>
 </html>
