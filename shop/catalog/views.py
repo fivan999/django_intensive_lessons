@@ -22,7 +22,9 @@ def item_detail(request: HttpRequest, item_num: int) -> HttpResponse:
     item = get_object_or_404(
         Item.objects.get_published_items().prefetch_related(
             'galery'
-        ).only('category__name', 'name', 'text', 'main_image__image'),
+        ).only(
+            'category__name', 'name', 'text', 'main_image__image'
+        ),
         pk=item_num
     )
     context = {

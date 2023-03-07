@@ -1,9 +1,20 @@
 {% extends "base.html" %}
 
-{% load static %}
-
 {% block title %}Главная страница{% endblock title %}
 
 {% block content %}
-  {% include "includes/item_list.html" %}
+  <div class="container mb-4">
+    {% with request.resolver_match.view_name as view_name %}
+      <h1 class="display-5 fw-bold lh-1 mb-3">
+        {% if view_name == 'homepage:homepage' %}Главная страница{% elif view_name == 'catalog:item_list' %}Каталог товаров{% endif %}
+      </h1>
+    {% endwith %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      {% for item in items %}
+        <div class="col col-12 col-md-6 col-xl-3">
+          {% include "includes/item_card.html" %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock content %}

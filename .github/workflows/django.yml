@@ -30,4 +30,5 @@ jobs:
 
     - name: Run Tests
       run: |
-        python shop/manage.py test
+        cd shop
+        python manage.py test
