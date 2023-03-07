@@ -88,8 +88,9 @@
     "fields": {
         "is_published": true,
         "name": "Утюг",
-        "text": "<p>превосходно гладит</p>",
+        "text": "превосходно гладит",
         "category": 1,
+        "is_on_main": true,
         "tags": [
             1
         ]
@@ -101,8 +102,9 @@
     "fields": {
         "is_published": true,
         "name": "Помидор",
-        "text": "<p>Превосходно помидор</p>",
+        "text": "Превосходно помидор",
         "category": 2,
+        "is_on_main": false,
         "tags": [
             2
         ]
@@ -114,8 +116,9 @@
     "fields": {
         "is_published": true,
         "name": "Яблоко",
-        "text": "<p>Превосходно зеленое яблоко</p>",
+        "text": "Превосходно зеленое яблоко",
         "category": 1,
+        "is_on_main": false,
         "tags": [
             3
         ]
@@ -127,8 +130,9 @@
     "fields": {
         "is_published": true,
         "name": "Ракетный комплекс \"Ярс\"",
-        "text": "<p>Превосходно баллистическая ракета</p>",
+        "text": "Превосходно баллистическая ракета",
         "category": 3,
+        "is_on_main": true,
         "tags": [
             4,
             5
@@ -141,8 +145,9 @@
     "fields": {
         "is_published": true,
         "name": "Тополь-М",
-        "text": "<p>Роскошно баллистическая ракета</p>",
+        "text": "Роскошно баллистическая ракета",
         "category": 3,
+        "is_on_main": true,
         "tags": [
             4,
             5
@@ -153,7 +158,7 @@
     "model": "catalog.imagetoitem",
     "pk": 2,
     "fields": {
-        "image": "catalog/aboba.jpeg",
+        "image": "catalog/4/aboba_XZ4eKkH8ee70634d0ce.jpeg",
         "item": 4
     }
 },
@@ -161,7 +166,7 @@
     "model": "catalog.imagetoitem",
     "pk": 3,
     "fields": {
-        "image": "catalog/помидор.jpg",
+        "image": "catalog/5/помидор_bOzReG15a81ae0e3e7c.jpg",
         "item": 5
     }
 },
@@ -169,7 +174,7 @@
     "model": "catalog.imagetoitem",
     "pk": 4,
     "fields": {
-        "image": "catalog/яблоко.jpg",
+        "image": "catalog/6/яблоко_9AQddzh495ad54737d4.jpg",
         "item": 6
     }
 },
@@ -177,7 +182,7 @@
     "model": "catalog.imagetoitem",
     "pk": 5,
     "fields": {
-        "image": "catalog/ярс.jpeg",
+        "image": "catalog/7/ярс_axcAx6O333de3162eaa.jpeg",
         "item": 7
     }
 },
@@ -185,16 +190,24 @@
     "model": "catalog.imagetoitem",
     "pk": 6,
     "fields": {
-        "image": "catalog/тополь.jpg",
+        "image": "catalog/8/тополь59fd51b55b28.jpg",
         "item": 8
     }
 },
 {
     "model": "catalog.galerytoitem",
-    "pk": 2,
+    "pk": 1,
     "fields": {
-        "image": "catalog/aboba_TtyXGdP.jpeg",
-        "item": 4
+        "image": "catalog/8/ярс_axcAx6O591c0b025edf.jpeg",
+        "item": 8
+    }
+},
+{
+    "model": "catalog.galerytoitem",
+    "pk": 3,
+    "fields": {
+        "image": "catalog/8/помидор_bOzReG170ccab29b6c4.jpg",
+        "item": 8
     }
 }
 ]

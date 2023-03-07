@@ -1,0 +1,83 @@
+[
+    {
+        "model": "catalog.tag",
+        "pk": 1,
+        "fields": {
+            "is_published": true,
+            "name": "Тестовый опубликованный тэг",
+            "slug": "test_slug1"
+        }
+    },
+    {
+        "model": "catalog.tag",
+        "pk": 2,
+        "fields": {
+            "is_published": false,
+            "name": "Тестовый неопубликованный тэг",
+            "slug": "test_slug2",
+            "keyword": "oвoщи"
+        }
+    },
+    {
+        "model": "catalog.category",
+        "pk": 1,
+        "fields": {
+            "is_published": true,
+            "name": "Тестовая опубликованная категория",
+            "slug": "test_slug1",
+            "weight": 100
+        }
+    },
+    {
+        "model": "catalog.category",
+        "pk": 2,
+        "fields": {
+            "is_published": false,
+            "name": "Тестовая неопубликованная категория",
+            "slug": "test_slug2",
+            "weight": 100
+        }
+    },
+    {
+        "model": "catalog.item",
+        "pk": 1,
+        "fields": {
+            "is_published": true,
+            "name": "опубликованный товар",
+            "text": "превосходно",
+            "category": 1,
+            "is_on_main": false,
+            "tags": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "catalog.item",
+        "pk": 2,
+        "fields": {
+            "is_published": false,
+            "name": "неопубликованный товар",
+            "text": "превосходно",
+            "category": 2,
+            "is_on_main": false,
+            "tags": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "catalog.item",
+        "pk": 3,
+        "fields": {
+            "is_published": true,
+            "name": "опубликованный товар",
+            "text": "превосходно",
+            "category": 1,
+            "is_on_main": true,
+            "tags": [
+                2
+            ]
+        }
+    }
+]

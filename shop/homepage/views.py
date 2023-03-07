@@ -10,7 +10,9 @@ def home(request: HttpRequest) -> HttpResponse:
     """возвращаем главную страницу"""
     items = Item.objects.get_published_items().filter(
         is_on_main=True
-    ).only('name', 'text', 'category__name', 'main_image__image').order_by(
+    ).only(
+        'name', 'text', 'category__name', 'main_image__image'
+    ).order_by(
         'name'
     )
     context = {

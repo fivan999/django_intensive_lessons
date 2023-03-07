@@ -130,6 +130,10 @@ class ImageToItem(core.models.AbstractImageModel):
         verbose_name_plural = 'главные изображения'
         db_table = 'catalog_image'
 
+    def __str__(self) -> str:
+        """строковое представление главной картинки"""
+        return f'Главная картинка {self.pk}'
+
 
 class GaleryToItem(core.models.AbstractImageModel):
     """модель Galery"""
@@ -145,3 +149,7 @@ class GaleryToItem(core.models.AbstractImageModel):
         verbose_name = 'изображение'
         verbose_name_plural = 'галерея изображений'
         db_table = 'catalog_galery'
+
+    def __str__(self) -> str:
+        """строковое представление картинки из галереи"""
+        return f'Картинка из гелереи {self.pk}'
