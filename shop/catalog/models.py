@@ -6,6 +6,7 @@ import core.models
 
 import django.core.validators
 import django.db.models
+from django.conf import settings
 from django.urls import reverse
 from django.utils.html import mark_safe
 
@@ -72,7 +73,9 @@ class Item(core.models.AbstractNameTextModel):
         verbose_name='описание',
         help_text='Введите описание',
         validators=[
-            catalog.validators.ValidateMustContain('превосходно', 'роскошно'),
+            catalog.validators.ValidateMustContain(
+                *settings.NESSESARY_TEXT_WORDS
+            ),
         ]
     )
     category = django.db.models.ForeignKey(

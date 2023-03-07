@@ -5,7 +5,7 @@
 {% block content %}
   <div class="container mb-4">
     {% with request.resolver_match.view_name as view_name %}
-      <h1 class="display-5 fw-bold lh-1 mb-3">
+      <h1 class="display-5 fw-bold lh-1 mb-4">
         {% if view_name == 'homepage:homepage' %}Главная страница{% elif view_name == 'catalog:item_list' %}Каталог товаров{% endif %}
       </h1>
     {% endwith %}

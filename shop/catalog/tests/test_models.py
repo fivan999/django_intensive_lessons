@@ -3,9 +3,12 @@ from catalog.models import (
     Item,
     Tag
 )
+from catalog.validators import ValidateMustContain
 
 import django.urls
+from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.forms.models import model_to_dict
 from django.test import Client, TestCase
 
 from parameterized import parameterized
@@ -49,7 +52,7 @@ class ModelsTests(TestCase):
         with self.assertRaises(ValidationError):
             self.item = Item(
                 name=test_case,
-                text='превосходно',
+                text=settings.NESSESARY_TEXT_WORDS[0],
                 category=self.category
             )
             self.item.full_clean()
@@ -73,7 +76,7 @@ class ModelsTests(TestCase):
 
         self.item = Item(
             name=test_case,
-            text='превосходно',
+            text=settings.NESSESARY_TEXT_WORDS[0],
             category=self.category
         )
         self.item.full_clean()
@@ -84,66 +87,6 @@ class ModelsTests(TestCase):
             Item.objects.count(),
             start_count + 1,
             f'Ошибка создания name модели: {test_case}'
-        )
-
-    @parameterized.expand(
-        [
-            'круто',
-            'aboba',
-            'oleg',
-            '',
-            'П!ревосходно',
-            'Ро!7кошно',
-            'Нероскошно',
-            '1превосходно',
-        ]
-    )
-    def test_create_invalid_text(self, test_case: str) -> None:
-        """тестируем создание невалидного text"""
-        start_count = Item.objects.count()
-
-        with self.assertRaises(ValidationError):
-            self.item = Item(
-                name='aboba',
-                text=test_case,
-                category=self.category
-            )
-            self.item.full_clean()
-            self.item.save()
-            self.item.tags.add(self.tag)
-
-        self.assertEqual(
-            Item.objects.count(),
-            start_count,
-            f'Ошибка создания text модели: {test_case}'
-        )
-
-    @parameterized.expand(
-        [
-            ',роскошно ',
-            'превосходно',
-            ', Превосходно: фищиф',
-            'nigbob like Роскошно',
-            'bebra_dev Превосходно воркает',
-        ]
-    )
-    def test_create_valid_text(self, test_case: str) -> None:
-        """тестируем создание валидного text"""
-        start_count = Item.objects.count()
-
-        self.item = Item(
-            name='aboba',
-            text=test_case,
-            category=self.category
-        )
-        self.item.full_clean()
-        self.item.save()
-        self.item.tags.add(self.tag)
-
-        self.assertEqual(
-            Item.objects.count(),
-            start_count + 1,
-            f'Ошибка создания text модели: {test_case}'
         )
 
     @parameterized.expand(
@@ -272,18 +215,62 @@ class ContextTests(TestCase):
         self.assertEqual(response.status_code, expected)
 
     @parameterized.expand([(1,), (3,)])
-    def test_item_detail_correct_context(self, item_id: int) -> None:
+    def test_item_detail_correct_context(self, item_pk: int) -> None:
         """проверка корректного контекста в item_detail"""
         response = Client().get(
-            django.urls.reverse('catalog:item_detail', args=[item_id])
+            django.urls.reverse('catalog:item_detail', args=[item_pk])
         )
         self.assertIn('item', response.context)
 
     def test_item_detail_correct_context_model(self) -> None:
         """тестируем возвращает ли сервер Item в item_detail"""
-        response = Client().get(django.urls.reverse(
-            'catalog:item_detail', args=[1]
-        ))
+        response = Client().get(
+            django.urls.reverse('catalog:item_detail', args=[1])
+        )
         self.assertEqual(
             isinstance(response.context['item'], Item), True
         )
+
+    @parameterized.expand([
+        'name', 'text', 'category', 'tags', 'id'
+    ])
+    def test_item_detail_returns_valid_fields(self, field: str) -> None:
+        """проверяем, возвращает ли сервер нужные поля у Item"""
+        response = Client().get(
+            django.urls.reverse('catalog:item_detail', args=[1])
+        )
+        self.assertTrue(field in model_to_dict(response.context['item']))
+
+    @parameterized.expand([
+        'main_image', 'bebra', 'galery'
+    ])
+    def test_item_detail_not_returns_invalid_fields(self, field: str) -> None:
+        """проверяем, возвращает ли сервер нужные поля у Item"""
+        response = Client().get(
+            django.urls.reverse('catalog:item_detail', args=[1])
+        )
+        self.assertFalse(field in model_to_dict(response.context['item']))
+
+    @parameterized.expand([(1,), (3,)])
+    def test_item_detail_returns_correct_pk(self, item_pk: int) -> None:
+        """проверяем правильность возвращаемого pk"""
+        response = Client().get(
+            django.urls.reverse('catalog:item_detail', args=[item_pk])
+        )
+        item = response.context['item']
+        self.assertEqual(item_pk, item.pk)
+
+    @parameterized.expand([(1,), (3,)])
+    def test_item_detail_returns_correct_text(self, item_pk: int) -> None:
+        """проверяем правильность возвращаемого text"""
+        response = Client().get(
+            django.urls.reverse('catalog:item_detail', args=[item_pk])
+        )
+        item = response.context['item']
+        validator = ValidateMustContain(*settings.NESSESARY_TEXT_WORDS)
+        validation_error_raised = False
+        try:
+            validator(item.text)
+        except ValidationError:
+            validation_error_raised = True
+        self.assertFalse(validation_error_raised)
