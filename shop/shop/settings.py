@@ -80,6 +80,8 @@ REVERSE_RUSSIAN_WORDS = os.environ.get(
     'REVERSE_RUSSIAN_WORDS', default='false'
 ).lower() in ('true', 'y', '1', 'yes', 't')
 
+NESSESARY_TEXT_WORDS = ['превосходно', 'роскошно']
+
 INTERNAL_IPS = os.environ.get('INTERNAL_IPS', default='127.0.0.1').split()
 
 ROOT_URLCONF = 'shop.urls'
