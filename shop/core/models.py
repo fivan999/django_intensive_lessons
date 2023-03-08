@@ -8,8 +8,31 @@ from django.core.exceptions import ValidationError
 from sorl.thumbnail import get_thumbnail
 
 
+def transliterate(word: str) -> str:
+    rus_to_en = {
+        'ь': '', 'ъ': '', 'а': 'a',
+        'б': 'b', 'в': 'v',
+        'г': 'g', 'д': 'd',
+        'е': 'e', 'ё': 'e', 'ж': 'zh',
+        'з': 'z', 'и': 'i',
+        'й': 'i', 'к': 'k', 'л': 'l',
+        'м': 'm', 'н': 'n',
+        'о': 'o', 'п': 'p', 'р': 'r',
+        'с': 's', 'т': 't',
+        'у': 'u', 'ф': 'f', 'х': 'kh',
+        'ц': 'tc', 'ч': 'ch',
+        'ш': 'sh', 'щ': 'shch',
+        'ы': 'y', 'э': 'e', 'ю': 'iu',
+        'я': 'ia'
+    }
+    return ''.join(
+        [rus_to_en.get(letter.lower(), letter.lower()) for letter in word]
+    )
+
+
 def generate_image_path(obj: django.db.models.Model, filename: str) -> str:
     """генерируем файловый пусть к картинке"""
+    filename = transliterate(filename)
     filename = (
         filename[:filename.rfind('.')]
         + secrets.token_hex(6)

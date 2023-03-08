@@ -1,0 +1,29 @@
+{% load static %}
+
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light">
+  <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+    <img src="{% static 'img/basket3.svg' %}" class="bi me-2" width="40" height="32" alt="иконка" />
+    <span class="fs-4">Что посмотреть</span>
+  </a>
+  <hr />
+  <ul class="nav nav-pills flex-column mb-auto">
+    {% with request.resolver_match.view_name as view_name %}
+      <li class="nav-item">
+        <a href="{% url 'catalog:new_items' %}" class="nav-link{% if view_name == 'catalog:new_items' %} active{% else %} link-dark{% endif %}">
+          Новое
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'catalog:updated_at_friday_items' %}" class="nav-link{% if view_name == 'catalog:updated_at_friday_items' %} active{% else %} link-dark{% endif %}">
+          Пятница
+        </a>
+      </li>
+        <li>
+        <a href="{% url 'catalog:unchecked_items' %}" class="nav-link{% if view_name == 'catalog:unchecked_items' %} active{% else %} link-dark{% endif %}">
+          Необновленное
+        </a>
+      </li>
+    {% endwith %}
+  </ul>
+  <hr />
+</div>
