@@ -96,6 +96,16 @@ class Item(core.models.AbstractNameTextModel):
         help_text='Отображать ли товар на главной странице',
         default=False
     )
+    created_at = django.db.models.DateField(
+        auto_now_add=True,
+        verbose_name='дата создания',
+        help_text='Дата создания товара'
+    )
+    updated_at = django.db.models.DateField(
+        auto_now=True,
+        verbose_name='дата изменения',
+        help_text='Дата изменения товара'
+    )
 
     class Meta:
         verbose_name = 'товар'

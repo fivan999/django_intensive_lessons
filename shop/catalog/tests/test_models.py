@@ -232,7 +232,7 @@ class ContextTests(TestCase):
         )
 
     @parameterized.expand([
-        'name', 'text', 'category', 'tags', 'id'
+        'name', 'text', 'category', 'tags', 'id', 'is_published'
     ])
     def test_item_detail_returns_valid_fields(self, field: str) -> None:
         """проверяем, возвращает ли сервер нужные поля у Item"""
@@ -242,10 +242,10 @@ class ContextTests(TestCase):
         self.assertTrue(field in model_to_dict(response.context['item']))
 
     @parameterized.expand([
-        'main_image', 'bebra', 'galery'
+        'main_image', 'bebra', 'galery', 'created_at', 'updated_at'
     ])
     def test_item_detail_not_returns_invalid_fields(self, field: str) -> None:
-        """проверяем, возвращает ли сервер нужные поля у Item"""
+        """проверяем, не возвращает ли сервер ненужные поля у Item"""
         response = Client().get(
             django.urls.reverse('catalog:item_detail', args=[1])
         )
