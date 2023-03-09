@@ -11,13 +11,17 @@
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="{{ item.main_image.image.url }}" class="d-block w-100 img" alt="..." />
-              <a href="{% url 'download:download_image' item.main_image.image.url %}" class="btn btn-primary" style="position: absolute; bottom: 0; right: 0; z-index: 2;">Скачать</a>
+              <div class="d-flex flex-column align-items-center gap-2">
+                <img src="{{ item.main_image.image.url }}" class="d-block w-100 img" alt="..." />
+                <a href="{% url 'download:download_image' item.main_image.image.url %}" class="btn btn-primary">Скачать</a>
+              </div>
             </div>
             {% for galery_image in item.galery.all %}
               <div class="carousel-item">
-                <img src="{{ galery_image.image.url }}" class="d-block w-100 img" alt="..." />
-                <a href="{% url 'download:download_image' item.main_image.image.url %}" class="btn btn-primary" style="position: absolute; bottom: 0; right: 0; z-index: 2;">Скачать</a>
+                <div class="d-flex flex-column align-items-center gap-2">
+                  <img src="{{ galery_image.image.url }}" class="d-block w-100 img" alt="..." />
+                  <a href="{% url 'download:download_image' item.main_image.image.url %}" class="btn btn-primary">Скачать</a>
+                </div>
               </div>
             {% endfor %}
           </div>
