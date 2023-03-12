@@ -37,6 +37,7 @@ pip install -r requirements/test.txt
 - ALLOWED_HOSTS (если включен DEBUG, он ['*'], иначе по умолчанию - 127.0.0.1)<br>
 - INTERNAL_IPS (для debug_toolbar, по умолчанию - 127.0.0.1) <br>
 - REVERSE_RUSSIAN_WORDS (нужен ли переворот русских слов при каждом 10м GET запросе, по умолчанию - false)<br>
+- EMAIL (с какой почты вы будете отправлять письмо пользователю)
 Пример .env файла - .env.example
 
 Запустите проект:

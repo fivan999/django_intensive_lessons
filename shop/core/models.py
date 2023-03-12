@@ -129,8 +129,14 @@ class AbstractImageModel(django.db.models.Model):
         help_text='Загрузите картинку',
     )
 
+    def get_image_300x300(self):
+        """обрезаем картинку(для каталога)"""
+        return get_thumbnail(
+            self.image, '300x300', crop='center', quality=65
+        )
+
     def get_image_50x50(self):
-        """обрезаем картинку"""
+        """обрезаем картинку(для админки)"""
         return get_thumbnail(
             self.image, '50x50', crop='center', quality=60
         )

@@ -1,5 +1,5 @@
 <div class="card shadow-sm">
-  <img class="bg-placeholder-img card-img-top" src="{{ item.main_image.image.url }}" width="300" height="300" alt="картинка" style="object-fit: contain;" />
+  <img class="bg-placeholder-img card-img-top" src="{{ item.main_image.get_image_300x300.url }}" alt="картинка" />
   <div class="card-body">
     <h5 class="card-title">{{ item.name }}</h5>
     <p class="card-text">{{ item.text|safe|truncatewords:10 }}</p>

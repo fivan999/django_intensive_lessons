@@ -12,6 +12,7 @@ urlpatterns = [
     path('download/', include('download.urls')),
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('feedback/', include('feedback.urls')),
 ]
 
 if settings.DEBUG:
