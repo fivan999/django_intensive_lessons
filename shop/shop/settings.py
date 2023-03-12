@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'homepage.apps.HomepageConfig',
     'core.apps.CoreConfig',
     'download.apps.DownloadConfig',
+    'feedback.apps.FeedbackConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -206,3 +207,7 @@ CKEDITOR_CONFIGS = {
         'tabSpaces': 4,
     }
 }
+
+EMAIL = os.getenv('EMAIL')
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'

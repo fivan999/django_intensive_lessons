@@ -3,7 +3,7 @@
 
 <header class="p-3 text-dark ">
   <div class="container col-xxl-8 p-2 border-bottom">
-    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between">
       <a href="{% url 'homepage:homepage' %}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
         <img src="{% static 'img/basket3.svg' %}" width="40" height="32" alt="иконка" />
       </a>
@@ -17,6 +17,9 @@
           </li>
           <li>
             <a href="{% url 'about:about' %}" class="nav-link text-dark {% if app_name == 'about' %}active{% endif %}">{% translate "О нас" %}</a>
+          </li>
+          <li>
+            <a href="{% url 'feedback:feedback' %}" class="nav-link text-dark {% if app_name == 'feedback' %}active{% endif %}">{% translate "Обратная связь" %}</a>
           </li>
         </ul>
       {% endwith %}
