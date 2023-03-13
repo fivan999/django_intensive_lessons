@@ -15,5 +15,8 @@ class FeedbackForm(django.forms.ModelForm):
             ),
             'email': django.forms.EmailInput(
                 attrs={'class': 'form-control', 'type': 'email'}
+            ),
+            'status': django.forms.Select(
+                attrs={'class': 'form-control'}
             )
         }

@@ -2,10 +2,17 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 from .forms import FeedbackForm
+from .models import Feedback
 
 
 class FormsTest(TestCase):
     """тестируем формы"""
+
+    feedback_form_data = {
+        'text': 'Письмо админу',
+        'email': 'aboba@ya.ru',
+        'status': 'получено'
+    }
 
     def setUp(self) -> None:
         self.feedback_form = FeedbackForm()
@@ -38,13 +45,19 @@ class FormsTest(TestCase):
 
     def test_feedback_form_redirects_to_thanks(self) -> None:
         """тестируем редирект на страницу с благодарностью"""
-        form_data = {
-            'text': 'Письмо админу',
-            'email': 'aboba@ya.ru'
-        }
         response = Client().post(
             reverse('feedback:feedback'),
-            form_data,
+            self.feedback_form_data,
             follow=True
         )
         self.assertRedirects(response, reverse('feedback:thanks'))
+
+    def test_create_feedback(self) -> None:
+        """тестируем создание фидбека"""
+        start_count = Feedback.objects.count()
+        Client().post(
+            reverse('feedback:feedback'),
+            self.feedback_form_data
+        )
+        end_count = Feedback.objects.count()
+        self.assertEqual(start_count + 1, end_count)
