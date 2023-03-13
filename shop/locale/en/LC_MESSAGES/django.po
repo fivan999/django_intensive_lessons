@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-12 17:38+0300\n"
+"POT-Creation-Date: 2023-03-13 21:12+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,33 +19,36 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: .\templates\includes\header.html:13
-msgid "Главная страница"
-msgstr "Main page"
-
-#: .\templates\includes\header.html:16
 msgid "Каталог товаров"
 msgstr "Product catalog"
 
-#: .\templates\includes\header.html:19
+#: .\templates\includes\header.html:16
 msgid "О нас"
 msgstr "About us"
 
-#: .\templates\includes\header.html:22
+#: .\templates\includes\header.html:19
 msgid "Обратная связь"
 msgstr "Feedback"
 
 #: .\templates\includes\header.html:29
+msgid "Профиль"
+msgstr ""
+
+#: .\templates\includes\header.html:31
 msgid "В админку"
 msgstr "Admin"
 
-#: .\templates\includes\header.html:31
+#: .\templates\includes\header.html:34
 msgid "Выйти"
 msgstr "Sing out"
 
-#: .\templates\includes\header.html:33
+#: .\templates\includes\header.html:36
 msgid "Войти"
 msgstr "Sign in"
 
-#: .\templates\includes\header.html:34
+#: .\templates\includes\header.html:37
 msgid "Зарегистрироваться"
 msgstr "Sing up"
+
+#~ msgid "Главная страница"
+#~ msgstr "Main page"

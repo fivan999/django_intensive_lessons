@@ -3,36 +3,40 @@
 
 <header class="p-3 text-dark ">
   <div class="container col-xxl-8 p-2 border-bottom">
-    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
       <a href="{% url 'homepage:homepage' %}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
         <img src="{% static 'img/basket3.svg' %}" width="40" height="32" alt="иконка" />
       </a>
       {% with request.resolver_match.app_name as app_name %}
-        <ul class="nav nav-tabs col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <ul class="nav nav-pills col-12 col-md-auto mb-2 justify-content-center mb-md-0">
           <li>
-            <a href="{% url 'homepage:homepage' %}" class="nav-link text-dark {% if app_name == 'homepage' %}active{% endif %}">{% translate "Главная страница" %}</a>
+            <a href="{% url 'catalog:item_list' %}" class="nav-link {% if app_name == 'catalog' %}active text-white{% else %}text-dark{% endif %}">{% translate "Каталог товаров" %}</a>
           </li>
           <li>
-            <a href="{% url 'catalog:item_list' %}" class="nav-link text-dark {% if app_name == 'catalog' %}active{% endif %}">{% translate "Каталог товаров" %}</a>
+            <a href="{% url 'about:about' %}" class="nav-link {% if app_name == 'about' %}active text-white{% else %}text-dark{% endif %}">{% translate "О нас" %}</a>
           </li>
           <li>
-            <a href="{% url 'about:about' %}" class="nav-link text-dark {% if app_name == 'about' %}active{% endif %}">{% translate "О нас" %}</a>
-          </li>
-          <li>
-            <a href="{% url 'feedback:feedback' %}" class="nav-link text-dark {% if app_name == 'feedback' %}active{% endif %}">{% translate "Обратная связь" %}</a>
+            <a href="{% url 'feedback:feedback' %}" class="nav-link {% if app_name == 'feedback' %}active text-white{% else %}text-dark{% endif %}">{% translate "Обратная связь" %}</a>
           </li>
         </ul>
       {% endwith %}
-      <div class="text-end">
-        {% if request.user.is_authenticated %}
-          {% if request.user.is_staff %}
-            <a href="/admin/" class="btn btn-outline-dark me-2">{% translate "В админку" %}</a>
+      <div class="dropdown text-end">
+        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="{% static 'img/default_user.jpeg' %}" width="50" height="50" class="rounded-circle" />
+        </a>
+        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser">
+          {% if request.user.is_authenticated %}
+            <a class="dropdown-item">{% translate "Профиль" %}</a>
+            {% if request.user.is_staff %}
+              <a href="/admin/" class="dropdown-item">{% translate "В админку" %}</a>
+            {% endif %}
+            <li><hr class="dropdown-divider" /></li>
+            <a class="dropdown-item">{% translate "Выйти" %}</a>
+          {% else %}
+            <a class="dropdown-item">{% translate "Войти" %}</a>
+            <a class="dropdown-item">{% translate "Зарегистрироваться" %}</a>
           {% endif %}
-          <a class="btn btn-primary">{% translate "Выйти" %}</a>
-        {% else %}
-          <a class="btn btn-outline-dark me-2">{% translate "Войти" %}</a>
-          <a class="btn btn-primary">{% translate "Зарегистрироваться" %}</a>
-        {% endif %}
+        </ul>
       </div>
     </div>
   </div>
