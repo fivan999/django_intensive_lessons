@@ -13,19 +13,16 @@ def feedback(request: HttpRequest) -> HttpResponse:
     if form.is_valid():
         text = form.cleaned_data['text']
         user_email = form.cleaned_data['email']
-        status = form.cleaned_data['status']
-        email_text = f'{text}\nСтатус: {status}'
         send_mail(
             'Feedback',
-            email_text,
+            text,
             settings.EMAIL,
             [user_email],
             fail_silently=False
         )
         Feedback.objects.create(
             text=text,
-            email=user_email,
-            status=status
+            email=user_email
         )
         return redirect('feedback:thanks')
     context = {

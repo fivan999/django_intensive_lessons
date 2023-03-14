@@ -8,7 +8,7 @@ class FeedbackForm(django.forms.ModelForm):
 
     class Meta:
         model = Feedback
-        exclude = ('created_on', )
+        exclude = ('created_on', 'status')
         widgets = {
             'text': django.forms.Textarea(
                 attrs={'class': 'form-control', 'rows': 4}
@@ -16,7 +16,4 @@ class FeedbackForm(django.forms.ModelForm):
             'email': django.forms.EmailInput(
                 attrs={'class': 'form-control', 'type': 'email'}
             ),
-            'status': django.forms.Select(
-                attrs={'class': 'form-control'}
-            )
         }
