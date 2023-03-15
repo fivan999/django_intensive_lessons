@@ -4,7 +4,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
 from .forms import FeedbackForm
-from .models import Feedback
+from .models import Feedback, FeedbackFile, FeedbackUserData
 
 
 def feedback(request: HttpRequest) -> HttpResponse:
@@ -13,16 +13,23 @@ def feedback(request: HttpRequest) -> HttpResponse:
     if form.is_valid():
         text = form.cleaned_data['text']
         user_email = form.cleaned_data['email']
+        user = FeedbackUserData.objects.filter(email=user_email)
+        if user:
+            user = user.first()
+        else:
+            user = FeedbackUserData.objects.create(email=user_email)
+        feedback = Feedback.objects.create(text=text, user=user)
+        for file in request.FILES.getlist('files'):
+            FeedbackFile.objects.create(
+                file=file,
+                feedback=feedback
+            )
         send_mail(
             'Feedback',
             text,
             settings.EMAIL,
             [user_email],
             fail_silently=False
-        )
-        Feedback.objects.create(
-            text=text,
-            email=user_email
         )
         return redirect('feedback:thanks')
     context = {

@@ -1,4 +1,32 @@
+import secrets
+
 import django.db.models
+
+from transliterate import translit
+
+
+def generate_file_path(obj: django.db.models.Model, filename: str) -> str:
+    """путь к файлу"""
+    filename = translit(filename, 'ru', reversed=True)
+    filename = (
+        filename[:filename.rfind('.')]
+        + secrets.token_hex(6)
+        + filename[filename.rfind('.'):]
+    )
+    return f'uploads/{obj.feedback.pk}/{filename}'
+
+
+class FeedbackUserData(django.db.models.Model):
+    """модель с данными пользователя из формы"""
+
+    email = django.db.models.EmailField(
+        verbose_name='электронная почта',
+        help_text='Электронная почта получателя'
+    )
+
+    class Meta:
+        verbose_name = 'данные пользователя'
+        db_table = 'feedback_feedbackuserdata'
 
 
 class Feedback(django.db.models.Model):
@@ -19,10 +47,6 @@ class Feedback(django.db.models.Model):
         verbose_name='дата и время создания',
         help_text='Когда отправили фидбек'
     )
-    email = django.db.models.EmailField(
-        verbose_name='электронная почта',
-        help_text='Электронная почта получателя'
-    )
     status = django.db.models.CharField(
         verbose_name='статус',
         help_text='Статус обработки формы',
@@ -30,8 +54,37 @@ class Feedback(django.db.models.Model):
         choices=STATUS_CHOICES,
         max_length=100
     )
+    user = django.db.models.ForeignKey(
+        FeedbackUserData,
+        on_delete=django.db.models.CASCADE,
+        verbose_name='пользователь',
+        help_text='Пользователь, к которому привязан фидбек',
+        related_name='feedbacks'
+    )
 
     class Meta:
         verbose_name = 'фидбек'
         verbose_name_plural = 'фидбеки'
         db_table = 'feedback_feedback'
+
+
+class FeedbackFile(django.db.models.Model):
+    """модель файла для фидбека"""
+
+    file = django.db.models.FileField(
+        verbose_name='файл',
+        help_text='Загрузите файл',
+        upload_to=generate_file_path
+    )
+    feedback = django.db.models.ForeignKey(
+        Feedback,
+        on_delete=django.db.models.CASCADE,
+        verbose_name='фидбек',
+        help_text='Фидбек, к которому привязан файл',
+        related_name='files'
+    )
+
+    class Meta:
+        verbose_name = 'файл фидбека'
+        verbose_name_plural = 'файлы фидбека'
+        db_table = 'feedback_feedbackfile'
