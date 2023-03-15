@@ -4,13 +4,20 @@ import shutil
 
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import Client, TestCase
+from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
 from feedback.forms import FeedbackForm
 from feedback.models import Feedback, FeedbackFile
 
 
+@override_settings(
+    MEDIA_ROOT=os.path.join(
+        os.path.join(
+            pathlib.Path(__name__).resolve().parent, 'feedback/tests/test_data'
+        )
+    )
+)
 class FormsTest(TestCase):
     """тестируем формы"""
 
@@ -19,16 +26,6 @@ class FormsTest(TestCase):
         'text': 'Письмо админу',
         'email': 'aboba@ya.ru'
     }
-
-    def setUp(self) -> None:
-        """переопределим MEDIA ROOT, чтобы не трогать основные файлы"""
-        settings.MEDIA_ROOT = os.path.join(
-            os.path.join(
-                pathlib.Path(__name__).resolve().parent,
-                'feedback/tests/test_data'
-            )
-        )
-        super().setUp()
 
     def tearDown(self) -> None:
         """удаление тестовых данных"""

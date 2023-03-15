@@ -28,6 +28,10 @@ class FeedbackUserData(django.db.models.Model):
         verbose_name = 'данные пользователя'
         db_table = 'feedback_feedbackuserdata'
 
+    def __str__(self) -> str:
+        """строковое представление пользователя"""
+        return self.email
+
 
 class Feedback(django.db.models.Model):
     """модель обратной связи"""
@@ -43,7 +47,7 @@ class Feedback(django.db.models.Model):
         help_text='Введите текст письма'
     )
     cretated_on = django.db.models.DateTimeField(
-        auto_now=True,
+        auto_now_add=True,
         verbose_name='дата и время создания',
         help_text='Когда отправили фидбек'
     )
@@ -88,3 +92,7 @@ class FeedbackFile(django.db.models.Model):
         verbose_name = 'файл фидбека'
         verbose_name_plural = 'файлы фидбека'
         db_table = 'feedback_feedbackfile'
+
+    def __str__(self) -> str:
+        """строковое представление файла фидбека"""
+        return f'Файл фидбека {self.pk}'
