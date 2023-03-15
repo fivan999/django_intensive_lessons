@@ -7,38 +7,18 @@ from django.core.exceptions import ValidationError
 
 from sorl.thumbnail import get_thumbnail
 
-
-def transliterate(word: str) -> str:
-    rus_to_en = {
-        'ь': '', 'ъ': '', 'а': 'a',
-        'б': 'b', 'в': 'v',
-        'г': 'g', 'д': 'd',
-        'е': 'e', 'ё': 'e', 'ж': 'zh',
-        'з': 'z', 'и': 'i',
-        'й': 'i', 'к': 'k', 'л': 'l',
-        'м': 'm', 'н': 'n',
-        'о': 'o', 'п': 'p', 'р': 'r',
-        'с': 's', 'т': 't',
-        'у': 'u', 'ф': 'f', 'х': 'kh',
-        'ц': 'tc', 'ч': 'ch',
-        'ш': 'sh', 'щ': 'shch',
-        'ы': 'y', 'э': 'e', 'ю': 'iu',
-        'я': 'ia'
-    }
-    return ''.join(
-        [rus_to_en.get(letter.lower(), letter.lower()) for letter in word]
-    )
+from transliterate import translit
 
 
 def generate_image_path(obj: django.db.models.Model, filename: str) -> str:
     """генерируем файловый пусть к картинке"""
-    filename = transliterate(filename)
+    filename = translit(filename, 'ru', reverse=True)
     filename = (
         filename[:filename.rfind('.')]
         + secrets.token_hex(6)
         + filename[filename.rfind('.'):]
     )
-    return f'catalog/{obj.item.id}/{filename}'
+    return f'catalog/{obj.item.pk}/{filename}'
 
 
 class AbstractNameTextModel(django.db.models.Model):
@@ -96,7 +76,7 @@ class AbstractKeywordModel(django.db.models.Model):
         ):
             raise ValidationError('Уже есть тэг с похожим именем')
         self.keyword = normalized_name
-        super(AbstractKeywordModel, self).clean(*args, **kwargs)
+        super().clean(*args, **kwargs)
 
     @staticmethod
     def normalize_models_name(value: str) -> str:
