@@ -1,52 +1,179 @@
 [
 {
+    "model": "feedback.feedbackuserdata",
+    "pk": 1,
+    "fields": {
+        "email": "aboba3@ya.ru"
+    }
+},
+{
+    "model": "feedback.feedbackuserdata",
+    "pk": 2,
+    "fields": {
+        "email": "fivan999@yandex.ru"
+    }
+},
+{
+    "model": "feedback.feedbackuserdata",
+    "pk": 3,
+    "fields": {
+        "email": "aboba@ya.ru"
+    }
+},
+{
     "model": "feedback.feedback",
     "pk": 1,
     "fields": {
-        "text": "Привет абобе",
-        "cretated_on": "2023-03-13T16:59:23.781Z",
-        "email": "aboba@ya.ru",
-        "status": "A"
+        "text": "d",
+        "cretated_on": "2023-03-15T04:55:16.795Z",
+        "status": "получено",
+        "user": 1
     }
 },
 {
     "model": "feedback.feedback",
     "pk": 2,
     "fields": {
-        "text": "Привет фивану бебре",
-        "cretated_on": "2023-03-13T17:03:26.491Z",
-        "email": "aboba@ya.ru",
-        "status": "получено"
+        "text": "d",
+        "cretated_on": "2023-03-15T04:55:46.838Z",
+        "status": "получено",
+        "user": 1
     }
 },
 {
     "model": "feedback.feedback",
     "pk": 3,
     "fields": {
-        "text": "fg",
-        "cretated_on": "2023-03-13T17:11:29.353Z",
-        "email": "aboba@ya.ru",
-        "status": "получено"
+        "text": "писбмо сейчас",
+        "cretated_on": "2023-03-15T14:19:25.300Z",
+        "status": "получено",
+        "user": 2
     }
 },
 {
     "model": "feedback.feedback",
     "pk": 4,
     "fields": {
-        "text": "абоба",
-        "cretated_on": "2023-03-13T17:12:09.228Z",
-        "email": "fivan@oleg.com",
-        "status": "в обработке"
+        "text": "а",
+        "cretated_on": "2023-03-15T14:20:23.854Z",
+        "status": "получено",
+        "user": 2
     }
 },
 {
     "model": "feedback.feedback",
     "pk": 5,
     "fields": {
-        "text": "Привет",
-        "cretated_on": "2023-03-13T18:17:07.491Z",
-        "email": "aboba@ya.ru",
-        "status": "получено"
+        "text": "f",
+        "cretated_on": "2023-03-15T14:22:31.347Z",
+        "status": "получено",
+        "user": 3
+    }
+},
+{
+    "model": "feedback.feedback",
+    "pk": 6,
+    "fields": {
+        "text": "привет обобениусу",
+        "cretated_on": "2023-03-15T18:01:32.138Z",
+        "status": "получено",
+        "user": 3
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 1,
+    "fields": {
+        "file": "uploads/2/zagruzhennoef5eda43742fa.png",
+        "feedback": 2
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 2,
+    "fields": {
+        "file": "uploads/2/klaster48d939974b62.docx",
+        "feedback": 2
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 3,
+    "fields": {
+        "file": "uploads/3/Benito_Mussolinic00e5c2aebcd.pptx",
+        "feedback": 3
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 4,
+    "fields": {
+        "file": "uploads/3/Vazhnye_chely_iz_Grazhdanskoj_vojny_v_Rossiif3589b17a136.docx",
+        "feedback": 3
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 5,
+    "fields": {
+        "file": "uploads/3/zagruzhennoe6f9287db50ef.png",
+        "feedback": 3
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 6,
+    "fields": {
+        "file": "uploads/3/Zarozhdenie_rabochego_dvizhenija_v_Rossiif084c0bb27d7.docx",
+        "feedback": 3
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 7,
+    "fields": {
+        "file": "uploads/3/klasterf7f6db572b15.docx",
+        "feedback": 3
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 8,
+    "fields": {
+        "file": "uploads/3/Nojabrskaja_revoljutsija_v_Germanii2ac123455418.pptx",
+        "feedback": 3
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 9,
+    "fields": {
+        "file": "uploads/4/klaster09c07f8a5127.docx",
+        "feedback": 4
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 10,
+    "fields": {
+        "file": "uploads/5/zagruzhennoe6ec70cb8e235.png",
+        "feedback": 5
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 11,
+    "fields": {
+        "file": "uploads/6/klasterbcb027e9db0d.docx",
+        "feedback": 6
+    }
+},
+{
+    "model": "feedback.feedbackfile",
+    "pk": 12,
+    "fields": {
+        "file": "uploads/6/Benito_Mussolinif311a0afa969.pptx",
+        "feedback": 6
     }
 }
 ]
