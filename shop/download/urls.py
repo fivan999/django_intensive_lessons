@@ -1,6 +1,6 @@
 from django.urls import re_path
 
-from . import views
+from download import views
 
 
 app_name = 'download'

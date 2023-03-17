@@ -44,7 +44,7 @@ class Feedback(django.db.models.Model):
 
     text = django.db.models.TextField(
         verbose_name='текст',
-        help_text='Введите текст письма'
+        help_text='Введите текст фидбека'
     )
     cretated_on = django.db.models.DateTimeField(
         auto_now_add=True,
