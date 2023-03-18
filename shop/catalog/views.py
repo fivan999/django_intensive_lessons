@@ -1,4 +1,4 @@
-from catalog.models import Item
+import catalog.models
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
@@ -6,9 +6,9 @@ from django.shortcuts import get_object_or_404, render
 
 def item_list(request: HttpRequest) -> HttpResponse:
     """Страница со всеми элементами"""
-    items = Item.objects.get_published_items().only(
-        'name', 'text', 'main_image__image', 'category__name'
-    ).order_by('category__name')
+    items = catalog.models.Item.objects.get_published_items().order_by(
+        'category__name'
+    )
     context = {
         'items': items
     }
@@ -18,9 +18,7 @@ def item_list(request: HttpRequest) -> HttpResponse:
 def item_detail(request: HttpRequest, item_num: int) -> HttpResponse:
     """Страница с одним элементом"""
     item = get_object_or_404(
-        Item.objects.get_item_with_galery().only(
-            'category__name', 'name', 'text', 'main_image__image'
-        ),
+        catalog.models.Item.objects.get_item_with_galery(),
         pk=item_num
     )
     context = {
@@ -31,9 +29,9 @@ def item_detail(request: HttpRequest, item_num: int) -> HttpResponse:
 
 def new_items(request: HttpRequest) -> HttpResponse:
     """страница с товарами, добавленными за последнюю неделю"""
-    items = Item.objects.get_new_items().only(
-        'name', 'text', 'main_image__image', 'category__name'
-    ).order_by('category__name')
+    items = catalog.models.Item.objects.get_new_items().order_by(
+        'category__name'
+    )
     context = {
         'items': items
     }
@@ -42,9 +40,9 @@ def new_items(request: HttpRequest) -> HttpResponse:
 
 def friday_updatet_items(request: HttpRequest) -> HttpResponse:
     """страница с товарами, обновленными в пятницу"""
-    items = Item.objects.get_friday_updated_items().only(
-        'name', 'text', 'main_image__image', 'category__name'
-    ).order_by('category__name')[:5]
+    items = catalog.models.Item.objects.get_friday_updated_items().order_by(
+        'category__name'
+    )[:5]
     context = {
         'items': items
     }
@@ -53,9 +51,7 @@ def friday_updatet_items(request: HttpRequest) -> HttpResponse:
 
 def unchecked_items(request: HttpRequest) -> HttpResponse:
     """страница с не обновленными товарами"""
-    items = Item.objects.get_unchecked_items().only(
-        'name', 'text', 'main_image__image', 'category__name'
-    ).order_by(
+    items = catalog.models.Item.objects.get_unchecked_items().order_by(
         'category__name'
     )
     context = {

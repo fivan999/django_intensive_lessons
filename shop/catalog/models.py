@@ -1,5 +1,5 @@
+import catalog.managers
 import catalog.validators
-from catalog.managers import ItemManager
 
 from ckeditor.fields import RichTextField
 
@@ -53,7 +53,7 @@ class Category(
 class Item(core.models.AbstractNameTextModel):
     """модель Item"""
 
-    objects = ItemManager()
+    objects = catalog.managers.ItemManager()
 
     text = RichTextField(
         verbose_name='описание',

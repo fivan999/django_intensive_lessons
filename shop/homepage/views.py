@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from catalog.models import Item
+import catalog.models
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
@@ -8,9 +8,7 @@ from django.shortcuts import render
 
 def home(request: HttpRequest) -> HttpResponse:
     """возвращаем главную страницу"""
-    items = Item.objects.get_items_on_main().only(
-        'name', 'text', 'category__name', 'main_image__image'
-    ).order_by('name')
+    items = catalog.models.Item.objects.get_items_on_main().order_by('name')
     context = {
         'items': items
     }
