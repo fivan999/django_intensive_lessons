@@ -1,6 +1,4 @@
 import django.forms
-from django.conf import settings
-from django.core.mail import send_mail
 from django.utils.datastructures import MultiValueDict
 
 from feedback.models import Feedback, FeedbackFile, FeedbackUserData

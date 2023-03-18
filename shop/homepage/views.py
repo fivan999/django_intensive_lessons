@@ -8,13 +8,9 @@ from django.shortcuts import render
 
 def home(request: HttpRequest) -> HttpResponse:
     """возвращаем главную страницу"""
-    items = Item.objects.get_published_items().filter(
-        is_on_main=True
-    ).only(
+    items = Item.objects.get_items_on_main().only(
         'name', 'text', 'category__name', 'main_image__image'
-    ).order_by(
-        'name'
-    )
+    ).order_by('name')
     context = {
         'items': items
     }

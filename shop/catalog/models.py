@@ -1,4 +1,5 @@
 import catalog.validators
+from catalog.managers import ItemManager
 
 from ckeditor.fields import RichTextField
 
@@ -47,21 +48,6 @@ class Category(
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
         db_table = 'catalog_category'
-
-
-class ItemManager(django.db.models.Manager):
-    def get_published_items(self) -> django.db.models.QuerySet:
-        """возвращаем опубликованные товары"""
-        return (
-            self.get_queryset().filter(
-                is_published=True, category__is_published=True
-            ).select_related('category', 'main_image').prefetch_related(
-                django.db.models.Prefetch(
-                    'tags',
-                    queryset=Tag.objects.filter(is_published=True).only('name')
-                )
-            )
-        )
 
 
 class Item(core.models.AbstractNameTextModel):
