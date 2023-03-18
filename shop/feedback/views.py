@@ -4,33 +4,20 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
 from feedback.forms import FeedbackForm
-from feedback.models import Feedback, FeedbackFile, FeedbackUserData
 
 
 def feedback(request: HttpRequest) -> HttpResponse:
     """обработчик форма обратной связи"""
     form = FeedbackForm(request.POST or None)
     if form.is_valid():
-        text = form.cleaned_data['text']
-        user_email = form.cleaned_data['email']
-        user = FeedbackUserData.objects.filter(email=user_email)
-        if user:
-            user = user.first()
-        else:
-            user = FeedbackUserData.objects.create(email=user_email)
-        feedback = Feedback.objects.create(text=text, user=user)
-        for file in request.FILES.getlist('files'):
-            FeedbackFile.objects.create(
-                file=file,
-                feedback=feedback
-            )
         send_mail(
             'Feedback',
-            text,
+            form.cleaned_data['text'],
             settings.EMAIL,
-            [user_email],
+            [form.cleaned_data['email']],
             fail_silently=False
         )
+        form.save(request.FILES)
         return redirect('feedback:thanks')
     context = {
         'form': form
