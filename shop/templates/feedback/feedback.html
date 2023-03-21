@@ -1,22 +1,12 @@
 {% extends "base.html" %}
 
+{% block title %}Обратная связь{% endblock title %}
+
 {% block content %}
   <div class="container col-xxl-8">
     <h2>Обратная связь</h2>
     <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      {% for field in form %}
-        <p>
-          {{ field.label }}
-          {{ field }}
-          <small><span class="text-muted">{{ field.help_text }}</span></small>
-          {% for error in field.errors %}
-          <div class="alert alert-danger" role="alert">
-            {{ error|safe }}
-          </div>
-          {% endfor %}
-        </p>
-      {% endfor %}
+      {% include "includes/make_form.html" %}
       <button type="submit" class="btn btn-primary">Отправить</button>
     </form>
   </div>

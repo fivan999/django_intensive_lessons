@@ -1,0 +1,16 @@
+{% extends "users/user_detail.html" %}
+
+{% block button %}
+  <div class="d-grid gap-2 d-md-flex">
+    <a href="{% url 'homepage:coffee' %}"><button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Выпить кофе</button></a>
+  </div>
+{% endblock button %}
+
+{% block profile_form %}
+  <form method="post" enctype="multipart/form-data">
+    {% for form in forms %}
+      {% include "includes/make_form.html" %}
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+{% endblock profile_form %}

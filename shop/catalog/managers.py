@@ -7,6 +7,8 @@ import django.db.models
 
 
 class ItemManager(django.db.models.Manager):
+    """менеджер модели Item"""
+
     def get_published_items(self) -> django.db.models.QuerySet:
         """возвращаем опубликованные товары"""
         return self.get_only_useful_fields().filter(
