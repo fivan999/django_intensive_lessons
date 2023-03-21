@@ -4,32 +4,32 @@ from django.db import migrations, transaction
 import users.managers
 
 
+def add_profile_to_user(apps, shecma_editor) -> None:
+    """добавляем профиль юзерам без профиля"""
+    db_alias = shecma_editor.connection.alias
+    user_model = apps.get_model('users', 'ShopUser')
+    profile_model = apps.get_model('users', 'Profile')
+    with transaction.atomic():
+        for user in user_model.objects.using(db_alias).all():
+            if not hasattr(user, 'profile'):
+                profile_model.objects.using(db_alias).create(user=user)
+
+
+def delete_profiles(apps, shecma_editor) -> None:
+    """удаляем профили"""
+    db_alias = shecma_editor.connection.alias
+    user_model = apps.get_model('users', 'ShopUser')
+    with transaction.atomic():
+        for user in user_model.objects.using(db_alias).all():
+            if hasattr(user, 'profile'):
+                user.profile.delete()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
         ('users', '0002_alter_shopuser_table'),
     ]
-
-    @staticmethod
-    def add_profile_to_user(apps, shecma_editor) -> None:
-        """добавляем профиль юзерам без профиля"""
-        db_alias = shecma_editor.connection.alias
-        user_model = apps.get_model('users', 'ShopUser')
-        profile_model = apps.get_model('users', 'Profile')
-        with transaction.atomic():
-            for user in user_model.objects.using(db_alias).all():
-                if not hasattr(user, 'profile'):
-                    profile_model.objects.using(db_alias).create(user=user)
-
-    @staticmethod
-    def delete_profiles(apps, shecma_editor) -> None:
-        """удаляем профили"""
-        db_alias = shecma_editor.connection.alias
-        user_model = apps.get_model('users', 'ShopUser')
-        with transaction.atomic():
-            for user in user_model.objects.using(db_alias).all():
-                if hasattr(user, 'profile'):
-                    user.profile.delete()
 
     operations = [
         migrations.AlterModelManagers(
