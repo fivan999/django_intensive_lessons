@@ -18,6 +18,7 @@ def generate_image_path(obj: django.db.models.Model, filename: str) -> str:
 
 class ShopUser(AbstractUser):
     """наш кастомный пользователь"""
+
     objects = users.managers.ShopUserManager()
 
     email = django.db.models.EmailField(
