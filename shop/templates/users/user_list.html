@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+  <div class="container col-xxl-8">
+    {% if users %}
+      <h1 class="display-5 fw-bold lh-1">
+        Пользователи
+      </h1>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3 mb-4">
+        {% for user in users %}
+          <div class="col">
+            <div class="card shadow-sm">
+              <img class="bg-placeholder-img card-img-top" src="{% if user.profile.image %}{{ user.profile.get_image_300x300.url }}{% else %}{% static 'img/default_user.svg' %}{% endif %}" width="300" height="300" alt="картинка" />
+              <div class="card-body">
+                <p class="card-text">Имя пользователя: {{ user.username }}</p>
+                <p class="card-text">Почта: {{ user.email }}</p>
+                <a href="{{ user.get_absolute_url }}" class="btn btn-primary">Смотреть</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+        {% include "includes/empty.html" %}
+    {% endif %}
+  </div>
+{% endblock content %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-13 21:12+0300\n"
+"POT-Creation-Date: 2023-03-21 20:32+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,23 +30,31 @@ msgstr "About us"
 msgid "Обратная связь"
 msgstr "Feedback"
 
-#: .\templates\includes\header.html:29
-msgid "Профиль"
-msgstr ""
-
 #: .\templates\includes\header.html:31
 msgid "В админку"
 msgstr "Admin"
 
-#: .\templates\includes\header.html:34
+#: .\templates\includes\header.html:32
+msgid "Список пользователей"
+msgstr "List of users"
+
+#: .\templates\includes\header.html:35
+msgid "Восстановить пароль"
+msgstr "Reset password"
+
+#: .\templates\includes\header.html:36
+msgid "Сменить пароль"
+msgstr "Change password"
+
+#: .\templates\includes\header.html:38
 msgid "Выйти"
 msgstr "Sing out"
 
-#: .\templates\includes\header.html:36
+#: .\templates\includes\header.html:40
 msgid "Войти"
 msgstr "Sign in"
 
-#: .\templates\includes\header.html:37
+#: .\templates\includes\header.html:41
 msgid "Зарегистрироваться"
 msgstr "Sing up"
 

@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 import catalog.models
 
+from django.contrib.auth.models import AbstractBaseUser
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
@@ -17,6 +18,9 @@ def home(request: HttpRequest) -> HttpResponse:
 
 def coffee(request: HttpRequest) -> HttpResponse:
     """возвращаем 418"""
+    if isinstance(request.user, AbstractBaseUser):
+        request.user.profile.coffee_count += 1
+        request.user.profile.save()
     return HttpResponse(
         '<body><h1>Я чайник</h1><body>', status=HTTPStatus.IM_A_TEAPOT
     )

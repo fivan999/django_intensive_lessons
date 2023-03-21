@@ -1,0 +1,117 @@
+from django.contrib.auth.tokens import default_token_generator
+from django.test import Client, TestCase, override_settings
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+
+import mock
+
+import pytz
+
+from users.models import ShopUser
+
+
+class UserTests(TestCase):
+    """тестируем пользователя"""
+
+    register_data = {
+        'username': 'aboba',
+        'email': 'aboba@ya.ru',
+        'password1': 'ajdfgbjuygfrb',
+        'password2': 'ajdfgbjuygfrb'
+    }
+
+    def test_user_register_status_code(self) -> None:
+        """тестируем статус код страницы регистрации"""
+        response = Client().get(reverse('users:signup'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_user_register_context(self) -> None:
+        """тестируем контекст страницы регистрации"""
+        response = Client().get(reverse('users:signup'))
+        self.assertIn('form', response.context)
+
+    def test_user_register_redirect(self) -> None:
+        """тестируем редирект на главную страницу"""
+        response = Client().post(
+            reverse('users:signup'),
+            self.register_data,
+            follow=True
+        )
+        self.assertRedirects(response, reverse('homepage:homepage'))
+
+    def test_user_register_success(self) -> None:
+        """тестируем появление записи в бд"""
+        user_count = ShopUser.objects.count()
+        Client().post(
+            reverse('users:signup'),
+            self.register_data,
+            follow=True
+        )
+        self.assertEqual(ShopUser.objects.count(), user_count + 1)
+
+    @override_settings(USER_IS_ACTIVE=False)
+    def test_user_not_is_active(self) -> None:
+        """тестируем неактивность пользователя"""
+        Client().post(
+            reverse('users:signup'),
+            self.register_data,
+            follow=True
+        )
+        self.assertFalse(ShopUser.objects.get(pk=1).is_active)
+
+    @override_settings(USER_IS_ACTIVE=True)
+    def test_user_is_active(self) -> None:
+        """тестируем активность пользователя"""
+        Client().post(
+            reverse('users:signup'),
+            self.register_data,
+            follow=True
+        )
+        self.assertTrue(ShopUser.objects.get(pk=1).is_active)
+
+    @override_settings(USER_IS_ACTIVE=False)
+    def test_user_activation(self) -> None:
+        """тестируем активацию пользователя"""
+        Client().post(
+            reverse('users:signup'),
+            self.register_data,
+            follow=True
+        )
+        user = ShopUser.objects.get(pk=1)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        Client().get(
+            reverse(
+                'users:activate_user',
+                kwargs={'uidb64': uid, 'token': token}
+            )
+        )
+        self.assertTrue(ShopUser.objects.get(pk=1).is_active)
+
+    @override_settings(USER_IS_ACTIVE=False)
+    @mock.patch('django.utils.timezone.now')
+    def test_user_activation_error(self, mock_now) -> None:
+        Client().post(
+            reverse('users:signup'),
+            self.register_data,
+            follow=True
+        )
+        utc = pytz.UTC
+        mock_now.return_value = utc.localize(timezone.datetime(3000, 1, 1))
+        user = ShopUser.objects.get(pk=1)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        Client().get(
+            reverse(
+                'users:activate_user',
+                kwargs={'uidb64': uid, 'token': token}
+            )
+        )
+        self.assertFalse(user.is_active)
+
+    def tearDown(self) -> None:
+        """чистим бд после тестов"""
+        ShopUser.objects.all().delete()
+        super().tearDown()

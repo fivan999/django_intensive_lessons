@@ -13,7 +13,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+from django.contrib.messages import constants
+
 from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,6 +52,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'download.apps.DownloadConfig',
     'feedback.apps.FeedbackConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -80,6 +84,10 @@ MIDDLEWARE = [
 
 REVERSE_RUSSIAN_WORDS = os.environ.get(
     'REVERSE_RUSSIAN_WORDS', default='false'
+).lower() in ('true', 'y', '1', 'yes', 't')
+
+USER_IS_ACTIVE = os.environ.get(
+    'USER_IS_ACTIVE', default=('true' if DEBUG else 'false')
 ).lower() in ('true', 'y', '1', 'yes', 't')
 
 NESSESARY_TEXT_WORDS = ['превосходно', 'роскошно']
@@ -139,6 +147,11 @@ AUTH_PASSWORD_VALIDATORS = [
         '.NumericPasswordValidator',
     },
 ]
+
+
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
 
 
 # Internationalization
@@ -211,3 +224,15 @@ CKEDITOR_CONFIGS = {
 EMAIL = os.getenv('EMAIL')
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+
+PASSWORD_RESET_TIMEOUT = 43200
+
+MESSAGE_TAGS = {
+    constants.DEBUG: 'alert-secondary',
+    constants.INFO: 'alert-info',
+    constants.SUCCESS: 'alert-success',
+    constants.WARNING: 'alert-warning',
+    constants.ERROR: 'alert-danger',
+}
+
+AUTH_USER_MODEL = 'users.ShopUser'
