@@ -39,6 +39,8 @@
           {% else %}
             <a class="dropdown-item" href="{% url 'users:login' %}">{% translate "Войти" %}</a>
             <a class="dropdown-item" href="{% url 'users:signup' %}">{% translate "Зарегистрироваться" %}</a>
+            <li><hr class="dropdown-divider" /></li>
+            <a class="dropdown-item" href="{% url 'users:password_reset' %}">{% translate "Восстановить пароль" %}</a>
           {% endif %}
         </ul>
       </div>

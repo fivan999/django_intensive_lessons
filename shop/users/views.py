@@ -19,7 +19,7 @@ from users.forms import CustomUserChangeForm, ProfileChangeForm, SignUpForm
 def signup(request: HttpRequest) -> HttpResponse:
     """регистрация пользователя"""
     form = SignUpForm(request.POST or None)
-    if form.is_valid():
+    if form.is_valid() and request.method == 'POST':
         user = form.save(commit=False)
         user.is_active = settings.USER_IS_ACTIVE
         user.save()

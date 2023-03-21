@@ -153,6 +153,8 @@ LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/auth/login/'
 
+AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

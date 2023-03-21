@@ -7,6 +7,8 @@ from django.utils.http import urlsafe_base64_encode
 
 import mock
 
+from parameterized import parameterized
+
 import pytz
 
 from users.models import ShopUser
@@ -110,6 +112,33 @@ class UserTests(TestCase):
             )
         )
         self.assertFalse(user.is_active)
+
+    @parameterized.expand(
+        [
+            [register_data['username'], register_data['password1'], True],
+            [register_data['email'], register_data['password1'], True],
+            [register_data['username'], 'awrgfkjuagvwf', False],
+            ['qwertyuiop[]', register_data['password1'], False],
+        ]
+    )
+    def test_user_authenticate(
+        self, username: str, password: str, expected: bool
+    ) -> None:
+        """проверяем возможность аутентификации"""
+        Client().post(
+            reverse('users:signup'),
+            self.register_data,
+            follow=True
+        )
+        user = ShopUser.objects.get(pk=1)
+        last_login_start = user.last_login
+        Client().post(
+            reverse('users:login'),
+            {'username': username, 'password': password},
+            follow=True
+        )
+        last_login_end = user.last_login
+        self.assertFalse(last_login_end != last_login_start)
 
     def tearDown(self) -> None:
         """чистим бд после тестов"""

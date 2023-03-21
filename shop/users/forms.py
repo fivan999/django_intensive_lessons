@@ -133,7 +133,7 @@ class CustomUserChangeForm(BootstrapForm, UserChangeForm):
         help_texts = {
             'username': 'Введите имя пользователя',
             'email': 'Введите электронную почту',
-            'first_name': 'Ввеите имя',
+            'first_name': 'Введите имя',
             'last_name': 'Введите фамилию'
         }
 
