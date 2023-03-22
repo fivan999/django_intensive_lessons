@@ -22,7 +22,18 @@ class ShopUser(AbstractUser):
     objects = users.managers.ShopUserManager()
 
     email = django.db.models.EmailField(
-        _('email address'), blank=True, unique=True
+        _('email address'), blank=True, max_length=100, unique=True
+    )
+    login_attempts = django.db.models.IntegerField(
+        default=0,
+        verbose_name='неудачные попытки',
+        help_text='Количество неудачных попыток входа в аккаунт'
+    )
+    datetime_blocked = django.db.models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name='дата и время блокировки',
+        help_text='Дата и время блокировки за попытки входа'
     )
 
     class Meta(AbstractUser.Meta):

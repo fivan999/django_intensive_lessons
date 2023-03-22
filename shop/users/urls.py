@@ -83,4 +83,9 @@ urlpatterns = [
     path(
         'profile/', users.views.user_profile, name='user_profile'
     ),
+    path(
+        'reset_login_attempts/<uidb64>/<token>/',
+        users.views.reset_login_attempts,
+        name='reset_login_attempts'
+    ),
 ]
