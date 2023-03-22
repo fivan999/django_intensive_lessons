@@ -7,9 +7,9 @@ import users.models
 class ShopUserManager(UserManager):
     """менеджер модели ShopUser"""
 
-    def get_active_users_list(self) -> django.db.models.QuerySet:
+    def get_queryset(self) -> django.db.models.QuerySet:
         """возвращаем активных пользователей"""
-        return self.get_queryset().filter(
+        return super().get_queryset().filter(
             is_active=True
         ).select_related('profile')
 

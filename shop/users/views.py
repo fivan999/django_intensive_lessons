@@ -82,7 +82,7 @@ def activate_user(
 def user_list(request: HttpRequest) -> HttpResponse:
     """список пользователей"""
     context = {
-        'users': users.models.ShopUser.objects.get_active_users_list()
+        'users': users.models.ShopUser.objects.get_only_useful_list_fields()
     }
     return render(
         request, 'users/user_list.html', context=context
