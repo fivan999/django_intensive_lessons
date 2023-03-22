@@ -14,6 +14,10 @@ import pytz
 from users.models import ShopUser
 
 
+START_DATETIME = pytz.UTC.localize(timezone.datetime(2023, 1, 1, 0, 0, 0))
+END_DATETIME = pytz.UTC.localize(timezone.datetime(2023, 1, 1, 12, 1, 0))
+
+
 class UserTests(TestCase):
     """тестируем пользователя"""
 
@@ -93,25 +97,29 @@ class UserTests(TestCase):
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
     @override_settings(USER_IS_ACTIVE=False)
-    @mock.patch('django.utils.timezone.now')
-    def test_user_activation_error(self, mock_now) -> None:
-        Client().post(
-            reverse('users:signup'),
-            self.register_data,
-            follow=True
-        )
-        utc = pytz.UTC
-        mock_now.return_value = utc.localize(timezone.datetime(3000, 1, 1))
-        user = ShopUser.objects.get(pk=1)
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
-        Client().get(
-            reverse(
-                'users:activate_user',
-                kwargs={'uidb64': uid, 'token': token}
+    def test_user_activation_error(self) -> None:
+        """тестируем ошибку активации юзера"""
+        with mock.patch(
+            'django.utils.timezone.now', return_value=START_DATETIME
+        ):
+            Client().post(
+                reverse('users:signup'),
+                self.register_data,
+                follow=True
             )
-        )
-        self.assertFalse(user.is_active)
+        with mock.patch(
+            'django.utils.timezone.now', return_value=END_DATETIME
+        ):
+            user = ShopUser.objects.get(pk=1)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            Client().get(
+                reverse(
+                    'users:activate_user',
+                    kwargs={'uidb64': uid, 'token': token}
+                )
+            )
+            self.assertFalse(user.is_active)
 
     @parameterized.expand(
         [
