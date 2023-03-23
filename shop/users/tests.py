@@ -148,8 +148,8 @@ class UserTests(TestCase):
             {'username': username, 'password': password},
             follow=True
         )
-        last_login_end = user.last_login
-        self.assertFalse(last_login_end != last_login_start)
+        last_login_end = ShopUser.objects.get(pk=1).last_login
+        self.assertTrue(last_login_end != last_login_start)
 
     @parameterized.expand(
         [
