@@ -151,7 +151,9 @@ class UserTests(TestCase):
             {'username': username, 'password': password},
             follow=True
         )
-        self.assertTrue(response.context['user'].is_authenticated)
+        self.assertEqual(
+            response.context['user'].is_authenticated, expected
+        )
 
     @parameterized.expand(
         [
