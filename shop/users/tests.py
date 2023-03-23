@@ -24,7 +24,7 @@ class UserTests(TestCase):
 
     register_data = {
         'username': 'aboba',
-        'email': 'aboba@ya.ru',
+        'email': 'aboba@yandex.ru',
         'password1': 'ajdfgbjuygfrb',
         'password2': 'ajdfgbjuygfrb'
     }
@@ -142,12 +142,18 @@ class UserTests(TestCase):
             self.register_data,
             follow=True
         )
+        client.get(
+            reverse('users:logout'),
+            follow=True
+        )
         response = client.post(
             reverse('users:login'),
             {'username': username, 'password': password},
             follow=True
         )
-        self.assertTrue(response.context['user'].is_authenticated)
+        self.assertEqual(
+            response.context['user'].is_authenticated, expected
+        )
 
     @parameterized.expand(
         [
