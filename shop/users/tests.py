@@ -24,7 +24,7 @@ class UserTests(TestCase):
 
     register_data = {
         'username': 'aboba',
-        'email': 'aboba@ya.ru',
+        'email': 'aboba@yandex.ru',
         'password1': 'ajdfgbjuygfrb',
         'password2': 'ajdfgbjuygfrb'
     }
