@@ -136,14 +136,15 @@ class UserTests(TestCase):
         self, username: str, password: str, expected: bool
     ) -> None:
         """проверяем возможность аутентификации"""
-        Client().post(
+        client = Client()
+        client.post(
             reverse('users:signup'),
             self.register_data,
             follow=True
         )
         user = ShopUser.objects.get(pk=1)
         last_login_start = user.last_login
-        Client().post(
+        client.post(
             reverse('users:login'),
             {'username': username, 'password': password},
             follow=True
