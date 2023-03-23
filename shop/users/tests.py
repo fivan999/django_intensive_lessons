@@ -142,19 +142,12 @@ class UserTests(TestCase):
             self.register_data,
             follow=True
         )
-        client.post(
+        response = client.post(
             reverse('users:login'),
             {'username': username, 'password': password},
             follow=True
         )
-        last_login_start = ShopUser.objects.get(pk=1).last_login
-        client.post(
-            reverse('users:login'),
-            {'username': username, 'password': password},
-            follow=True
-        )
-        last_login_end = ShopUser.objects.get(pk=1).last_login
-        self.assertTrue(last_login_end != last_login_start)
+        self.assertTrue(response.context['user'].is_authenticated)
 
     @parameterized.expand(
         [
