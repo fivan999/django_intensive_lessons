@@ -4,7 +4,7 @@ from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
-from mock import mock
+from freezegun import freeze_time
 
 from parameterized import parameterized
 
@@ -15,6 +15,7 @@ from users.models import ShopUser
 
 START_DATETIME = pytz.UTC.localize(timezone.datetime(2023, 1, 1, 0, 0, 0))
 END_DATETIME = pytz.UTC.localize(timezone.datetime(2023, 1, 1, 12, 1, 0))
+END_DATETIME_WEEK = pytz.UTC.localize(timezone.datetime(2023, 1, 9, 0, 0, 0))
 
 
 class UserTests(TestCase):
@@ -94,19 +95,13 @@ class UserTests(TestCase):
     def test_user_activation_error(self) -> None:
         """тестируем ошибку активации юзера"""
         client = Client()
-        with mock.patch(
-            'django.utils.timezone.now',
-            return_value=START_DATETIME
-        ):
+        with freeze_time('2023-01-01 00:00:00'):
             client.post(
                 reverse('users:signup'),
                 self.register_data,
                 follow=True
             )
-        with mock.patch(
-            'django.utils.timezone.now',
-            return_value=END_DATETIME
-        ):
+        with freeze_time('2023-01-01 13:00:00'):
             user = ShopUser.objects.get(pk=1)
             text = mail.outbox[0].body
             text = text[text.find('http'):].strip('\n')
@@ -121,6 +116,7 @@ class UserTests(TestCase):
             ['qwertyuiop[]', register_data['password1'], False],
         ]
     )
+    @override_settings(USER_IS_ACTIVE=True)
     def test_user_authenticate(
         self, username: str, password: str, expected: bool
     ) -> None:
@@ -166,7 +162,7 @@ class UserTests(TestCase):
         )
         self.assertEqual(ShopUser.objects.get(pk=1).email, expected)
 
-    @override_settings(USER_IS_ACTIVE=False)
+    @override_settings(USER_IS_ACTIVE=True)
     def test_user_deactivation(self) -> None:
         """тестируем деактивацию профиля в авторизации"""
         client = Client()
@@ -186,7 +182,7 @@ class UserTests(TestCase):
             )
         self.assertFalse(ShopUser.objects.get(pk=1).is_active)
 
-    @override_settings(USER_IS_ACTIVE=False)
+    @override_settings(USER_IS_ACTIVE=True)
     def test_user_reactivation_success(self) -> None:
         """тестируем реактивацию профиля"""
         client = Client()
@@ -209,6 +205,32 @@ class UserTests(TestCase):
         text = text[text.find('http'):].strip('\n')
         client.get(text)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
+
+    @override_settings(USER_IS_ACTIVE=True)
+    def test_user_reactivation_error(self) -> None:
+        """тестируем ошибку реактивации профиля"""
+        with freeze_time('2023-01-01'):
+            client = Client()
+            client.post(
+                reverse('users:signup'),
+                self.register_data,
+                follow=True
+            )
+            user = ShopUser.objects.get(pk=1)
+            for _ in range(settings.LOGIN_ATTEMPTS):
+                client.post(
+                    reverse('users:login'),
+                    {
+                        'username': user.username,
+                        'password': 'testbeb'
+                    },
+                    follow=True
+                )
+        with freeze_time('2023-01-10'):
+            text = mail.outbox[0].body
+            text = text[text.find('http'):].strip('\n')
+            client.get(text)
+            self.assertFalse(ShopUser.objects.get(pk=1).is_active)
 
     def tearDown(self) -> None:
         """чистим бд после тестов"""
