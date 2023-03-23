@@ -1,11 +1,8 @@
 from django.conf import settings
-from django.contrib.auth.tokens import default_token_generator
 from django.core import mail
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
 
 from mock import mock
 
@@ -111,9 +108,7 @@ class UserTests(TestCase):
             user = ShopUser.objects.get(pk=1)
             text = mail.outbox[0].body
             text = text[text.find('http'):].strip('\n')
-            Client().get(
-                text
-            )
+            Client().get(text)
             self.assertFalse(user.is_active)
 
     @parameterized.expand(
@@ -206,15 +201,9 @@ class UserTests(TestCase):
                 },
                 follow=True
             )
-        user = ShopUser.objects.get(pk=1)
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
-        Client().get(
-            reverse(
-                'users:reset_login_attempts',
-                kwargs={'uidb64': uid, 'token': token}
-            )
-        )
+        text = mail.outbox[0].body
+        text = text[text.find('http'):].strip('\n')
+        Client().get(text)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
     def tearDown(self) -> None:
