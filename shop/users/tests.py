@@ -88,8 +88,8 @@ class UserTests(TestCase):
             follow=True
         )
         text = mail.outbox[0].body
-        text = text[text.find('http'):].strip('\n') 
-        Client().get(text)
+        text = text[text.find('http'):].strip('\n')
+        Client().get(text)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
     @override_settings(USER_IS_ACTIVE=False)
