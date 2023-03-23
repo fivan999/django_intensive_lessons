@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
+from django.core import mail
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
@@ -114,13 +115,10 @@ class UserTests(TestCase):
             return_value=END_DATETIME
         ):
             user = ShopUser.objects.get(pk=1)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
+            text = mail.outbox[0].body
+            text = text[text.find('http'):].strip('\n')
             Client().get(
-                reverse(
-                    'users:activate_user',
-                    kwargs={'uidb64': uid, 'token': token}
-                )
+                text
             )
             self.assertFalse(user.is_active)
 
