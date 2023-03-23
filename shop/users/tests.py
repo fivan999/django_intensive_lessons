@@ -87,8 +87,8 @@ class UserTests(TestCase):
             self.register_data,
             follow=True
         )
-        text = mail.outbox[0].body
-        text = text[text.find('http'):].strip('\n') 
+        text = mail.outbox[0].body
+        text = text[text.find('http'):].strip('\n') 
          Client().get( 
              text 
          )
