@@ -108,9 +108,7 @@ class UserTests(TestCase):
             user = ShopUser.objects.get(pk=1)
             text = mail.outbox[0].body
             text = text[text.find('http'):].strip('\n')
-            Client().get(
-                text
-            )
+            Client().get(text)
             self.assertFalse(user.is_active)
 
     @parameterized.expand(
