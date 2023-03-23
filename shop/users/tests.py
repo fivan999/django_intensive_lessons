@@ -79,24 +79,26 @@ class UserTests(TestCase):
     @override_settings(USER_IS_ACTIVE=False)
     def test_user_activation(self) -> None:
         """тестируем активацию пользователя"""
-        Client().post(
+        client = Client()
+        client.post(
             reverse('users:signup'),
             self.register_data,
             follow=True
         )
         text = mail.outbox[0].body
         text = text[text.find('http'):].strip('\n')
-        Client().get(text)
+        client.get(text)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
     @override_settings(USER_IS_ACTIVE=False)
     def test_user_activation_error(self) -> None:
         """тестируем ошибку активации юзера"""
+        client = Client()
         with mock.patch(
             'django.utils.timezone.now',
             return_value=START_DATETIME
         ):
-            Client().post(
+            client.post(
                 reverse('users:signup'),
                 self.register_data,
                 follow=True
@@ -108,7 +110,7 @@ class UserTests(TestCase):
             user = ShopUser.objects.get(pk=1)
             text = mail.outbox[0].body
             text = text[text.find('http'):].strip('\n')
-            Client().get(text)
+            client.get(text)
             self.assertFalse(user.is_active)
 
     @parameterized.expand(
@@ -167,13 +169,14 @@ class UserTests(TestCase):
     @override_settings(USER_IS_ACTIVE=False)
     def test_user_deactivation(self) -> None:
         """тестируем деактивацию профиля в авторизации"""
-        Client().post(
+        client = Client()
+        client.post(
             reverse('users:signup'),
             self.register_data,
             follow=True
         )
         for _ in range(settings.LOGIN_ATTEMPTS):
-            Client().post(
+            client.post(
                 reverse('users:login'),
                 {
                     'username': self.register_data['username'],
@@ -186,14 +189,15 @@ class UserTests(TestCase):
     @override_settings(USER_IS_ACTIVE=False)
     def test_user_reactivation_success(self) -> None:
         """тестируем реактивацию профиля"""
-        Client().post(
+        client = Client()
+        client.post(
             reverse('users:signup'),
             self.register_data,
             follow=True
         )
         user = ShopUser.objects.get(pk=1)
         for _ in range(settings.LOGIN_ATTEMPTS):
-            Client().post(
+            client.post(
                 reverse('users:login'),
                 {
                     'username': user.username,
@@ -203,7 +207,7 @@ class UserTests(TestCase):
             )
         text = mail.outbox[0].body
         text = text[text.find('http'):].strip('\n')
-        Client().get(text)
+        client.get(text)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
     def tearDown(self) -> None:
