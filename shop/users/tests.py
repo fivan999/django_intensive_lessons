@@ -142,6 +142,10 @@ class UserTests(TestCase):
             self.register_data,
             follow=True
         )
+        client.get(
+            reverse('users:logout'),
+            follow=True
+        )
         response = client.post(
             reverse('users:login'),
             {'username': username, 'password': password},
