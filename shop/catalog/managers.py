@@ -29,9 +29,9 @@ class ItemManager(django.db.models.Manager):
             is_published=True, category__is_published=True
         ).values_list('id', flat=True)
         return self.get_published_items().filter(
-            created_at__gte=django.db.models.F(
-                'created_at'
-            ) - datetime.timedelta(days=7),
+            created_at__gte=(
+                datetime.datetime.now() - datetime.timedelta(days=7)
+            ),
             id__in=random.sample(list(item_ids), 5)
         )
 

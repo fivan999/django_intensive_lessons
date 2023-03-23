@@ -102,11 +102,10 @@ class UserTests(TestCase):
                 follow=True
             )
         with freeze_time('2023-01-01 13:00:00'):
-            user = ShopUser.objects.get(pk=1)
             text = mail.outbox[0].body
             text = text[text.find('http'):].strip('\n')
             client.get(text)
-            self.assertFalse(user.is_active)
+            self.assertFalse(ShopUser.objects.get(pk=1).is_active)
 
     @parameterized.expand(
         [
@@ -209,7 +208,7 @@ class UserTests(TestCase):
     @override_settings(USER_IS_ACTIVE=True)
     def test_user_reactivation_error(self) -> None:
         """тестируем ошибку реактивации профиля"""
-        with freeze_time('2023-01-01'):
+        with freeze_time('2023-01-01 00:00:00'):
             client = Client()
             client.post(
                 reverse('users:signup'),
@@ -226,7 +225,7 @@ class UserTests(TestCase):
                     },
                     follow=True
                 )
-        with freeze_time('2023-01-10'):
+        with freeze_time('2023-01-10 00:00:00'):
             text = mail.outbox[0].body
             text = text[text.find('http'):].strip('\n')
             client.get(text)
