@@ -1,3 +1,4 @@
+from django.core import mail
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.test import Client, TestCase, override_settings
