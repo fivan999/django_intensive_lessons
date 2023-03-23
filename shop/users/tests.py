@@ -87,15 +87,9 @@ class UserTests(TestCase):
             self.register_data,
             follow=True
         )
-        user = ShopUser.objects.get(pk=1)
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
-        Client().get(
-            reverse(
-                'users:activate_user',
-                kwargs={'uidb64': uid, 'token': token}
-            )
-        )
+        text = mail.outbox[0].body
+        text = text[text.find('http'):].strip('\n')
+        Client().get(text)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
     @override_settings(USER_IS_ACTIVE=False)
