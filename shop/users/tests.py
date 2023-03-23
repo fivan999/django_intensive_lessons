@@ -114,13 +114,10 @@ class UserTests(TestCase):
             return_value=END_DATETIME
         ):
             user = ShopUser.objects.get(pk=1)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
+            text = mail.outbox[0].body
+            text = text[text.find('http'):].strip('\n')
             Client().get(
-                reverse(
-                    'users:activate_user',
-                    kwargs={'uidb64': uid, 'token': token}
-                )
+                text
             )
             self.assertFalse(user.is_active)
 
