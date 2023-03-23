@@ -78,8 +78,8 @@ def reset_login_attempts(
         user = None
     if (
         user and default_token_generator.check_token(user, token)
-        and (datetime.datetime.now() + datetime.timedelta(days=7)).timestamp()
-        > user.datetime_blocked.timestamp()
+        and (user.datetime_blocked + datetime.timedelta(days=7)).timestamp()
+        > datetime.datetime.now().timestamp()
     ):
         user.is_active = True
         user.save()
