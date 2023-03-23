@@ -1,18 +1,18 @@
+import datetime
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import send_mail
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 
 import users.models
+import users.services
 from users.forms import CustomUserChangeForm, ProfileChangeForm, SignUpForm
 
 
@@ -26,27 +26,13 @@ def signup(request: HttpRequest) -> HttpResponse:
         profile = users.models.Profile(user=user)
         profile.save()
         if not settings.USER_IS_ACTIVE:
-            message = render_to_string(
-                'users/activate_user.html',
-                {
-                    'username': user.username,
-                    'domain': get_current_site(request).domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': default_token_generator.make_token(user),
-                    'protocol': 'https' if request.is_secure() else 'http'
-                }
-            )
-            send_mail(
-                'Activate your account',
-                message,
-                settings.EMAIL,
-                [user.email],
-                fail_silently=False
+            users.services.activation_email(
+                request, 'users:activate_user', user
             )
             messages.success(
                 request,
                 f'На вашу почту {user.email} было '
-                'отправлено письмо с подтверждением регистрации'
+                'отправлено письмо с активацией'
             )
         else:
             messages.success(request, 'Спасибо за регистрацию!')
@@ -69,11 +55,41 @@ def activate_user(
         user.is_active = True
         user.save()
         login(request, user)
-        messages.success(request, 'Спасибо за подтверждение аккаунта.')
+        messages.success(
+            request, 'Спасибо за активацию аккаунта'
+        )
     else:
         messages.error(
             request,
-            'Ссылка активации неверна. Попробуйте зарегистрироваться заново.'
+            'Ссылка активации неверна.'
+        )
+    return redirect('homepage:homepage')
+
+
+def reset_login_attempts(
+    request: HttpRequest, uidb64: str, token: str
+) -> HttpResponse:
+    """активация аккаунта после превышения попыток"""
+    try:
+        user = users.models.ShopUser.objects.get(
+            pk=force_str(urlsafe_base64_decode(uidb64))
+        )
+    except Exception:
+        user = None
+    if (
+        user and default_token_generator.check_token(user, token)
+        and (datetime.datetime.now() + datetime.timedelta(days=7)).timestamp()
+        > user.datetime_blocked.timestamp()
+    ):
+        user.is_active = True
+        user.save()
+        messages.success(
+            request, 'Спасибо за активацию аккаунта, теперь вы можете войти'
+        )
+    else:
+        messages.error(
+            request,
+            'Ссылка активации неверна.'
         )
     return redirect('homepage:homepage')
 
@@ -82,7 +98,7 @@ def activate_user(
 def user_list(request: HttpRequest) -> HttpResponse:
     """список пользователей"""
     context = {
-        'users': users.models.ShopUser.objects.get_active_users_list()
+        'users': users.models.ShopUser.objects.get_only_useful_list_fields()
     }
     return render(
         request, 'users/user_list.html', context=context

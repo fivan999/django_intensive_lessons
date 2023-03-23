@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
@@ -5,7 +6,7 @@ from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-import mock
+from mock import mock
 
 from parameterized import parameterized
 
@@ -100,7 +101,8 @@ class UserTests(TestCase):
     def test_user_activation_error(self) -> None:
         """тестируем ошибку активации юзера"""
         with mock.patch(
-            'django.utils.timezone.now', return_value=START_DATETIME
+            'django.utils.timezone.now',
+            return_value=START_DATETIME
         ):
             Client().post(
                 reverse('users:signup'),
@@ -108,7 +110,8 @@ class UserTests(TestCase):
                 follow=True
             )
         with mock.patch(
-            'django.utils.timezone.now', return_value=END_DATETIME
+            'django.utils.timezone.now',
+            return_value=END_DATETIME
         ):
             user = ShopUser.objects.get(pk=1)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -147,6 +150,76 @@ class UserTests(TestCase):
         )
         last_login_end = user.last_login
         self.assertFalse(last_login_end != last_login_start)
+
+    @parameterized.expand(
+        [
+            ['aboba@ya.ru', 'aboba@yandex.ru'],
+            ['ABOBA@yA.ru', 'aboba@yandex.ru'],
+            ['abo.ba.+ger@gmail.com', 'aboba@gmail.com'],
+            ['ABo.ba.+ger@gmail.com', 'aboba@gmail.com'],
+        ]
+    )
+    def test_user_normalize_email(self, email: str, expected: str) -> None:
+        """тестируем валидацию почты"""
+        Client().post(
+            reverse('users:signup'),
+            {
+                'username': self.register_data['username'],
+                'email': email,
+                'password1': self.register_data['password1'],
+                'password2': self.register_data['password2'],
+            },
+            follow=True
+        )
+        self.assertEqual(ShopUser.objects.get(pk=1).email, expected)
+
+    @override_settings(USER_IS_ACTIVE=False)
+    def test_user_deactivation(self) -> None:
+        """тестируем деактивацию профиля в авторизации"""
+        Client().post(
+            reverse('users:signup'),
+            self.register_data,
+            follow=True
+        )
+        for _ in range(settings.LOGIN_ATTEMPTS):
+            Client().post(
+                reverse('users:login'),
+                {
+                    'username': self.register_data['username'],
+                    'password': 'testbeb'
+                },
+                follow=True
+            )
+        self.assertFalse(ShopUser.objects.get(pk=1).is_active)
+
+    @override_settings(USER_IS_ACTIVE=False)
+    def test_user_reactivation_success(self) -> None:
+        """тестируем реактивацию профиля"""
+        Client().post(
+            reverse('users:signup'),
+            self.register_data,
+            follow=True
+        )
+        user = ShopUser.objects.get(pk=1)
+        for _ in range(settings.LOGIN_ATTEMPTS):
+            Client().post(
+                reverse('users:login'),
+                {
+                    'username': user.username,
+                    'password': 'testbeb'
+                },
+                follow=True
+            )
+        user = ShopUser.objects.get(pk=1)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        Client().get(
+            reverse(
+                'users:reset_login_attempts',
+                kwargs={'uidb64': uid, 'token': token}
+            )
+        )
+        self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
     def tearDown(self) -> None:
         """чистим бд после тестов"""

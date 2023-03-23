@@ -154,6 +154,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/auth/login/'
 
 AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend']
+LOGIN_ATTEMPTS = int(os.environ.get('LOGIN_ATTEMPTS', default=3))
 
 
 # Internationalization
