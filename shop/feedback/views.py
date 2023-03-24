@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
 from django.core.mail import send_mail
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
@@ -6,6 +7,7 @@ from django.shortcuts import redirect, render
 from feedback.forms import FeedbackForm
 
 
+@staff_member_required
 def feedback(request: HttpRequest) -> HttpResponse:
     """обработчик форма обратной связи"""
     form = FeedbackForm(request.POST or None)

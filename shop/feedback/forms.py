@@ -1,7 +1,10 @@
 import django.forms
+from django.core.exceptions import ValidationError
 from django.utils.datastructures import MultiValueDict
 
-from feedback.models import Feedback, FeedbackFile, FeedbackUserData
+from feedback.models import Feedback, FeedbackFile
+
+import users.models
 
 
 class FeedbackForm(django.forms.Form):
@@ -30,16 +33,19 @@ class FeedbackForm(django.forms.Form):
         help_text='Загрузите файл'
     )
 
+    def clean_email(self) -> None:
+        """валидируем email"""
+        if not users.models.ShopUser.objects.filter(
+            email=self.cleaned_data['email']
+        ).exists():
+            raise ValidationError('Пользователя с таким email не существует')
+
     def save(self, files: MultiValueDict) -> None:
         """сохраняем форму"""
         text = self.cleaned_data['text']
         user_email = self.cleaned_data['email']
 
-        user = FeedbackUserData.objects.filter(email=user_email)
-        if user:
-            user = user.first()
-        else:
-            user = FeedbackUserData.objects.create(email=user_email)
+        user = users.models.ShopUser.objects.get(email=user_email)
 
         feedback = Feedback.objects.create(text=text, user=user)
 

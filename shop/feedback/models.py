@@ -4,6 +4,8 @@ import django.db.models
 
 from transliterate import translit
 
+import users.models
+
 
 def generate_file_path(obj: django.db.models.Model, filename: str) -> str:
     """путь к файлу"""
@@ -14,23 +16,6 @@ def generate_file_path(obj: django.db.models.Model, filename: str) -> str:
         + filename[filename.rfind('.'):]
     )
     return f'uploads/{obj.feedback.pk}/{filename}'
-
-
-class FeedbackUserData(django.db.models.Model):
-    """модель с данными пользователя из формы"""
-
-    email = django.db.models.EmailField(
-        verbose_name='электронная почта',
-        help_text='Электронная почта получателя'
-    )
-
-    class Meta:
-        verbose_name = 'данные пользователя'
-        db_table = 'feedback_feedbackuserdata'
-
-    def __str__(self) -> str:
-        """строковое представление пользователя"""
-        return self.email
 
 
 class Feedback(django.db.models.Model):
@@ -59,7 +44,7 @@ class Feedback(django.db.models.Model):
         max_length=100
     )
     user = django.db.models.ForeignKey(
-        FeedbackUserData,
+        users.models.ShopUser,
         on_delete=django.db.models.CASCADE,
         verbose_name='пользователь',
         help_text='Пользователь, к которому привязан фидбек',

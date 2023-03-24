@@ -1,5 +1,3 @@
-import datetime
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.backends import ModelBackend
@@ -29,7 +27,6 @@ class EmailBackend(ModelBackend):
             user.login_attempts += 1
             if user.login_attempts == settings.LOGIN_ATTEMPTS:
                 user.is_active = False
-                user.datetime_blocked = datetime.datetime.now()
                 messages.error(
                     request,
                     'Вы слишком много раз пытались '

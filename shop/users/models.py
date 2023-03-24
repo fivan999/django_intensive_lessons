@@ -29,12 +29,6 @@ class ShopUser(AbstractUser):
         verbose_name='неудачные попытки',
         help_text='Количество неудачных попыток входа в аккаунт'
     )
-    datetime_blocked = django.db.models.DateTimeField(
-        blank=True,
-        null=True,
-        verbose_name='дата и время блокировки',
-        help_text='Дата и время блокировки за попытки входа'
-    )
 
     class Meta(AbstractUser.Meta):
         db_table = 'auth_user'
