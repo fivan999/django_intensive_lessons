@@ -39,6 +39,7 @@ class FeedbackForm(django.forms.Form):
             email=self.cleaned_data['email']
         ).exists():
             raise ValidationError('Пользователя с таким email не существует')
+        return self.cleaned_data['email']
 
     def save(self, files: MultiValueDict) -> None:
         """сохраняем форму"""

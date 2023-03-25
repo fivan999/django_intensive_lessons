@@ -10,6 +10,8 @@ from django.urls import reverse
 from feedback.forms import FeedbackForm
 from feedback.models import Feedback, FeedbackFile
 
+from users.models import ShopUser
+
 
 @override_settings(
     MEDIA_ROOT=os.path.join(
@@ -21,23 +23,53 @@ from feedback.models import Feedback, FeedbackFile
 class FormsTest(TestCase):
     """тестируем формы"""
 
+    fixtures = ['fixtures/tests/feedback_tests.json', ]
+
     feedback_form = FeedbackForm()
+
     feedback_form_data = {
-        'text': 'Письмо админу',
-        'email': 'aboba@ya.ru'
+        'text': 'hello',
+        'email': 'testuser@yandex.ru'
     }
 
     def tearDown(self) -> None:
         """удаление тестовых данных"""
         Feedback.objects.all().delete()
-        dir_name = str(settings.MEDIA_ROOT) + '/uploads/1'
+        dir_name = str(settings.MEDIA_ROOT) + '/uploads/feedbacks/1'
         if os.path.isdir(dir_name):
             shutil.rmtree(dir_name)
         super().tearDown()
 
+    def test_user_can_not_give_feedback(self) -> None:
+        """
+        обычный пользователь не может давать фидбеки,
+        будет редирект на страницу входа в админку
+        """
+        client = Client()
+        user = ShopUser.objects.get(pk=2)
+        client.post(
+            reverse('users:login'),
+            {
+                'username': user.username,
+                'password': 'mutter77'
+            },
+            follow=True
+        )
+        response = client.get(reverse('feedback:feedback'))
+        self.assertEqual(response.url, '/admin/login/?next=/feedback/')
+
     def test_form_in_feedback_context(self) -> None:
         """тестируем передачу формы в контекст"""
-        response = Client().get(reverse('feedback:feedback'))
+        client = Client()
+        user = ShopUser.objects.get(pk=1)
+        response = client.post(
+            reverse('users:login'),
+            {
+                'username': user.username,
+                'password': 'mutter77'
+            }
+        )
+        self.assertEqual(response.context['user'], 1)
         self.assertIn('form', response.context)
 
     def test_feedback_form_correct_text_label(self) -> None:
@@ -62,17 +94,34 @@ class FormsTest(TestCase):
 
     def test_feedback_form_redirects_to_thanks(self) -> None:
         """тестируем редирект на страницу с благодарностью"""
-        response = Client().post(
+        client = Client()
+        user = ShopUser.objects.get(pk=1)
+        response = client.post(
+            reverse('users:login'),
+            {
+                'username': user.username,
+                'password': 'mutter77'
+            }
+        )
+        response = client.post(
             reverse('feedback:feedback'),
-            self.feedback_form_data,
-            follow=True
+            self.feedback_form_data
         )
         self.assertRedirects(response, reverse('feedback:thanks'))
 
     def test_create_feedback(self) -> None:
         """тестируем создание фидбека"""
         start_count = Feedback.objects.count()
-        Client().post(
+        client = Client()
+        user = ShopUser.objects.get(pk=1)
+        client.post(
+            reverse('users:login'),
+            {
+                'username': user.username,
+                'password': 'mutter77'
+            }
+        )
+        client.post(
             reverse('feedback:feedback'),
             self.feedback_form_data
         )
@@ -81,11 +130,12 @@ class FormsTest(TestCase):
 
     def test_attach_files_in_feedback(self) -> None:
         """тестируем возможность прикрепить файлы в фидбеке"""
+        client = Client()
         self.feedback_form_data['files'] = [
             SimpleUploadedFile('file1.txt', b'aboba'),
             SimpleUploadedFile('file2.txt', b'bebra')
         ]
-        response = Client().post(
+        response = client.post(
             reverse('feedback:feedback'),
             self.feedback_form_data,
             follow=True

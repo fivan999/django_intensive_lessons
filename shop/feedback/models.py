@@ -15,7 +15,7 @@ def generate_file_path(obj: django.db.models.Model, filename: str) -> str:
         + secrets.token_hex(6)
         + filename[filename.rfind('.'):]
     )
-    return f'uploads/{obj.feedback.pk}/{filename}'
+    return f'uploads/feedbacks/{obj.feedback.pk}/{filename}'
 
 
 class Feedback(django.db.models.Model):
@@ -31,7 +31,7 @@ class Feedback(django.db.models.Model):
         verbose_name='текст',
         help_text='Введите текст фидбека'
     )
-    cretated_on = django.db.models.DateTimeField(
+    created_on = django.db.models.DateTimeField(
         auto_now_add=True,
         verbose_name='дата и время создания',
         help_text='Когда отправили фидбек'

@@ -33,6 +33,7 @@
               <a href="/admin/" class="dropdown-item">{% translate "В админку" %}</a>
               <a href="{% url 'users:user_list' %}" class="dropdown-item">{% translate "Список пользователей" %}</a>
             {% endif %}
+            <a class="dropdown-item" href="{% url 'feedback:user_feedbacks' user_id=request.user.id %}">{% translate "Мои фидбеки" %}</a>
             <li><hr class="dropdown-divider" /></li>
             <a class="dropdown-item" href="{% url 'users:password_reset' %}">{% translate "Восстановить пароль" %}</a>
             <a class="dropdown-item" href="{% url 'users:password_change' %}">{% translate "Сменить пароль" %}</a>
