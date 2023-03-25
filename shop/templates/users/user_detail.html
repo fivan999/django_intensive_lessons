@@ -15,7 +15,9 @@
         <p class="lead">Фамилия: {% if user.last_name %}{{ user.last_name }}{% else %}<strong>не указано</strong>{% endif %}</p>
         <p class="lead">Дата рождения: {% if user.profile.birthday %}{{ user.profile.birthday|date:'Y-m-d' }}{% else %}<strong>не указано</strong>{% endif %}</p>
         <p class="lead">Пытался выпить кофе {{ user.profile.coffee_count }} раз</p>
-        {% block button %}{% endblock button %}
+        {% block button %}
+          <a href="{% url 'feedback:user_feedbacks' user_id=user.id %}"><button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Фидбеки</button></a>
+        {% endblock button %}
       </div>
       {% block profile_form %}{% endblock profile_form %}
     </div>
