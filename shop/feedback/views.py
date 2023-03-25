@@ -1,7 +1,6 @@
 from typing import Union
 
 from django.conf import settings
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import QuerySet
@@ -17,7 +16,7 @@ from feedback.forms import FeedbackForm
 from feedback.models import Feedback
 
 
-@method_decorator(staff_member_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class FeedbackView(FormView):
     """страница с отправкой фидбека"""
 
@@ -51,7 +50,9 @@ class UserFeedbacks(ListView):
         self, request: HttpRequest, *args, **kwargs
     ) -> Union[Http404, HttpResponse]:
         """проверка на соответствие user_id"""
-        if request.user.id != self.kwargs['user_id']:
+        if request.user.id != self.kwargs[
+            'user_id'
+        ] and not request.user.is_staff:
             raise Http404()
         return super().dispatch(request, *args, **kwargs)
 
