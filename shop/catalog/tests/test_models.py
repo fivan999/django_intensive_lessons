@@ -1,10 +1,3 @@
-from catalog.models import (
-    Category,
-    Item,
-    Tag
-)
-from catalog.validators import ValidateMustContain
-
 import django.urls
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -12,6 +5,9 @@ from django.forms.models import model_to_dict
 from django.test import Client, TestCase
 
 from parameterized import parameterized
+
+from catalog.models import Category, Item, Tag
+from catalog.validators import ValidateMustContain
 
 
 class ModelsTests(TestCase):
@@ -23,13 +19,11 @@ class ModelsTests(TestCase):
             is_published=True,
             name='Тестовая категория',
             slug='test_slug',
-            weight=100
+            weight=100,
         )
 
         self.tag = Tag.objects.create(
-            is_published=True,
-            name='Тестовый тэг',
-            slug='test_slug'
+            is_published=True, name='Тестовый тэг', slug='test_slug'
         )
         super().setUp()
 
@@ -42,7 +36,8 @@ class ModelsTests(TestCase):
 
     @parameterized.expand(
         [
-            '', 'a' * 151,
+            '',
+            'a' * 151,
         ]
     )
     def test_create_invalid_name(self, test_case: str) -> None:
@@ -53,7 +48,7 @@ class ModelsTests(TestCase):
             self.item = Item(
                 name=test_case,
                 text=settings.NESSESARY_TEXT_WORDS[0],
-                category=self.category
+                category=self.category,
             )
             self.item.full_clean()
             self.item.save()
@@ -62,12 +57,15 @@ class ModelsTests(TestCase):
         self.assertEqual(
             Item.objects.count(),
             start_count,
-            f'Ошибка создания name модели: {test_case}'
+            f'Ошибка создания name модели: {test_case}',
         )
 
     @parameterized.expand(
         [
-            '$' * 149, 'b' * 150, 'aboba', 'олежа',
+            '$' * 149,
+            'b' * 150,
+            'aboba',
+            'олежа',
         ]
     )
     def test_create_valid_name(self, test_case: str) -> None:
@@ -77,7 +75,7 @@ class ModelsTests(TestCase):
         self.item = Item(
             name=test_case,
             text=settings.NESSESARY_TEXT_WORDS[0],
-            category=self.category
+            category=self.category,
         )
         self.item.full_clean()
         self.item.save()
@@ -86,12 +84,16 @@ class ModelsTests(TestCase):
         self.assertEqual(
             Item.objects.count(),
             start_count + 1,
-            f'Ошибка создания name модели: {test_case}'
+            f'Ошибка создания name модели: {test_case}',
         )
 
     @parameterized.expand(
         [
-            ' роскошно ', '#1aboba-_', '12-_иван', '', '1' * 201,
+            ' роскошно ',
+            '#1aboba-_',
+            '12-_иван',
+            '',
+            '1' * 201,
         ]
     )
     def test_create_invalid_slug(self, test_case: str) -> None:
@@ -99,39 +101,37 @@ class ModelsTests(TestCase):
         start_count = Tag.objects.count()
 
         with self.assertRaises(ValidationError):
-            self.item = Tag(
-                name='олег',
-                slug=test_case
-            )
+            self.item = Tag(name='олег', slug=test_case)
             self.item.full_clean()
             self.item.save()
 
         self.assertEqual(
             Tag.objects.count(),
             start_count,
-            f'Ошибка создания slug модели: {test_case}'
+            f'Ошибка создания slug модели: {test_case}',
         )
 
     @parameterized.expand(
         [
-            '1aboba_-', '1234567', '----', '____', '_-',
+            '1aboba_-',
+            '1234567',
+            '----',
+            '____',
+            '_-',
         ]
     )
     def test_create_valid_slug(self, test_case: str) -> None:
         """тестируем создание валидного slug"""
         start_count = Tag.objects.count()
 
-        self.item = Tag(
-            name='олег',
-            slug=test_case
-        )
+        self.item = Tag(name='олег', slug=test_case)
         self.item.full_clean()
         self.item.save()
 
         self.assertEqual(
             Tag.objects.count(),
             start_count + 1,
-            f'Ошибка создания slug модели: {test_case}'
+            f'Ошибка создания slug модели: {test_case}',
         )
 
     @parameterized.expand([(-1,), (-32767,), (32768,), (0,)])
@@ -140,18 +140,14 @@ class ModelsTests(TestCase):
         start_count = Category.objects.count()
 
         with self.assertRaises(ValidationError):
-            self.item = Category(
-                name='олег',
-                slug='aboba',
-                weight=test_case
-            )
+            self.item = Category(name='олег', slug='aboba', weight=test_case)
             self.item.full_clean()
             self.item.save()
 
         self.assertEqual(
             Category.objects.count(),
             start_count,
-            f'Ошибка создания weight модели: {test_case}'
+            f'Ошибка создания weight модели: {test_case}',
         )
 
     @parameterized.expand([(1,), (32767,), (15000,)])
@@ -159,25 +155,23 @@ class ModelsTests(TestCase):
         """тестируем создание валидного weight"""
         start_count = Category.objects.count()
 
-        self.item = Category(
-            name='олег',
-            slug='aboba',
-            weight=test_case
-        )
+        self.item = Category(name='олег', slug='aboba', weight=test_case)
         self.item.full_clean()
         self.item.save()
 
         self.assertEqual(
             Category.objects.count(),
             start_count + 1,
-            f'Ошибка создания weight модели: {test_case}'
+            f'Ошибка создания weight модели: {test_case}',
         )
 
 
 class ContextTests(TestCase):
     """тестируем модельки на страницах"""
 
-    fixtures = ['fixtures/tests/context_tests.json', ]
+    fixtures = [
+        'fixtures/tests/context_tests.json',
+    ]
 
     def test_catalog_show_correct_context(self) -> None:
         """проверка корректного контекста в каталоге"""
@@ -227,13 +221,11 @@ class ContextTests(TestCase):
         response = Client().get(
             django.urls.reverse('catalog:item_detail', args=[1])
         )
-        self.assertEqual(
-            isinstance(response.context['item'], Item), True
-        )
+        self.assertEqual(isinstance(response.context['item'], Item), True)
 
-    @parameterized.expand([
-        'name', 'text', 'category', 'tags', 'id', 'is_published'
-    ])
+    @parameterized.expand(
+        ['name', 'text', 'category', 'tags', 'id', 'is_published']
+    )
     def test_item_detail_returns_valid_fields(self, field: str) -> None:
         """проверяем, возвращает ли сервер нужные поля у Item"""
         response = Client().get(
@@ -241,9 +233,9 @@ class ContextTests(TestCase):
         )
         self.assertTrue(field in model_to_dict(response.context['item']))
 
-    @parameterized.expand([
-        'main_image', 'bebra', 'galery', 'created_at', 'updated_at'
-    ])
+    @parameterized.expand(
+        ['main_image', 'bebra', 'galery', 'created_at', 'updated_at']
+    )
     def test_item_detail_not_returns_invalid_fields(self, field: str) -> None:
         """проверяем, не возвращает ли сервер ненужные поля у Item"""
         response = Client().get(

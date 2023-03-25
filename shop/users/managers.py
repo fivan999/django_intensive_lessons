@@ -10,9 +10,11 @@ class ShopUserManager(UserManager):
 
     def get_active_users_list(self) -> django.db.models.QuerySet:
         """возвращаем активных пользователей"""
-        return self.get_queryset().filter(
-            is_active=True
-        ).select_related('profile')
+        return (
+            self.get_queryset()
+            .filter(is_active=True)
+            .select_related('profile')
+        )
 
     def get_only_useful_list_fields(self) -> django.db.models.QuerySet:
         """только нужные поля для списка пользователей"""
@@ -23,8 +25,13 @@ class ShopUserManager(UserManager):
     def get_only_useful_detail_fields(self) -> django.db.models.QuerySet:
         """только нужные поля для одного пользователя"""
         return self.get_active_users_list().only(
-            'username', 'email', 'profile__image', 'first_name', 'last_name',
-            'profile__coffee_count', 'profile__birthday'
+            'username',
+            'email',
+            'profile__image',
+            'first_name',
+            'last_name',
+            'profile__coffee_count',
+            'profile__birthday',
         )
 
     @classmethod
@@ -35,7 +42,7 @@ class ShopUserManager(UserManager):
         email_user, email_domain = email.lower().strip().split('@')
 
         if '+' in email_user:
-            email_user = email_user[:email_user.find('+')]
+            email_user = email_user[: email_user.find('+')]
 
         if email_domain in ('yandex.ru', 'ya.ru'):
             email_user = email_user.replace('.', '-')
@@ -55,7 +62,7 @@ class ShopUserManager(UserManager):
         user = self.model(
             username=username,
             email=self.normalize_email(email),
-            **extra_fields
+            **extra_fields,
         )
         user.set_password(password)
         user.save(using=self._db)

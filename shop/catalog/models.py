@@ -1,21 +1,20 @@
-import catalog.managers
-import catalog.validators
-
-from ckeditor.fields import RichTextField
-
-import core.models
-
 import django.core.validators
 import django.db.models
 from django.conf import settings
 from django.urls import reverse
 from django.utils.html import mark_safe
 
+from ckeditor.fields import RichTextField
+
+import catalog.managers
+import catalog.validators
+import core.models
+
 
 class Tag(
     core.models.AbstractNameTextModel,
     core.models.AbstractSlugModel,
-    core.models.AbstractKeywordModel
+    core.models.AbstractKeywordModel,
 ):
     """модель Tag"""
 
@@ -28,7 +27,7 @@ class Tag(
 class Category(
     core.models.AbstractNameTextModel,
     core.models.AbstractSlugModel,
-    core.models.AbstractKeywordModel
+    core.models.AbstractKeywordModel,
 ):
     """модель Category"""
 
@@ -41,7 +40,7 @@ class Category(
             django.core.validators.MaxValueValidator(32767),
             django.core.validators.MinValueValidator(1),
         ],
-        default=100
+        default=100,
     )
 
     class Meta:
@@ -62,35 +61,35 @@ class Item(core.models.AbstractNameTextModel):
             catalog.validators.ValidateMustContain(
                 *settings.NESSESARY_TEXT_WORDS
             ),
-        ]
+        ],
     )
     category = django.db.models.ForeignKey(
         Category,
         verbose_name='категория',
         on_delete=django.db.models.CASCADE,
         related_name='catalog_items',
-        help_text='Категория, к которой принадлежит товар'
+        help_text='Категория, к которой принадлежит товар',
     )
     tags = django.db.models.ManyToManyField(
         Tag,
         verbose_name='тэги',
         related_name='catalog_items',
-        help_text='Тэги товара'
+        help_text='Тэги товара',
     )
     is_on_main = django.db.models.BooleanField(
         verbose_name='на главной',
         help_text='Отображать ли товар на главной странице',
-        default=False
+        default=False,
     )
     created_at = django.db.models.DateField(
         auto_now_add=True,
         verbose_name='дата создания',
-        help_text='Дата создания товара'
+        help_text='Дата создания товара',
     )
     updated_at = django.db.models.DateField(
         auto_now=True,
         verbose_name='дата изменения',
-        help_text='Дата изменения товара'
+        help_text='Дата изменения товара',
     )
 
     class Meta:
@@ -121,7 +120,7 @@ class ImageToItem(core.models.AbstractImageModel):
         verbose_name='превью',
         related_name='main_image',
         on_delete=django.db.models.CASCADE,
-        help_text='Главное изображение для товара'
+        help_text='Главное изображение для товара',
     )
 
     class Meta:
@@ -141,7 +140,7 @@ class GaleryToItem(core.models.AbstractImageModel):
         Item,
         verbose_name='галерея',
         related_name='galery',
-        on_delete=django.db.models.CASCADE
+        on_delete=django.db.models.CASCADE,
     )
 
     class Meta:

@@ -1,6 +1,6 @@
-import catalog.models
-
 import django.contrib.admin
+
+import catalog.models
 
 
 class ImageToItemAdmin(django.contrib.admin.TabularInline):
@@ -21,7 +21,10 @@ class ItemAdmin(django.contrib.admin.ModelAdmin):
         'is_published',
         'image_thumb',
     )
-    inlines = (ImageToItemAdmin, GaleryToItemAdmin, )
+    inlines = (
+        ImageToItemAdmin,
+        GaleryToItemAdmin,
+    )
     list_editable = ('is_published',)
     list_display_links = ('name',)
     filter_horizontal = ('tags',)
@@ -42,6 +45,7 @@ class TagAdmin(django.contrib.admin.ModelAdmin):
 @django.contrib.admin.register(catalog.models.Category)
 class CategoryAdmin(django.contrib.admin.ModelAdmin):
     """отображение модели Category в админке"""
+
     list_display = (
         'name',
         'is_published',

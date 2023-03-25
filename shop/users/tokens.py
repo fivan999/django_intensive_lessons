@@ -45,9 +45,9 @@ class TokenGeneratorWithTimestamp(PasswordResetTokenGenerator):
         now = self._now()
         if legacy_token:
             ts *= 24 * 60 * 60
-            ts += int((now - datetime.combine(
-                now.date(), time.min
-            )).total_seconds())
+            ts += int(
+                (now - datetime.combine(now.date(), time.min)).total_seconds()
+            )
         if (self._num_seconds(now) - ts) > self.token_validity_period:
             return False
 

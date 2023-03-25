@@ -27,13 +27,13 @@ def activation_email(
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': token,
             'protocol': 'https' if request.is_secure() else 'http',
-            'where_to': where_to
-        }
+            'where_to': where_to,
+        },
     )
     send_mail(
         'Activate your account',
         message,
         settings.EMAIL,
         [user.email],
-        fail_silently=False
+        fail_silently=False,
     )

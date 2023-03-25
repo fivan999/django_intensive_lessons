@@ -6,7 +6,6 @@ import django.db.models
 from django.core.exceptions import ValidationError
 
 from sorl.thumbnail import get_thumbnail
-
 from transliterate import translit
 
 
@@ -14,9 +13,9 @@ def generate_image_path(obj: django.db.models.Model, filename: str) -> str:
     """генерируем файловый пусть к картинке"""
     filename = translit(filename, 'ru', reverse=True)
     filename = (
-        filename[:filename.rfind('.')]
+        filename[: filename.rfind('.')]
         + secrets.token_hex(6)
-        + filename[filename.rfind('.'):]
+        + filename[filename.rfind('.') :]
     )
     return f'catalog/{obj.item.pk}/{filename}'
 
@@ -27,12 +26,10 @@ class AbstractNameTextModel(django.db.models.Model):
     is_published = django.db.models.BooleanField(
         verbose_name='опубликован',
         help_text='Опубликован или нет',
-        default=True
+        default=True,
     )
     name = django.db.models.CharField(
-        verbose_name='имя',
-        help_text='Введите имя',
-        max_length=150
+        verbose_name='имя', help_text='Введите имя', max_length=150
     )
 
     class Meta:
@@ -49,7 +46,7 @@ class AbstractSlugModel(django.db.models.Model):
         verbose_name='уникальное поле',
         help_text='Уникальное для каждого элемента поле',
         unique=True,
-        max_length=200
+        max_length=200,
     )
 
     class Meta:
@@ -59,10 +56,7 @@ class AbstractSlugModel(django.db.models.Model):
 class AbstractKeywordModel(django.db.models.Model):
     """абстрактная модель с полем keyword"""
 
-    keyword = django.db.models.CharField(
-        editable=False,
-        max_length=150
-    )
+    keyword = django.db.models.CharField(editable=False, max_length=150)
 
     class Meta:
         abstract = True
@@ -71,8 +65,10 @@ class AbstractKeywordModel(django.db.models.Model):
         """переопределение метода clean"""
         normalized_name = self.normalize_models_name(self.name)
         if (
-            self.__class__.objects.filter(keyword=normalized_name).
-            exclude(id=self.id).count() > 0
+            self.__class__.objects.filter(keyword=normalized_name)
+            .exclude(id=self.id)
+            .count()
+            > 0
         ):
             raise ValidationError('Уже есть тэг с похожим именем')
         self.keyword = normalized_name
@@ -111,15 +107,11 @@ class AbstractImageModel(django.db.models.Model):
 
     def get_image_300x300(self):
         """обрезаем картинку(для каталога)"""
-        return get_thumbnail(
-            self.image, '300x300', crop='center', quality=65
-        )
+        return get_thumbnail(self.image, '300x300', crop='center', quality=65)
 
     def get_image_50x50(self):
         """обрезаем картинку(для админки)"""
-        return get_thumbnail(
-            self.image, '50x50', crop='center', quality=60
-        )
+        return get_thumbnail(self.image, '50x50', crop='center', quality=60)
 
     class Meta:
         abstract = True

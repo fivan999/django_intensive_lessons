@@ -5,7 +5,7 @@ from django.contrib.auth.forms import (
     PasswordResetForm,
     SetPasswordForm,
     UserChangeForm,
-    UserCreationForm
+    UserCreationForm,
 )
 
 import users.models
@@ -37,9 +37,7 @@ class SignUpForm(BootstrapForm, UserCreationForm):
         """переопределяем поля"""
         super().__init__(*args, **kwargs)
         self.fields['username'].label = 'Имя пользователя'
-        self.fields[
-            'username'
-        ].help_text = 'Не более 150 символов. '
+        self.fields['username'].help_text = 'Не более 150 символов. '
         'Только буквы, цифры и символы @/./+/-/_.'
 
         self.fields['email'].label = 'Почта'
@@ -128,13 +126,13 @@ class CustomUserChangeForm(BootstrapForm, UserChangeForm):
             'username': 'Имя пользователя',
             'email': 'Почта',
             'first_name': 'Имя',
-            'last_name': 'Фамилия'
+            'last_name': 'Фамилия',
         }
         help_texts = {
             'username': 'Введите имя пользователя',
             'email': 'Введите электронную почту',
             'first_name': 'Введите имя',
-            'last_name': 'Введите фамилию'
+            'last_name': 'Введите фамилию',
         }
 
 
@@ -144,11 +142,8 @@ class ProfileChangeForm(BootstrapForm):
     class Meta:
         model = users.models.Profile
         fields = ('birthday', 'image')
-        labels = {
-            'birthday': 'Дата рождения',
-            'image': 'Аватарка'
-        }
+        labels = {'birthday': 'Дата рождения', 'image': 'Аватарка'}
         help_texts = {
             'birthday': 'Введите дату рождения в формате день.месяц.год',
-            'image': 'Загрузите аватарку'
+            'image': 'Загрузите аватарку',
         }

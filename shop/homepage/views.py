@@ -1,18 +1,16 @@
 from http import HTTPStatus
 
-import catalog.models
-
 from django.contrib.auth.models import AbstractBaseUser
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+
+import catalog.models
 
 
 def home(request: HttpRequest) -> HttpResponse:
     """возвращаем главную страницу"""
     items = catalog.models.Item.objects.get_items_on_main().order_by('name')
-    context = {
-        'items': items
-    }
+    context = {'items': items}
     return render(request, 'home/homepage.html', context=context)
 
 

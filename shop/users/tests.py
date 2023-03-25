@@ -4,14 +4,11 @@ from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
+import pytz
 from freezegun import freeze_time
-
 from parameterized import parameterized
 
-import pytz
-
 from users.models import ShopUser
-
 
 START_DATETIME = pytz.UTC.localize(timezone.datetime(2023, 1, 1, 0, 0, 0))
 END_DATETIME = pytz.UTC.localize(timezone.datetime(2023, 1, 1, 12, 1, 0))
@@ -25,7 +22,7 @@ class UserTests(TestCase):
         'username': 'aboba',
         'email': 'aboba@yandex.ru',
         'password1': 'ajdfgbjuygfrb',
-        'password2': 'ajdfgbjuygfrb'
+        'password2': 'ajdfgbjuygfrb',
     }
 
     def test_user_register_status_code(self) -> None:
@@ -41,53 +38,35 @@ class UserTests(TestCase):
     def test_user_register_redirect(self) -> None:
         """тестируем редирект на главную страницу"""
         response = Client().post(
-            reverse('users:signup'),
-            self.register_data,
-            follow=True
+            reverse('users:signup'), self.register_data, follow=True
         )
         self.assertRedirects(response, reverse('homepage:homepage'))
 
     def test_user_register_success(self) -> None:
         """тестируем появление записи в бд"""
         user_count = ShopUser.objects.count()
-        Client().post(
-            reverse('users:signup'),
-            self.register_data,
-            follow=True
-        )
+        Client().post(reverse('users:signup'), self.register_data, follow=True)
         self.assertEqual(ShopUser.objects.count(), user_count + 1)
 
     @override_settings(USER_IS_ACTIVE=False)
     def test_user_not_is_active(self) -> None:
         """тестируем неактивность пользователя"""
-        Client().post(
-            reverse('users:signup'),
-            self.register_data,
-            follow=True
-        )
+        Client().post(reverse('users:signup'), self.register_data, follow=True)
         self.assertFalse(ShopUser.objects.get(pk=1).is_active)
 
     @override_settings(USER_IS_ACTIVE=True)
     def test_user_is_active(self) -> None:
         """тестируем активность пользователя"""
-        Client().post(
-            reverse('users:signup'),
-            self.register_data,
-            follow=True
-        )
+        Client().post(reverse('users:signup'), self.register_data, follow=True)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
     @override_settings(USER_IS_ACTIVE=False)
     def test_user_activation(self) -> None:
         """тестируем активацию пользователя"""
         client = Client()
-        client.post(
-            reverse('users:signup'),
-            self.register_data,
-            follow=True
-        )
+        client.post(reverse('users:signup'), self.register_data, follow=True)
         text = mail.outbox[0].body
-        text = text[text.find('http'):].strip('\n')
+        text = text[text.find('http') :].strip('\n')
         client.get(text)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
@@ -97,13 +76,11 @@ class UserTests(TestCase):
         client = Client()
         with freeze_time('2023-01-01 00:00:00'):
             client.post(
-                reverse('users:signup'),
-                self.register_data,
-                follow=True
+                reverse('users:signup'), self.register_data, follow=True
             )
         with freeze_time('2023-01-01 13:00:00'):
             text = mail.outbox[0].body
-            text = text[text.find('http'):].strip('\n')
+            text = text[text.find('http') :].strip('\n')
             client.get(text)
             self.assertFalse(ShopUser.objects.get(pk=1).is_active)
 
@@ -121,23 +98,14 @@ class UserTests(TestCase):
     ) -> None:
         """проверяем возможность аутентификации"""
         client = Client()
-        client.post(
-            reverse('users:signup'),
-            self.register_data,
-            follow=True
-        )
-        client.get(
-            reverse('users:logout'),
-            follow=True
-        )
+        client.post(reverse('users:signup'), self.register_data, follow=True)
+        client.get(reverse('users:logout'), follow=True)
         response = client.post(
             reverse('users:login'),
             {'username': username, 'password': password},
-            follow=True
+            follow=True,
         )
-        self.assertEqual(
-            response.context['user'].is_authenticated, expected
-        )
+        self.assertEqual(response.context['user'].is_authenticated, expected)
 
     @parameterized.expand(
         [
@@ -157,7 +125,7 @@ class UserTests(TestCase):
                 'password1': self.register_data['password1'],
                 'password2': self.register_data['password2'],
             },
-            follow=True
+            follow=True,
         )
         self.assertEqual(ShopUser.objects.get(pk=1).email, expected)
 
@@ -165,19 +133,15 @@ class UserTests(TestCase):
     def test_user_deactivation(self) -> None:
         """тестируем деактивацию профиля в авторизации"""
         client = Client()
-        client.post(
-            reverse('users:signup'),
-            self.register_data,
-            follow=True
-        )
+        client.post(reverse('users:signup'), self.register_data, follow=True)
         for _ in range(settings.LOGIN_ATTEMPTS):
             client.post(
                 reverse('users:login'),
                 {
                     'username': self.register_data['username'],
-                    'password': 'testbeb'
+                    'password': 'testbeb',
                 },
-                follow=True
+                follow=True,
             )
         self.assertFalse(ShopUser.objects.get(pk=1).is_active)
 
@@ -185,23 +149,16 @@ class UserTests(TestCase):
     def test_user_reactivation_success(self) -> None:
         """тестируем реактивацию профиля"""
         client = Client()
-        client.post(
-            reverse('users:signup'),
-            self.register_data,
-            follow=True
-        )
+        client.post(reverse('users:signup'), self.register_data, follow=True)
         user = ShopUser.objects.get(pk=1)
         for _ in range(settings.LOGIN_ATTEMPTS):
             client.post(
                 reverse('users:login'),
-                {
-                    'username': user.username,
-                    'password': 'testbeb'
-                },
-                follow=True
+                {'username': user.username, 'password': 'testbeb'},
+                follow=True,
             )
         text = mail.outbox[0].body
-        text = text[text.find('http'):].strip('\n')
+        text = text[text.find('http') :].strip('\n')
         client.get(text)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
@@ -211,23 +168,18 @@ class UserTests(TestCase):
         with freeze_time('2023-01-01'):
             client = Client()
             client.post(
-                reverse('users:signup'),
-                self.register_data,
-                follow=True
+                reverse('users:signup'), self.register_data, follow=True
             )
             user = ShopUser.objects.get(pk=1)
             for _ in range(settings.LOGIN_ATTEMPTS):
                 client.post(
                     reverse('users:login'),
-                    {
-                        'username': user.username,
-                        'password': 'testbeb'
-                    },
-                    follow=True
+                    {'username': user.username, 'password': 'testbeb'},
+                    follow=True,
                 )
         with freeze_time('2023-01-10'):
             text = mail.outbox[0].body
-            text = text[text.find('http'):].strip('\n')
+            text = text[text.find('http') :].strip('\n')
             client.get(text)
             self.assertFalse(ShopUser.objects.get(pk=1).is_active)
 

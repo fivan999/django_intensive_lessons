@@ -1,13 +1,15 @@
-from catalog.models import Item
-
 import django.urls
 from django.test import Client, TestCase
+
+from catalog.models import Item
 
 
 class ContextTests(TestCase):
     """тестируем модельки на страницах"""
 
-    fixtures = ['fixtures/tests/context_tests.json', ]
+    fixtures = [
+        'fixtures/tests/context_tests.json',
+    ]
 
     def test_homepage_show_correct_context(self) -> None:
         """проверка корректного контекста на главной странице"""

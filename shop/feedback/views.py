@@ -11,7 +11,6 @@ from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
-
 from feedback.forms import FeedbackForm
 from feedback.models import Feedback
 
@@ -31,7 +30,7 @@ class FeedbackView(FormView):
             form.cleaned_data['text'],
             settings.EMAIL,
             [form.cleaned_data['email']],
-            fail_silently=False
+            fail_silently=False,
         )
         form.save(self.request.FILES)
         return super().form_valid(form)
@@ -50,17 +49,20 @@ class UserFeedbacks(ListView):
         self, request: HttpRequest, *args, **kwargs
     ) -> Union[Http404, HttpResponse]:
         """проверка на соответствие user_id"""
-        if request.user.id != self.kwargs[
-            'user_id'
-        ] and not request.user.is_staff:
+        if (
+            request.user.id != self.kwargs['user_id']
+            and not request.user.is_staff
+        ):
             raise Http404()
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> QuerySet:
         """получаем нужные фидбеки"""
-        return Feedback.objects.filter(
-            user__id=self.kwargs['user_id']
-        ).prefetch_related('files').only('text', 'created_on', 'status')
+        return (
+            Feedback.objects.filter(user__id=self.kwargs['user_id'])
+            .prefetch_related('files')
+            .only('text', 'created_on', 'status')
+        )
 
 
 def thanks_for_feedback(request: HttpRequest) -> HttpResponse:

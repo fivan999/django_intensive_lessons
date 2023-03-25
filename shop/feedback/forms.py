@@ -2,9 +2,8 @@ import django.forms
 from django.core.exceptions import ValidationError
 from django.utils.datastructures import MultiValueDict
 
-from feedback.models import Feedback, FeedbackFile
-
 import users.models
+from feedback.models import Feedback, FeedbackFile
 
 
 class FeedbackForm(django.forms.Form):
@@ -15,14 +14,12 @@ class FeedbackForm(django.forms.Form):
             attrs={'class': 'form-control', 'rows': 4}
         ),
         label='Текст',
-        help_text='Введите текст фидбека'
+        help_text='Введите текст фидбека',
     )
     email = django.forms.EmailField(
-        widget=django.forms.EmailInput(
-            attrs={'class': 'form-control'}
-        ),
+        widget=django.forms.EmailInput(attrs={'class': 'form-control'}),
         label='Почта',
-        help_text='Введите почту получателя'
+        help_text='Введите почту получателя',
     )
     files = django.forms.FileField(
         widget=django.forms.ClearableFileInput(
@@ -30,7 +27,7 @@ class FeedbackForm(django.forms.Form):
         ),
         required=False,
         label='Файл',
-        help_text='Загрузите файл'
+        help_text='Загрузите файл',
     )
 
     def clean_email(self) -> None:

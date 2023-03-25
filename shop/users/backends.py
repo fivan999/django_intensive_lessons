@@ -11,7 +11,7 @@ class EmailBackend(ModelBackend):
     """бекенд для аутентификации по почте"""
 
     def authenticate(
-            self, request, username=None, password=None, **kwargs
+        self, request, username=None, password=None, **kwargs
     ) -> None:
         try:
             user = ShopUser.objects.get(
@@ -33,15 +33,12 @@ class EmailBackend(ModelBackend):
                     'войти в аккаунт'
                     ', поэтому нам пришлось его деактивировать. '
                     'Ссылка для восстановления '
-                    'отправлена на ваш email.'
+                    'отправлена на ваш email.',
                 )
                 users.services.activation_email(
                     request, 'users:reset_login_attempts', user
                 )
             elif user.login_attempts > settings.LOGIN_ATTEMPTS:
-                messages.error(
-                    request,
-                    'Проверьте свою почту'
-                )
+                messages.error(request, 'Проверьте свою почту')
             user.save()
         return None

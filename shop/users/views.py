@@ -31,7 +31,7 @@ def signup(request: HttpRequest) -> HttpResponse:
             messages.success(
                 request,
                 f'На вашу почту {user.email} было '
-                'отправлено письмо с активацией'
+                'отправлено письмо с активацией',
             )
         else:
             messages.success(request, 'Спасибо за регистрацию!')
@@ -54,14 +54,9 @@ def activate_user(
         user.is_active = True
         user.save()
         login(request, user)
-        messages.success(
-            request, 'Спасибо за активацию аккаунта'
-        )
+        messages.success(request, 'Спасибо за активацию аккаунта')
     else:
-        messages.error(
-            request,
-            'Ссылка активации неверна.'
-        )
+        messages.error(request, 'Ссылка активации неверна.')
     return redirect('homepage:homepage')
 
 
@@ -78,16 +73,12 @@ def reset_login_attempts(
     if user and token_7_days.check_token(user, token):
         user.is_active = True
         messages.success(
-            request,
-            'Спасибо за активацию аккаунта, теперь вы можете войти'
+            request, 'Спасибо за активацию аккаунта, теперь вы можете войти'
         )
         user.login_attempts = settings.LOGIN_ATTEMPTS - 1
         user.save()
     else:
-        messages.error(
-            request,
-            'Ссылка активации неверна.'
-        )
+        messages.error(request, 'Ссылка активации неверна.')
     return redirect('homepage:homepage')
 
 
@@ -97,9 +88,7 @@ def user_list(request: HttpRequest) -> HttpResponse:
     context = {
         'users': users.models.ShopUser.objects.get_only_useful_list_fields()
     }
-    return render(
-        request, 'users/user_list.html', context=context
-    )
+    return render(request, 'users/user_list.html', context=context)
 
 
 @staff_member_required
@@ -108,12 +97,10 @@ def user_detail(request: HttpRequest, user_id: int) -> HttpResponse:
     context = {
         'user': get_object_or_404(
             users.models.ShopUser.objects.get_only_useful_detail_fields(),
-            pk=user_id
+            pk=user_id,
         )
     }
-    return render(
-        request, 'users/user_detail.html', context=context
-    )
+    return render(request, 'users/user_detail.html', context=context)
 
 
 @login_required
@@ -133,10 +120,8 @@ def user_profile(request: HttpRequest) -> HttpResponse:
     context = {
         'user': get_object_or_404(
             users.models.ShopUser.objects.get_only_useful_detail_fields(),
-            pk=request.user.pk
+            pk=request.user.pk,
         ),
-        'forms': [user_form, profile_form]
+        'forms': [user_form, profile_form],
     }
-    return render(
-        request, 'users/profile.html', context=context
-    )
+    return render(request, 'users/profile.html', context=context)

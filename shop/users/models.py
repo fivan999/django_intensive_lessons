@@ -1,5 +1,3 @@
-import core.models
-
 import django.db.models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
@@ -7,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from transliterate import translit
 
+import core.models
 import users.managers
 
 
@@ -27,7 +26,7 @@ class ShopUser(AbstractUser):
     login_attempts = django.db.models.IntegerField(
         default=0,
         verbose_name='неудачные попытки',
-        help_text='Количество неудачных попыток входа в аккаунт'
+        help_text='Количество неудачных попыток входа в аккаунт',
     )
 
     class Meta(AbstractUser.Meta):
@@ -49,25 +48,25 @@ class Profile(core.models.AbstractImageModel):
         help_text='Профиль пользователя',
         on_delete=django.db.models.CASCADE,
         blank=True,
-        null=True
+        null=True,
     )
     birthday = django.db.models.DateField(
         blank=True,
         verbose_name='дата рождения',
         help_text='Дата рождения пользователя',
-        null=True
+        null=True,
     )
     image = django.db.models.ImageField(
         blank=True,
         verbose_name='аватарка',
         help_text='Аватарка пользователя',
         upload_to=generate_image_path,
-        null=True
+        null=True,
     )
     coffee_count = django.db.models.IntegerField(
         default=0,
         verbose_name='количесто кофе',
-        help_text='Сколько раз пользователь пытался сварить кофе'
+        help_text='Сколько раз пользователь пытался сварить кофе',
     )
 
     class Meta:

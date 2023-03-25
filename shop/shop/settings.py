@@ -17,7 +17,6 @@ from django.contrib.messages import constants
 
 from dotenv import load_dotenv
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -198,22 +197,36 @@ CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar_Basic': [
-            ['Source', '-', 'Bold', 'Italic']
-        ],
+        'toolbar_Basic': [['Source', '-', 'Bold', 'Italic']],
         'enterMode': 2,
         'toolbar_YourCustomToolbarConfig': [
-            {'name': 'basicstyles',
-             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript',
-                       'Superscript']},
-            {'name': 'paragraph',
-             'items': ['NumberedList', 'BulletedList', '-', 'Outdent',
-                       'Indent', '-',
-                       'JustifyLeft', 'JustifyCenter', 'JustifyRight',
-                       'JustifyBlock']},
-            {'name': 'insert',
-             'items': ['Flash', 'Smiley',
-                       'SpecialChar']},
+            {
+                'name': 'basicstyles',
+                'items': [
+                    'Bold',
+                    'Italic',
+                    'Underline',
+                    'Strike',
+                    'Subscript',
+                    'Superscript',
+                ],
+            },
+            {
+                'name': 'paragraph',
+                'items': [
+                    'NumberedList',
+                    'BulletedList',
+                    '-',
+                    'Outdent',
+                    'Indent',
+                    '-',
+                    'JustifyLeft',
+                    'JustifyCenter',
+                    'JustifyRight',
+                    'JustifyBlock',
+                ],
+            },
+            {'name': 'insert', 'items': ['Flash', 'Smiley', 'SpecialChar']},
             {'name': 'colors', 'items': ['TextColor', 'BGColor']},
             {'name': 'styles', 'items': ['Font']},
             {'name': 'styles', 'items': ['FontSize']},

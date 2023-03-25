@@ -7,11 +7,10 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from feedback.forms import FeedbackForm
-from feedback.models import Feedback, FeedbackFile
-
 from parameterized import parameterized
 
+from feedback.forms import FeedbackForm
+from feedback.models import Feedback, FeedbackFile
 from users.models import ShopUser
 
 
@@ -25,14 +24,13 @@ from users.models import ShopUser
 class FormsTest(TestCase):
     """тестируем формы"""
 
-    fixtures = ['fixtures/tests/feedback_tests.json', ]
+    fixtures = [
+        'fixtures/tests/feedback_tests.json',
+    ]
 
     feedback_form = FeedbackForm()
 
-    feedback_form_data = {
-        'text': 'hello',
-        'email': 'testadmin@yandex.ru'
-    }
+    feedback_form_data = {'text': 'hello', 'email': 'testadmin@yandex.ru'}
 
     def tearDown(self) -> None:
         """удаление тестовых данных"""
@@ -56,10 +54,7 @@ class FormsTest(TestCase):
         user = ShopUser.objects.get(pk=1)
         client.post(
             reverse('users:login'),
-            {
-                'username': user.username,
-                'password': 'mutter77'
-            }
+            {'username': user.username, 'password': 'mutter77'},
         )
         response = client.get(reverse('feedback:feedback'))
         self.assertIn('form', response.context)
@@ -90,14 +85,10 @@ class FormsTest(TestCase):
         user = ShopUser.objects.get(id=1)
         response = client.post(
             reverse('users:login'),
-            {
-                'username': user.username,
-                'password': 'mutter77'
-            }
+            {'username': user.username, 'password': 'mutter77'},
         )
         response = client.post(
-            reverse('feedback:feedback'),
-            self.feedback_form_data
+            reverse('feedback:feedback'), self.feedback_form_data
         )
         self.assertRedirects(response, reverse('feedback:thanks'))
 
@@ -108,15 +99,9 @@ class FormsTest(TestCase):
         user = ShopUser.objects.get(id=1)
         client.post(
             reverse('users:login'),
-            {
-                'username': user.username,
-                'password': 'mutter77'
-            }
+            {'username': user.username, 'password': 'mutter77'},
         )
-        client.post(
-            reverse('feedback:feedback'),
-            self.feedback_form_data
-        )
+        client.post(reverse('feedback:feedback'), self.feedback_form_data)
         end_count = Feedback.objects.count()
         self.assertEqual(start_count + 1, end_count)
 
@@ -129,31 +114,20 @@ class FormsTest(TestCase):
         user = ShopUser.objects.get(id=1)
         client.post(
             reverse('users:login'),
-            {
-                'username': user.username,
-                'password': 'mutter77'
-            }
+            {'username': user.username, 'password': 'mutter77'},
         )
-        client.post(
-            reverse('feedback:feedback'),
-            self.feedback_form_data
-        )
+        client.post(reverse('feedback:feedback'), self.feedback_form_data)
         file_path = FeedbackFile.objects.get(pk=1).file.path
         self.assertTrue(os.path.isfile(file_path))
 
-    @parameterized.expand([
-        (1,), (2,)
-    ])
+    @parameterized.expand([(1,), (2,)])
     def test_admin_can_view_all_feedbacks(self, user_id: int) -> None:
         """админ может посмотреть фидбеки всех пользователей"""
         client = Client()
         user = ShopUser.objects.get(id=1)
         client.post(
             reverse('users:login'),
-            {
-                'username': user.username,
-                'password': 'mutter77'
-            }
+            {'username': user.username, 'password': 'mutter77'},
         )
         response = client.get(
             reverse('feedback:user_feedbacks', kwargs={'user_id': user_id})

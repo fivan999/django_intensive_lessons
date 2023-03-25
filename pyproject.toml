@@ -1,8 +1,18 @@
 [tool.black]
 line-length=79
 skip-string-normalization=1
-exclude=["*/migrations/", "venv/", "env/"]
+extend-exclude = '"*/migrations/.py", "venv/", "env/"'
+include = '\.pyi?$'
 [tool.pylint.main]
 disable=["C0114", "C0415"]
 recursive="yes"
 ignore="venv"
+[tool.isort]
+default_section = "THIRDPARTY"
+known_local_folder = ["users", "feedback", "catalog", "shop", "about", "core", "download", "homepage",]
+known_django = "django"
+sections = ["FUTURE","STDLIB","DJANGO","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
+skip = [".gitignore", "venv/", "env/"]
+skip_glob = ["*/migrations/*"]
+multi_line_output = 3
+profile = "django"

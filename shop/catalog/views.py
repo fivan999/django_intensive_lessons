@@ -1,7 +1,7 @@
-import catalog.models
-
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
+
+import catalog.models
 
 
 def item_list(request: HttpRequest) -> HttpResponse:
@@ -9,21 +9,16 @@ def item_list(request: HttpRequest) -> HttpResponse:
     items = catalog.models.Item.objects.get_published_items().order_by(
         'category__name'
     )
-    context = {
-        'items': items
-    }
+    context = {'items': items}
     return render(request, 'catalog/list.html', context=context)
 
 
 def item_detail(request: HttpRequest, item_num: int) -> HttpResponse:
     """Страница с одним элементом"""
     item = get_object_or_404(
-        catalog.models.Item.objects.get_item_with_galery(),
-        pk=item_num
+        catalog.models.Item.objects.get_item_with_galery(), pk=item_num
     )
-    context = {
-        'item': item
-    }
+    context = {'item': item}
     return render(request, 'catalog/detail.html', context=context)
 
 
@@ -32,9 +27,7 @@ def new_items(request: HttpRequest) -> HttpResponse:
     items = catalog.models.Item.objects.get_new_items().order_by(
         'category__name'
     )
-    context = {
-        'items': items
-    }
+    context = {'items': items}
     return render(request, 'catalog/list.html', context=context)
 
 
@@ -43,9 +36,7 @@ def friday_updatet_items(request: HttpRequest) -> HttpResponse:
     items = catalog.models.Item.objects.get_friday_updated_items().order_by(
         'category__name'
     )[:5]
-    context = {
-        'items': items
-    }
+    context = {'items': items}
     return render(request, 'catalog/list.html', context=context)
 
 
@@ -54,9 +45,7 @@ def unchecked_items(request: HttpRequest) -> HttpResponse:
     items = catalog.models.Item.objects.get_unchecked_items().order_by(
         'category__name'
     )
-    context = {
-        'items': items
-    }
+    context = {'items': items}
     return render(request, 'catalog/list.html', context=context)
 
 
