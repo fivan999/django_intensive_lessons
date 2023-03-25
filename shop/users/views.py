@@ -1,5 +1,3 @@
-import datetime
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
@@ -14,6 +12,7 @@ from django.utils.http import urlsafe_base64_decode
 import users.models
 import users.services
 from users.forms import CustomUserChangeForm, ProfileChangeForm, SignUpForm
+from users.tokens import token_7_days
 
 
 def signup(request: HttpRequest) -> HttpResponse:
@@ -76,16 +75,14 @@ def reset_login_attempts(
         )
     except Exception:
         user = None
-    if (
-        user and default_token_generator.check_token(user, token)
-        and user.datetime_blocked.timestamp()
-        > (datetime.datetime.now() - datetime.timedelta(days=7)).timestamp()
-    ):
+    if user and token_7_days.check_token(user, token):
         user.is_active = True
-        user.save()
         messages.success(
-            request, 'Спасибо за активацию аккаунта, теперь вы можете войти'
+            request,
+            'Спасибо за активацию аккаунта, теперь вы можете войти'
         )
+        user.login_attempts = settings.LOGIN_ATTEMPTS - 1
+        user.save()
     else:
         messages.error(
             request,

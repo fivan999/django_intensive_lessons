@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container col-xxl-8">
+    {% if feedbacks %}
+      <h1 class="display-5 fw-bold lh-1">
+        Фидбеки
+      </h1>
+      {% for feedback in feedbacks %}
+        <div class="card shadow-sm mb-1">
+          <div class="card-body">
+            <h5 class="card-title">Фидбек {{ forloop.counter }}</h5>
+            <p class="card-text"><span class="fw-bold">Текст:</span> <br />{{ feedback.text|safe }}</p>
+            <p class="card-text">Статус: {{ feedback.status }}</p>
+            <p class="card-text">Файлы: 
+              {% for file in feedback.files.all %}
+                <span class="badge rounded-pill text-bg-primary"><a href="{{ file.file.url }}" class="nav-link text-white">Файл {{ forloop.counter }}</a></span>
+              {% empty %}
+                Нет
+              {% endfor %}
+            </p>
+            <p class="card-text text-muted">Время отправки: {{ feedback.created_on }} UTC</p>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      {% include "includes/empty.html" %}
+    {% endif %}
+  </div>
+{% endblock content %}

@@ -208,7 +208,7 @@ class UserTests(TestCase):
     @override_settings(USER_IS_ACTIVE=True)
     def test_user_reactivation_error(self) -> None:
         """тестируем ошибку реактивации профиля"""
-        with freeze_time('2023-01-01 00:00:00'):
+        with freeze_time('2023-01-01'):
             client = Client()
             client.post(
                 reverse('users:signup'),
@@ -225,7 +225,7 @@ class UserTests(TestCase):
                     },
                     follow=True
                 )
-        with freeze_time('2023-01-10 00:00:00'):
+        with freeze_time('2023-01-10'):
             text = mail.outbox[0].body
             text = text[text.find('http'):].strip('\n')
             client.get(text)

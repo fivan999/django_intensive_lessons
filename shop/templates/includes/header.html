@@ -15,9 +15,11 @@
           <li>
             <a href="{% url 'about:about' %}" class="nav-link {% if app_name == 'about' %}active text-white{% else %}text-dark{% endif %}">{% translate "О нас" %}</a>
           </li>
-          <li>
-            <a href="{% url 'feedback:feedback' %}" class="nav-link {% if app_name == 'feedback' %}active text-white{% else %}text-dark{% endif %}">{% translate "Обратная связь" %}</a>
-          </li>
+          {% if request.user.is_staff %}
+            <li>
+              <a href="{% url 'feedback:feedback' %}" class="nav-link {% if app_name == 'feedback' %}active text-white{% else %}text-dark{% endif %}">{% translate "Обратная связь" %}</a>
+            </li>
+          {% endif %}
         </ul>
       {% endwith %}
       <div class="dropdown text-end">
@@ -31,6 +33,7 @@
               <a href="/admin/" class="dropdown-item">{% translate "В админку" %}</a>
               <a href="{% url 'users:user_list' %}" class="dropdown-item">{% translate "Список пользователей" %}</a>
             {% endif %}
+            <a class="dropdown-item" href="{% url 'feedback:user_feedbacks' user_id=request.user.id %}">{% translate "Мои фидбеки" %}</a>
             <li><hr class="dropdown-divider" /></li>
             <a class="dropdown-item" href="{% url 'users:password_reset' %}">{% translate "Восстановить пароль" %}</a>
             <a class="dropdown-item" href="{% url 'users:password_change' %}">{% translate "Сменить пароль" %}</a>

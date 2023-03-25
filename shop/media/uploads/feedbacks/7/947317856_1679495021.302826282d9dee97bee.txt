@@ -1,0 +1,167 @@
+Для реализации данного функционала в Django можно использовать следующий подход:
+
+1. Добавьте новое поле `failed_login_attempts` в модель пользователя, которое будет хранить количество неудачных попыток входа.
+
+```python
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    failed_login_attempts = models.PositiveIntegerField(default=0)
+```
+
+2. Создайте middleware, который будет отслеживать неудачные попытки входа в систему и увеличивать счетчик `failed_login_attempts` для соответствующего пользователя.
+
+```python
+from django.utils.deprecation import MiddlewareMixin
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class FailedLoginAttemptsMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        if request.user.is_authenticated and request.method == 'POST':
+            # Проверяем, была ли отправлена форма входа
+            if 'username' in request.POST and 'password' in request.POST:
+                # Проверяем правильность логина и пароля
+                username = request.POST['username']
+                password = request.POST['password']
+                user = authenticate(request, username=username, password=password)
+                if user is None:
+                    # Увеличиваем счетчик неудачных попыток входа
+                    user = request.user
+                    user.failed_login_attempts += 1
+                    user.save()
+```
+
+3. Создайте декоратор, который будет проверять, не превышено ли максимальное количество неудачных попыток входа для пользователя.
+
+```python
+from django.core.exceptions import PermissionDenied
+from django.utils.decorators import available_attrs
+from functools import wraps
+
+def check_failed_login_attempts(max_attempts):
+    def decorator(view_func):
+        @wraps(view_func, assigned=available_attrs(view_func))
+        def _wrapped_view(request, *args, **kwargs):
+            user = request.user
+            if user.is_authenticated and user.failed_login_attempts >= max_attempts:
+                # Отклоняем запрос, если превышено максимальное количество неудачных попыток входа
+                raise PermissionDenied('Вы превысили максимальное количество неудачных попыток входа')
+            return view_func(request, *args, **kwargs)
+        return _wrapped_view
+    return decorator
+```
+
+4. Используйте декоратор `check_failed_login_attempts` для защиты ваших представлений, которые могут быть вызваны только для авторизованных пользователей.
+
+```python
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+
+@login_required
+@check_failed_login_attempts(max_attempts=3)
+def my_view(request):
+    # Ваш код представления
+    pass
+```
+
+5. Создайте задачу, которая будет проверять неактивных пользователей и отправлять им письмо с ссылкой на активацию.
+
+```python
+from datetime import timedelta
+from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+from celery import shared_task
+
+User = get_user_model()
+
+@shared_task
+def check_inactive_users():
+    # Выбираем всех неактивных пользователей, которые не активировались в течение недели
+    cutoff_date = timezone.now() - timedelta(days=7)
+    inactive_users = User.objects.filter(is_active=False, last_login__lt=cutoff_date)
+
+    for user in inactive_users:
+        # Отправляем письмо с ссылкой на активацию
+        activation_link = reverse_lazy('activate_user', kwargs={'pk': user.pk})
+        activation_url = request.build_absolute_uri(activation_link)
+        context = {'activation_url': activation_url}
+        message = render_to_string('activation_email.html', context)
+
+        send_mail(
+            'Активация аккаунта',
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            fail_silently=False,
+        )
+```
+
+6. Создайте представление, которое будет обрабатывать запросы на активацию пользователей.
+
+```python
+from django.views.generic import UpdateView
+from django.contrib.auth import get_user_model
+from django.urls import reverse_lazy
+
+User = get_user_model()
+
+class ActivateUserView(UpdateView):
+    model = User
+    fields = []
+    template_name = 'activate_user.html'
+    success_url = reverse_lazy('home')
+
+    def get_object(self, queryset=None):
+        # Получаем пользователя по id из URL
+        return self.model.objects.get(pk=self.kwargs['pk'])
+
+    def form_valid(self, form):
+        # Активируем пользователя и сбрасываем счетчик неудачных попыток входа
+        user = form.save(commit=False)
+        user.is_active = True
+        user.failed_login_attempts = 0
+        user.save()
+        return super().form_valid(form)
+```
+
+7. Создайте шаблоны для письма активации и страницы активации.
+
+```html
+<!-- activation_email.html -->
+<p>Для активации вашего аккаунта перейдите по ссылке:</p>
+<a href="{{ activation_url }}">{{ activation_url }}</a>
+```
+
+```html
+<!-- activate_user.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Активация аккаунта</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Активировать</button>
+  </form>
+{% endblock %}
+```
+
+8. Добавьте задачу `check_inactive_users` в очередь Celery для периодического выполнения.
+
+```python
+from celery.schedules import crontab
+from celery.task import periodic_task
+
+@periodic_task(run_every=crontab(hour=0, minute=0))
+def run_check_inactive_users():
+    check_inactive_users.delay()
+```
+
+Теперь вы можете отслеживать неудачные попытки входа в систему пользователей, блокировать их аккаунты после превышения максимального количества попыток, отправлять письма для активации и сбрасывать счетчик неудачных попыток входа после успешной авторизации.
