@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 from django.core import mail
 from django.test import Client, TestCase, override_settings
@@ -10,7 +12,7 @@ from parameterized import parameterized
 
 import pytz
 
-from users.models import ShopUser
+from users.models import Profile, ShopUser
 
 
 START_DATETIME = pytz.UTC.localize(timezone.datetime(2023, 1, 1, 0, 0, 0))
@@ -188,5 +190,55 @@ class UserTests(TestCase):
 
     def tearDown(self) -> None:
         """чистим бд после тестов"""
+        ShopUser.objects.all().delete()
+        super().tearDown()
+
+
+class TestContextProcessor(TestCase):
+    """тестируем работу контекст-процессора"""
+
+    def setUp(self) -> None:
+        """подготовка к тестированию, создание тестовых данных"""
+        self.test_user1 = ShopUser.objects.create(
+            email='testuser1@yandex.ru',
+            username='testuser1',
+            is_active=True
+        )
+        self.test_user1.set_password('password')
+        self.test_profile1 = Profile.objects.create(
+            birthday=datetime.date.today(),
+            user=self.test_user1
+        )
+
+        self.test_user2 = ShopUser.objects.create(
+            email='testuser2@yandex.ru',
+            username='testuser2',
+            is_active=True
+        )
+        self.test_user2.set_password('password')
+        self.test_profile2 = Profile.objects.create(
+            birthday=datetime.date(2006, 1, 1),
+            user=self.test_user2
+        )
+        super().setUp()
+
+    def test_birthday_users_in_context(self) -> None:
+        """проверям наличие дней рождения пользователей в контексте"""
+        response = Client().get(reverse('homepage:homepage'))
+        self.assertIn('birthday_users', response.context)
+
+    def test_birthday_users_count(self) -> None:
+        """проверяем количество пользователей с днем рождения в контексте"""
+        response = Client().get(reverse('homepage:homepage'))
+        self.assertEqual(len(response.context['birthday_users']), 1)
+
+    def test_birthday_users_exact_user(self) -> None:
+        """проверяем id пользователя, у которого сегодня день рождения"""
+        response = Client().get(reverse('homepage:homepage'))
+        self.assertEqual(response.context['birthday_users'].first().pk, 1)
+
+    def tearDown(self) -> None:
+        """удаление тестовых данных"""
+        Profile.objects.all().delete()
         ShopUser.objects.all().delete()
         super().tearDown()

@@ -67,18 +67,34 @@ urlpatterns = [
         ),
         name='password_reset_complete',
     ),
-    path('signup/', users.views.signup, name='signup'),
+    path(
+        'signup/',
+        users.views.SignupView.as_view(),
+        name='signup'
+    ),
     path(
         'activate/<uidb64>/<token>/',
-        users.views.activate_user,
+        users.views.ActivateUserView.as_view(),
         name='activate_user',
     ),
-    path('users/', users.views.user_list, name='user_list'),
-    path('users/<int:user_id>/', users.views.user_detail, name='user_detail'),
-    path('profile/', users.views.user_profile, name='user_profile'),
+    path(
+        'users/',
+        users.views.UserListView.as_view(),
+        name='user_list'
+    ),
+    path(
+        'users/<int:pk>/',
+        users.views.UserDetailView.as_view(),
+        name='user_detail'
+    ),
+    path(
+        'profile/',
+        users.views.UserProfileView.as_view(),
+        name='user_profile'
+    ),
     path(
         'reset_login_attempts/<uidb64>/<token>/',
-        users.views.reset_login_attempts,
+        users.views.ResetLoginAttempts.as_view(),
         name='reset_login_attempts',
     ),
 ]

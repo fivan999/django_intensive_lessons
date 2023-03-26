@@ -5,6 +5,14 @@ from homepage import views
 app_name = 'homepage'
 
 urlpatterns = [
-    path('', views.home, name='homepage'),
-    path('coffee/', views.coffee, name='coffee'),
+    path(
+        '',
+        views.HomeItemListView.as_view(),
+        name='homepage'
+    ),
+    path(
+        'coffee/',
+        views.CoffeeView.as_view(),
+        name='coffee'
+    ),
 ]

@@ -8,15 +8,17 @@ from django.shortcuts import redirect, render
 import catalog.models
 import rating.forms
 import rating.models
+from django.views import View
+from django.views.generic import DetailView, ListView
 
 
-def item_list(request: HttpRequest) -> HttpResponse:
+class ItemListView(ListView):
     """Страница со всеми элементами"""
-    items = catalog.models.Item.objects.get_published_items().order_by(
+    queryset = catalog.models.Item.objects.get_published_items().order_by(
         'category__name'
     )
-    context = {'items': items}
-    return render(request, 'catalog/list.html', context=context)
+    context_object_name = 'items'
+    template_name = 'catalog/list.html'
 
 
 class ItemDetailView(FormMixin, DetailView):
@@ -67,35 +69,30 @@ class ItemDetailView(FormMixin, DetailView):
         return render(request, self.template_name, self.get_context_data())
 
 
-def new_items(request: HttpRequest) -> HttpResponse:
+class NewItemListView(ItemListView):
     """страница с товарами, добавленными за последнюю неделю"""
-    items = catalog.models.Item.objects.get_new_items().order_by(
+    queryset = catalog.models.Item.objects.get_new_items().order_by(
         'category__name'
     )
-    context = {'items': items}
-    return render(request, 'catalog/list.html', context=context)
 
 
-def friday_updatet_items(request: HttpRequest) -> HttpResponse:
+class FridayUpdatetItemListView(ItemListView):
     """страница с товарами, обновленными в пятницу"""
-    items = catalog.models.Item.objects.get_friday_updated_items().order_by(
+    queryset = catalog.models.Item.objects.get_friday_updated_items().order_by(
         'category__name'
     )[:5]
-    context = {'items': items}
-    return render(request, 'catalog/list.html', context=context)
 
 
-def unchecked_items(request: HttpRequest) -> HttpResponse:
+class UncheckedUpdatetItemListView(ItemListView):
     """страница с не обновленными товарами"""
-    items = catalog.models.Item.objects.get_unchecked_items().order_by(
+    queryset = catalog.models.Item.objects.get_unchecked_items().order_by(
         'category__name'
     )
-    context = {'items': items}
-    return render(request, 'catalog/list.html', context=context)
 
 
-def grader_zero_int_item_detail(
-    request: HttpRequest, item_num: int
-) -> HttpResponse:
+class GraderZeroIntItemDetail(View):
     """страница с одним элементом, но регулярное выражение(инт>0)"""
-    return HttpResponse(f'<body><h1>Подробно элемент {item_num}</h1></body>')
+    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+        return HttpResponse(
+            f'<body>{pk}<body>'
+        )

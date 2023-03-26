@@ -20,6 +20,16 @@
   <body class="d-flex flex-column min-vh-100">
     {% include "includes/header.html" %}
     <main>
+      {% if birthday_users %}
+        <div class="container col-xxl-8 mb-2">
+          <h1 class="display-7 fw-bold lh-1">Поздравляем с Днем рождения!</h1>
+          <ul class="list-group">
+            {% for user in birthday_users %}
+              <li class="list-group-item">{{ user.email }}{% if user.first_name %} - {{ user.first_name }}{% endif %}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
       {% for message in messages %}
         <div class="container xxl-8">
           <div class="alert {{ message.tags }} alert-dismissible" role="alert">
@@ -30,5 +40,9 @@
       {% block content %}Контента нет{% endblock content %}
     </main>
     {% include "includes/footer.html" %}
+    <script>
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // e.g. "America/New_York"
+      document.cookie = "django_timezone=" + timezone;
+    </script>
   </body>
 </html>
