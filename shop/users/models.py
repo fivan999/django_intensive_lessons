@@ -36,7 +36,7 @@ class ShopUser(AbstractUser):
 
     def get_absolute_url(self) -> str:
         """путь к user_detail"""
-        return reverse('users:user_detail', kwargs={'user_id': self.pk})
+        return reverse('users:user_detail', kwargs={'pk': self.pk})
 
 
 class Profile(core.models.AbstractImageModel):
