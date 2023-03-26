@@ -1,13 +1,12 @@
 from typing import Union
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import QuerySet
 from django.http import Http404, HttpRequest, HttpResponse
-from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
+from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
@@ -15,8 +14,7 @@ from feedback.forms import FeedbackForm
 from feedback.models import Feedback
 
 
-@method_decorator(login_required, name='dispatch')
-class FeedbackView(FormView):
+class FeedbackView(LoginRequiredMixin, FormView):
     """страница с отправкой фидбека"""
 
     template_name = 'feedback/feedback.html'
@@ -36,8 +34,7 @@ class FeedbackView(FormView):
         return super().form_valid(form)
 
 
-@method_decorator(login_required, name='dispatch')
-class UserFeedbacks(ListView):
+class UserFeedbacks(LoginRequiredMixin, ListView):
     """отображение списка фидбеков юзера"""
 
     model = Feedback
@@ -65,6 +62,7 @@ class UserFeedbacks(ListView):
         )
 
 
-def thanks_for_feedback(request: HttpRequest) -> HttpResponse:
+class ThanksForFeedback(LoginRequiredMixin, TemplateView):
     """спасибо тебе за фидбек!"""
-    return render(request, 'feedback/thanks.html')
+
+    template_name = 'feedback/thanks.html'

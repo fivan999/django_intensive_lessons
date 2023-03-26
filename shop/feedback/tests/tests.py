@@ -7,10 +7,11 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from parameterized import parameterized
-
 from feedback.forms import FeedbackForm
 from feedback.models import Feedback, FeedbackFile
+
+from parameterized import parameterized
+
 from users.models import ShopUser
 
 
