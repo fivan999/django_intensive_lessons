@@ -110,7 +110,7 @@ class Item(core.models.AbstractNameTextModel):
 
     def get_absolute_url(self) -> str:
         """путь к item_detail"""
-        return reverse('catalog:item_detail', kwargs={'item_num': self.pk})
+        return reverse('catalog:item_detail', kwargs={'pk': self.pk})
 
 
 class ImageToItem(core.models.AbstractImageModel):

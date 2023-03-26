@@ -6,7 +6,6 @@ from django.core.mail import send_mail
 from django.db.models import QuerySet
 from django.http import Http404, HttpRequest, HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
@@ -60,9 +59,3 @@ class UserFeedbacks(LoginRequiredMixin, ListView):
             .prefetch_related('files')
             .only('text', 'created_on', 'status')
         )
-
-
-class ThanksForFeedback(LoginRequiredMixin, TemplateView):
-    """спасибо тебе за фидбек!"""
-
-    template_name = 'feedback/thanks.html'

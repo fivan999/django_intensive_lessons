@@ -4,21 +4,25 @@ import catalog.models
 
 from django.contrib.auth.models import AbstractBaseUser
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.views import View
+from django.views.generic import ListView
 
 
-def home(request: HttpRequest) -> HttpResponse:
+class HomeItemListView(ListView):
     """возвращаем главную страницу"""
-    items = catalog.models.Item.objects.get_items_on_main().order_by('name')
-    context = {'items': items}
-    return render(request, 'home/homepage.html', context=context)
+    queryset = catalog.models.Item.objects.get_items_on_main().order_by('name')
+    template_name = 'home/homepage.html'
+    context_object_name = 'items'
 
 
-def coffee(request: HttpRequest) -> HttpResponse:
+class CoffeeView(View):
     """возвращаем 418"""
-    if isinstance(request.user, AbstractBaseUser):
-        request.user.profile.coffee_count += 1
-        request.user.profile.save()
-    return HttpResponse(
-        '<body><h1>Я чайник</h1><body>', status=HTTPStatus.IM_A_TEAPOT
-    )
+    def get(self, request: HttpRequest) -> HttpResponse:
+        """По запросу get увеличивает кол-во выпитого кофе
+        на 1 у авторизованного пользователя"""
+        if isinstance(request.user, AbstractBaseUser):
+            request.user.profile.coffee_count += 1
+            request.user.profile.save()
+        return HttpResponse(
+            '<body><h1>Я чайник</h1><body>', status=HTTPStatus.IM_A_TEAPOT
+        )
