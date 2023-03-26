@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load widget_tweaks %}
 
 {% block title %}Товар {{ item_pk }}{% endblock title %}
 
@@ -44,9 +45,31 @@
             <span class="badge rounded-pill text-bg-primary">{{ tag.name }}</span>
           {% endfor %}
         </p>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-          <a class="btn btn-primary btn-lg px-4 me-md-2">Купить</a>
-        </div>
+        <div>
+          {% if number %}
+              <p class="lead">Средняя оценка товара: {{ average }}</p>
+              <p class="lead">Количество оценок: {{ number }}</p>
+          {% endif %}
+          {% if user.is_authenticated %}
+                  <form method="POST">
+                      {% csrf_token %}
+                      <div class="row align-items-start">
+                        <div class="col">
+                          <button type="submit" class="btn btn-primary">Оценить</button>
+                        </div>
+                        <div class="col">
+                          {% render_field form.grade class="form-select" %}
+                        </div>
+                      </div>
+                  </form>
+                  {% if grade %}
+                  <p class="lead">Ваша оценка: {{ grade.first }}</p>
+                  {% endif %}
+          {% endif %}
+          <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <a class="btn btn-primary btn-lg px-4 me-md-2">Купить</a>
+          </div>
+       </div>
       </div>
     </div>
   </div>

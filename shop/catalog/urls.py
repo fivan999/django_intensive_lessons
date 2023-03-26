@@ -1,6 +1,6 @@
-from catalog import converters, views
-
 from django.urls import path, re_path, register_converter
+
+from catalog import converters, views
 
 
 register_converter(converters.GraderZeroIntConverter, 'grader_zero_int')
@@ -9,7 +9,8 @@ app_name = 'catalog'
 
 urlpatterns = [
     path('', views.item_list, name='item_list'),
-    path('<int:item_num>/', views.item_detail, name='item_detail'),
+    re_path(r'(?P<pk>[1-9]\d*)/$', views.ItemDetailView.as_view(),
+            name='item_detail'),
     path('new/', views.new_items, name='new_items'),
     path(
         'friday/', views.friday_updatet_items, name='updated_at_friday_items'
