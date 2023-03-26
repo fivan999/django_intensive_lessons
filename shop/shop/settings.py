@@ -78,7 +78,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'catalog.middleware.ReverseRussianMiddleware',
+    'catalog.middleware.ReverseRussianMiddleware'
 ]
 
 REVERSE_RUSSIAN_WORDS = os.environ.get(
@@ -106,6 +106,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'users.context_processors.users_with_birthdays',
             ],
         },
     },
