@@ -1,16 +1,20 @@
-from http import HTTPStatus
 from typing import Union
 
 from django.conf import settings
-from django.http import FileResponse, HttpRequest, HttpResponse
+from django.http import FileResponse, Http404, HttpRequest, HttpResponse
+from django.views import View
 
 
-def download_image(
-    request: HttpRequest, file_name: str
-) -> Union[FileResponse, HttpResponse]:
+class DownloadImageView(View):
     """скачиваем картинку"""
-    file_name = str(settings.BASE_DIR) + file_name
-    try:
-        return FileResponse(open(file_name, 'rb'), as_attachment=True)
-    except Exception:
-        return HttpResponse(status=HTTPStatus.NOT_FOUND)
+    def get(
+            self,
+            request: HttpRequest,
+            file_name: str
+    ) -> Union[FileResponse, HttpResponse]:
+        """По запросу get возвращаем файл или ошибку 404"""
+        file_name = str(settings.BASE_DIR) + file_name
+        try:
+            return FileResponse(open(file_name, 'rb'), as_attachment=True)
+        except Exception:
+            return Http404

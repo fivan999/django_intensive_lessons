@@ -34,7 +34,7 @@ class ItemManager(django.db.models.Manager):
             created_at__gte=(
                 datetime.datetime.now() - datetime.timedelta(days=7)
             ),
-            id__in=random.sample(list(item_ids), 5),
+            id__in=random.sample(list(item_ids), min(5, len(list(item_ids)))),
         )
 
     def get_friday_updated_items(self) -> django.db.models.QuerySet:
