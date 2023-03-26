@@ -1,14 +1,15 @@
+import catalog.managers
+import catalog.validators
+
+from ckeditor.fields import RichTextField
+
+import core.models
+
 import django.core.validators
 import django.db.models
 from django.conf import settings
 from django.urls import reverse
 from django.utils.html import mark_safe
-
-from ckeditor.fields import RichTextField
-
-import catalog.managers
-import catalog.validators
-import core.models
 
 
 class Tag(

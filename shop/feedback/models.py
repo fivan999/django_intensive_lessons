@@ -13,7 +13,7 @@ def generate_file_path(obj: django.db.models.Model, filename: str) -> str:
     filename = (
         filename[: filename.rfind('.')]
         + secrets.token_hex(6)
-        + filename[filename.rfind('.') :]
+        + filename[filename.rfind('.'):]
     )
     return f'uploads/feedbacks/{obj.feedback.pk}/{filename}'
 

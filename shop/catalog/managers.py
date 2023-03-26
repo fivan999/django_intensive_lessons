@@ -1,9 +1,9 @@
 import datetime
 import random
 
-import django.db.models
-
 import catalog.models
+
+import django.db.models
 
 
 class ItemManager(django.db.models.Manager):

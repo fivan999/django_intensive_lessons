@@ -1,3 +1,6 @@
+from catalog.models import Category, Item, Tag
+from catalog.validators import ValidateMustContain
+
 import django.urls
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -5,9 +8,6 @@ from django.forms.models import model_to_dict
 from django.test import Client, TestCase
 
 from parameterized import parameterized
-
-from catalog.models import Category, Item, Tag
-from catalog.validators import ValidateMustContain
 
 
 class ModelsTests(TestCase):

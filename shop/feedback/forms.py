@@ -2,8 +2,9 @@ import django.forms
 from django.core.exceptions import ValidationError
 from django.utils.datastructures import MultiValueDict
 
-import users.models
 from feedback.models import Feedback, FeedbackFile
+
+import users.models
 
 
 class FeedbackForm(django.forms.Form):

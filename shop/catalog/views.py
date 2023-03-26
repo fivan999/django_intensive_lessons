@@ -1,7 +1,7 @@
+import catalog.models
+
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
-
-import catalog.models
 
 
 def item_list(request: HttpRequest) -> HttpResponse:

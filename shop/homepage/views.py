@@ -1,10 +1,10 @@
 from http import HTTPStatus
 
+import catalog.models
+
 from django.contrib.auth.models import AbstractBaseUser
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-
-import catalog.models
 
 
 def home(request: HttpRequest) -> HttpResponse:

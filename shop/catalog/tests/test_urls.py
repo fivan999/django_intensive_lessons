@@ -1,10 +1,10 @@
 from typing import Any
 
+from catalog.middleware import ReverseRussianMiddleware
+
 from django.test import Client, TestCase, override_settings
 
 from parameterized import parameterized
-
-from catalog.middleware import ReverseRussianMiddleware
 
 
 class StaticUrlTests(TestCase):

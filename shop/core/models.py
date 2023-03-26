@@ -6,6 +6,7 @@ import django.db.models
 from django.core.exceptions import ValidationError
 
 from sorl.thumbnail import get_thumbnail
+
 from transliterate import translit
 
 
@@ -15,7 +16,7 @@ def generate_image_path(obj: django.db.models.Model, filename: str) -> str:
     filename = (
         filename[: filename.rfind('.')]
         + secrets.token_hex(6)
-        + filename[filename.rfind('.') :]
+        + filename[filename.rfind('.'):]
     )
     return f'catalog/{obj.item.pk}/{filename}'
 
