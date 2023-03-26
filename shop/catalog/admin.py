@@ -2,14 +2,23 @@ import catalog.models
 
 import django.contrib.admin
 
+import rating.models
+
 
 class ImageToItemAdmin(django.contrib.admin.TabularInline):
+    """отображение главной картинки в админке"""
     model = catalog.models.ImageToItem
 
 
 class GaleryToItemAdmin(django.contrib.admin.TabularInline):
+    """отображение галереи в админке"""
     model = catalog.models.GaleryToItem
     extra = 1
+
+
+class RatingInline(django.contrib.admin.TabularInline):
+    """отображение модели рейтинга в админке"""
+    model = rating.models.Rating
 
 
 @django.contrib.admin.register(catalog.models.Item)
@@ -24,6 +33,7 @@ class ItemAdmin(django.contrib.admin.ModelAdmin):
     inlines = (
         ImageToItemAdmin,
         GaleryToItemAdmin,
+        RatingInline,
     )
     list_editable = ('is_published',)
     list_display_links = ('name',)

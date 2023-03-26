@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'download.apps.DownloadConfig',
     'feedback.apps.FeedbackConfig',
     'users.apps.UsersConfig',
+    'rating.apps.RatingConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,6 +64,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'ckeditor',
     'ckeditor_uploader',
+    'widget_tweaks',
 ]
 
 if DEBUG:

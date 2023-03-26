@@ -8,3 +8,4 @@ django-cleanup==7.0.0
 sorl-thumbnail==12.9.0
 django-ckeditor==6.5.1
 transliterate==1.10.2
+django-widget-tweaks==1.4.12
