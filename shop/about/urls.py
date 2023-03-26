@@ -5,8 +5,7 @@ from django.views.generic import TemplateView
 app_name = 'about'
 
 urlpatterns = [
-    path
-    (
+    path(
         '',
         TemplateView.as_view(template_name='about/about.html'),
         name='about'

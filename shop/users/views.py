@@ -63,8 +63,9 @@ class SignupView(FormView):
 
 class ActivateUserView(View):
     """Активирует аккаунт пользователя"""
-    def get(self, request: HttpRequest, uidb64: str, token: str
-            ) -> HttpResponse:
+    def get(
+        self, request: HttpRequest, uidb64: str, token: str
+    ) -> HttpResponse:
         """активация аккаунта пользователя"""
         try:
             user = users.models.ShopUser.objects.get(
