@@ -47,24 +47,18 @@
         </p>
         <div>
           {% if number %}
-              <p class="lead">Средняя оценка товара: {{ average }}</p>
+              <p class="lead">Средняя оценка товара: {{ average|floatformat:2 }}</p>
               <p class="lead">Количество оценок: {{ number }}</p>
           {% endif %}
-          {% if user.is_authenticated %}
-                  <form method="POST">
-                      {% csrf_token %}
-                      <div class="row align-items-start">
-                        <div class="col">
-                          <button type="submit" class="btn btn-primary">Оценить</button>
-                        </div>
-                        <div class="col">
-                          {% render_field form.grade class="form-select" %}
-                        </div>
-                      </div>
-                  </form>
-                  {% if grade %}
-                  <p class="lead">Ваша оценка: {{ grade.first }}</p>
-                  {% endif %}
+          {% if request.user.is_authenticated %}
+            {% if user_grade %}
+              <p class="lead">Ваша оценка: {{ user_grade }}</p>
+            {% endif %}
+            <form method="post" enctype="multipart/form-data" class="mb-2">
+              {% csrf_token %}
+              {% include "includes/make_form.html" %}
+              <button type="submit" class="btn btn-primary">Оценить</button>
+            </form>
           {% endif %}
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <a class="btn btn-primary btn-lg px-4 me-md-2">Купить</a>

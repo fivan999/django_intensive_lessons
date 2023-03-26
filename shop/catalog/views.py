@@ -1,8 +1,8 @@
 import catalog.models
 
-from django.db.models import Avg
+from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import DetailView, ListView
@@ -22,51 +22,57 @@ class ItemListView(ListView):
 
 
 class ItemDetailView(FormMixin, DetailView):
+    """подробно товар"""
     model = catalog.models.Item
     form_model = rating.models.Rating
     template_name = 'catalog/detail.html'
     context_object_name = 'item'
     form_class = rating.forms.RatingForm
-    get_queryset = catalog.models.Item.objects.get_published_items
+    queryset = catalog.models.Item.objects.get_published_items()
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs) -> dict:
+        """дополняем контекст"""
         context = super().get_context_data(*args, **kwargs)
-        context['form'] = self.form_class(self.request.POST or None)
 
-        context['grade'] = self.form_model.objects.filter(
-            user_id=self.request.user.id,
-            item_id=self.kwargs['pk'],
-        )
-        context['number'] = self.form_model.objects.filter(
-            item_id=self.kwargs['pk'],
-        ).count()
-        context['average'] = round(self.form_model.objects.filter(
-            item_id=self.kwargs['pk'],
-        ).aggregate(
-            Avg('grade')
-        )['grade__avg'], 2)
+        sum_grades, number = 0, 0
+        item_grades = rating.models.Rating.objects.filter(
+            item_id=self.kwargs['pk']
+        ).select_related('user').only('grade', 'user__id')
+        for grade in item_grades:
+            sum_grades += grade.grade
+            number += 1
+            if self.request.user.id == grade.user.id:
+                context['user_grade'] = grade
 
+        context['number'] = number
+        if number == 0:
+            context['average'] = 0
+        else:
+            context['average'] = sum_grades / number
         return context
 
     def get_success_url(self, **kwargs):
-        if kwargs is not None:
-            return reverse_lazy(
-                'catalog:item_detail',
-                kwargs={'pk': kwargs['pk']}
-            )
-        return reverse_lazy('catalog:item_detail')
+        """
+        перенаправляем полователя после
+        успешного заполнения формы
+        """
+        return reverse_lazy(
+            'catalog:item_detail',
+            kwargs={'pk': kwargs['pk']}
+        )
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """обновляем оценку пользователя"""
         form = self.form_class(request.POST or None)
-        if form.is_valid():
+        if form.is_valid() and form.cleaned_data['grade']:
             self.form_model.objects.update_or_create(
                 user_id=request.user.id,
                 item_id=self.kwargs['pk'],
                 defaults=form.cleaned_data,
             )
-
-            return redirect(self.get_success_url(**self.kwargs))
-        return render(request, self.template_name, self.get_context_data())
+        else:
+            messages.error(self.request, 'Заполните форму правильно')
+        return redirect(self.get_success_url(**self.kwargs))
 
 
 class NewItemListView(ItemListView):

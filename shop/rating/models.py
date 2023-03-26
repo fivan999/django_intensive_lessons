@@ -1,6 +1,7 @@
+import catalog.models
+
 from django.db import models
 
-import catalog.models
 import users.models
 
 
@@ -18,20 +19,22 @@ class Rating(models.Model):
         'оценка',
         choices=Grades.choices,
         blank=True,
-        null=True,
+        help_text='Оцените товар',
+        default=5
     )
-
     user = models.ForeignKey(
         users.models.ShopUser,
         verbose_name='пользователь',
         on_delete=models.CASCADE,
         related_name='user_rating',
+        help_text='пользователь, который оставил рейтинг'
     )
     item = models.ForeignKey(
         catalog.models.Item,
         verbose_name='товар',
         on_delete=models.CASCADE,
         related_name='item_rating',
+        help_text='товар, к которому относится рейтинг',
     )
 
     class Meta:

@@ -1,19 +1,23 @@
+import catalog.models
+
 import django.contrib.admin
 
-import catalog.models
 import rating.models
 
 
 class ImageToItemAdmin(django.contrib.admin.TabularInline):
+    """отображение главной картинки в админке"""
     model = catalog.models.ImageToItem
 
 
 class GaleryToItemAdmin(django.contrib.admin.TabularInline):
+    """отображение галереи в админке"""
     model = catalog.models.GaleryToItem
     extra = 1
 
 
 class RatingInline(django.contrib.admin.TabularInline):
+    """отображение модели рейтинга в админке"""
     model = rating.models.Rating
 
 
