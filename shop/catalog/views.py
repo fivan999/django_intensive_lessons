@@ -1,15 +1,15 @@
+import catalog.models
+
 from django.db.models import Avg
-from django.urls import reverse_lazy
-from django.views.generic import DetailView
-from django.views.generic.edit import FormMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-
-import catalog.models
-import rating.forms
-import rating.models
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import DetailView, ListView
+from django.views.generic.edit import FormMixin
+
+import rating.forms
+import rating.models
 
 
 class ItemListView(ListView):
