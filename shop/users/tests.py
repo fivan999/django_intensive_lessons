@@ -4,11 +4,14 @@ from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
-import pytz
 from freezegun import freeze_time
+
 from parameterized import parameterized
 
+import pytz
+
 from users.models import ShopUser
+
 
 START_DATETIME = pytz.UTC.localize(timezone.datetime(2023, 1, 1, 0, 0, 0))
 END_DATETIME = pytz.UTC.localize(timezone.datetime(2023, 1, 1, 12, 1, 0))
@@ -66,7 +69,7 @@ class UserTests(TestCase):
         client = Client()
         client.post(reverse('users:signup'), self.register_data, follow=True)
         text = mail.outbox[0].body
-        text = text[text.find('http') :].strip('\n')
+        text = text[text.find('http'):].strip('\n')
         client.get(text)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
@@ -80,7 +83,7 @@ class UserTests(TestCase):
             )
         with freeze_time('2023-01-01 13:00:00'):
             text = mail.outbox[0].body
-            text = text[text.find('http') :].strip('\n')
+            text = text[text.find('http'):].strip('\n')
             client.get(text)
             self.assertFalse(ShopUser.objects.get(pk=1).is_active)
 
@@ -158,7 +161,7 @@ class UserTests(TestCase):
                 follow=True,
             )
         text = mail.outbox[0].body
-        text = text[text.find('http') :].strip('\n')
+        text = text[text.find('http'):].strip('\n')
         client.get(text)
         self.assertTrue(ShopUser.objects.get(pk=1).is_active)
 
@@ -179,7 +182,7 @@ class UserTests(TestCase):
                 )
         with freeze_time('2023-01-10'):
             text = mail.outbox[0].body
-            text = text[text.find('http') :].strip('\n')
+            text = text[text.find('http'):].strip('\n')
             client.get(text)
             self.assertFalse(ShopUser.objects.get(pk=1).is_active)
 

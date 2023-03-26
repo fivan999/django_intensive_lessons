@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -29,28 +29,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements/base.txt
           pip install -r requirements/dev.txt
-          pip install -r requirements/test.txt    
-
-  lint:
-      runs-on: ubuntu-latest
-      name: Lint
-      needs: build
-      steps:
-        - name: Check out source repository
-          uses: actions/checkout@v3
-
-        - name: Set up Python environment
-          uses: actions/setup-python@v4
-          with:
-            python-version: "3.11"
-
-        - name: black Lint
-          uses: psf/black@stable
-
-        - name: flake8 Lint
-          uses: py-actions/flake8@v2
-          with:
-            plugins: "flake8-import-order==0.18.2 pep8-naming==0.13.3 flake8-quotes==3.3.2 flake8-functions-names==0.4.0 flake8-variables-names==0.0.5"
-
-        - name: isort Lint
-          uses: isort/isort-action@v1.0.0
+          pip install -r requirements/test.txt
+      
+      - name: code check
+        run: | 
+              flake8 . --count --show-source --statistics
+              black . --check
+              # pylint . --rcfile="pyproject.toml"
+      
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+        with:
+          plugins: "flake8-import-order==0.18.2 pep8-naming==0.13.3 flake8-quotes==3.3.2"

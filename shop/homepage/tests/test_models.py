@@ -1,7 +1,7 @@
+from catalog.models import Item
+
 import django.urls
 from django.test import Client, TestCase
-
-from catalog.models import Item
 
 
 class ContextTests(TestCase):
