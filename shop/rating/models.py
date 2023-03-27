@@ -49,3 +49,5 @@ class Rating(models.Model):
     def get_grade(self) -> str:
         """строковое представление оценки"""
         return self.Grades(self.grade).label
+
+    get_grade.short_description = 'оценка'
