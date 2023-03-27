@@ -41,8 +41,7 @@
     </main>
     {% include "includes/footer.html" %}
     <script>
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // e.g. "America/New_York"
-      document.cookie = "django_timezone=" + timezone;
+      document.cookie = django_timezone=${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}
     </script>
   </body>
 </html>
