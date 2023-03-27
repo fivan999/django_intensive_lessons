@@ -37,10 +37,17 @@ class ItemDetailView(FormMixin, DetailView):
         sum_grades, number = 0, 0
         item_grades = rating.models.Rating.objects.filter(
             item_id=self.kwargs['pk']
-        ).select_related('user').only('grade', 'user__id')
+        ).select_related('user').only('grade', 'user__id', 'user__username')
+        if item_grades:
+            maxrating = max([grade.grade for grade in item_grades])
+            minrating = min([grade.grade for grade in item_grades])
         for grade in item_grades:
             sum_grades += grade.grade
             number += 1
+            if grade.grade == maxrating:
+                user_maxrating = grade.user.username
+            if grade.grade == minrating:
+                user_minrating = grade.user.username
             if self.request.user.id == grade.user.id:
                 context['user_grade'] = grade
 
@@ -49,6 +56,8 @@ class ItemDetailView(FormMixin, DetailView):
             context['average'] = 0
         else:
             context['average'] = sum_grades / number
+            context['user_maxrating'] = user_maxrating
+            context['user_minrating'] = user_minrating
         return context
 
     def get_success_url(self, **kwargs):

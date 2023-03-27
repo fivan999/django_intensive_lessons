@@ -48,6 +48,10 @@
           {% if number %}
               <p class="lead">Средняя оценка товара: {{ average|floatformat:2 }}</p>
               <p class="lead">Количество оценок: {{ number }}</p>
+              <p class="lead">Последний пользователь, поставивший максимальную оценку:</p>
+              <p class="lead">{{ user_maxrating }}</p>
+              <p class="lead">Последний пользователь, поставивший минимальную оценку:</p>
+              <p class="lead">{{ user_minrating }}</p>
           {% endif %}
           {% if request.user.is_authenticated %}
             {% if user_grade %}
