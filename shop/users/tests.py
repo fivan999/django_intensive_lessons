@@ -217,7 +217,7 @@ class TestContextProcessor(TestCase):
         )
         self.test_user2.set_password('password')
         self.test_profile2 = Profile.objects.create(
-            birthday=datetime.date(2006, 1, 1),
+            birthday=datetime.date.today() - datetime.timedelta(days=1),
             user=self.test_user2
         )
         super().setUp()
