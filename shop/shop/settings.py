@@ -63,8 +63,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'django_cleanup.apps.CleanupConfig',
     'ckeditor',
-    'ckeditor_uploader',
-    'widget_tweaks',
+    'ckeditor_uploader'
 ]
 
 if DEBUG:
