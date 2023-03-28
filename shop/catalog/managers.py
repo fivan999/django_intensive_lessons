@@ -25,17 +25,22 @@ class ItemManager(django.db.models.Manager):
 
     def get_new_items(self) -> django.db.models.QuerySet:
         """5 рандомных товаров, добавленных за последнюю неделю"""
-        item_ids = (
-            self.get_queryset()
-            .filter(is_published=True, category__is_published=True)
-            .values_list('id', flat=True)
-        )
-        return self.get_published_items().filter(
-            created_at__gte=(
-                datetime.datetime.now() - datetime.timedelta(days=7)
-            ),
-            id__in=random.sample(list(item_ids), min(5, len(list(item_ids)))),
-        )
+        try:
+            item_ids = (
+                self.get_queryset()
+                .filter(is_published=True, category__is_published=True)
+                .values_list('id', flat=True)
+            )
+            return self.get_published_items().filter(
+                created_at__gte=(
+                    datetime.datetime.now() - datetime.timedelta(days=7)
+                ),
+                id__in=random.sample(
+                    list(item_ids), min(5, len(list(item_ids)))
+                ),
+            ).order_by('category__name')
+        except Exception:
+            return django.db.models.QuerySet()
 
     def get_friday_updated_items(self) -> django.db.models.QuerySet:
         """товары обновленные в пятницу"""
