@@ -12,7 +12,7 @@ from transliterate import translit
 
 def generate_image_path(obj: django.db.models.Model, filename: str) -> str:
     """генерируем файловый пусть к картинке"""
-    filename = translit(filename, 'ru', reverse=True)
+    filename = translit(filename, 'ru', reversed=True)
     filename = (
         filename[: filename.rfind('.')]
         + secrets.token_hex(6)
