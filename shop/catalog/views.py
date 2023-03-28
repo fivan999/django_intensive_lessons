@@ -38,16 +38,16 @@ class ItemDetailView(FormMixin, DetailView):
         item_grades = rating.models.Rating.objects.filter(
             item_id=self.kwargs['pk']
         ).select_related('user').only('grade', 'user__id', 'user__username')
-        if item_grades:
-            maxrating = max([grade.grade for grade in item_grades])
-            minrating = min([grade.grade for grade in item_grades])
+        minrating, maxrating = 6, 0
         for grade in item_grades:
             sum_grades += grade.grade
             number += 1
-            if grade.grade == maxrating:
+            if grade.grade >= maxrating:
                 user_maxrating = grade.user.username
-            if grade.grade == minrating:
+                maxrating = grade.grade
+            if grade.grade <= minrating:
                 user_minrating = grade.user.username
+                minrating = grade.grade
             if self.request.user.id == grade.user.id:
                 context['user_grade'] = grade
 
