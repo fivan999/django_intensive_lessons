@@ -55,7 +55,7 @@ class Profile(core.models.AbstractImageModel):
         blank=True,
         verbose_name='дата рождения',
         help_text='Дата рождения пользователя',
-        null=True,
+        null=True
     )
     image = django.db.models.ImageField(
         blank=True,

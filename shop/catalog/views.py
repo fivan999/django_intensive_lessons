@@ -73,14 +73,20 @@ class ItemDetailView(FormMixin, DetailView):
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """обновляем оценку пользователя"""
         form = self.form_class(request.POST or None)
-        if form.is_valid() and form.cleaned_data['grade']:
-            self.form_model.objects.update_or_create(
-                user_id=request.user.id,
-                item_id=self.kwargs['pk'],
-                defaults=form.cleaned_data,
-            )
-        else:
-            messages.error(self.request, 'Заполните форму правильно')
+        if form.is_valid():
+            if form.cleaned_data['grade']:
+                self.form_model.objects.update_or_create(
+                    user_id=request.user.id,
+                    item_id=self.kwargs['pk'],
+                    defaults=form.cleaned_data,
+                )
+                messages.success(request, 'Товар оценён')
+            else:
+                self.form_model.objects.filter(
+                    user_id=request.user.id,
+                    item_id=self.kwargs['pk']
+                ).delete()
+                messages.success(request, 'Оценка удалена')
         return redirect(self.get_success_url(**self.kwargs))
 
 

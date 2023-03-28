@@ -18,6 +18,7 @@ def users_with_birthdays(request: HttpRequest) -> dict:
     birthday_users = ShopUser.objects.filter(
         profile__birthday__month=today_user_datetime.month,
         profile__birthday__day=today_user_datetime.day,
-        is_active=True
+        is_active=True,
+        profile__birthday__year__lte=today_user_datetime.year
     ).only('email', 'first_name')
     return {'birthday_users': birthday_users}
