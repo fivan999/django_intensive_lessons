@@ -3,6 +3,7 @@ from catalog.views import ItemListView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Prefetch, Q, QuerySet
+from django.http import HttpRequest
 from django.shortcuts import render
 from django.views.generic import View
 
@@ -29,11 +30,11 @@ class ListOfRatedUserItems(LoginRequiredMixin, ItemListView):
 
 class UserRatedStatistics(LoginRequiredMixin, View):
     """статистика пользователя по оценкам"""
+    template_name = 'statistic/user_statistics.html'
 
-    def get(self, request) -> dict:
+    def get(self, request: HttpRequest) -> dict:
         """метод get"""
         context = {}
-
         sum_grades = 0
 
         user_grades = Rating.objects.filter(
@@ -76,5 +77,4 @@ class UserRatedStatistics(LoginRequiredMixin, View):
             context['max_rating'] = max_rating
             context['min_rating'] = min_rating
 
-        template_name = 'statistic/user_statistics.html'
-        return render(request, template_name, context=context)
+        return render(request, self.template_name, context=context)

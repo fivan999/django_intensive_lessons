@@ -38,6 +38,7 @@
             {% endif %}
             <a class="dropdown-item" href="{% url 'statistic:user_rated_items' %}">{% translate "Оцененные товары" %}</a>
             <a class="dropdown-item" href="{% url 'feedback:user_feedbacks' user_id=request.user.id %}">{% translate "Мои фидбеки" %}</a>
+            <a class="dropdown-item" href="{% url 'statistic:user_statistics' %}">{% translate "Статистика" %}</a>
             <li><hr class="dropdown-divider" /></li>
             <a class="dropdown-item" href="{% url 'users:password_reset' %}">{% translate "Восстановить пароль" %}</a>
             <a class="dropdown-item" href="{% url 'users:password_change' %}">{% translate "Сменить пароль" %}</a>

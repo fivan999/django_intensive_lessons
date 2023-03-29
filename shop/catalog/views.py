@@ -92,9 +92,7 @@ class ItemDetailView(FormMixin, DetailView):
 
 class NewItemListView(ItemListView):
     """страница с товарами, добавленными за последнюю неделю"""
-    queryset = catalog.models.Item.objects.get_new_items().order_by(
-        'category__name'
-    )
+    queryset = catalog.models.Item.objects.get_new_items()
 
 
 class FridayUpdatetItemListView(ItemListView):

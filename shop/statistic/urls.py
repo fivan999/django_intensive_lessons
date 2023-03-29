@@ -14,6 +14,6 @@ urlpatterns = [
     path(
         'user/',
         views.UserRatedStatistics.as_view(),
-        name='user_rated_statistics'
+        name='user_statistics'
     ),
 ]
