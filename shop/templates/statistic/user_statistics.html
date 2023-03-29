@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Оцененные товары{% endblock title %}
+
+{% block content %}
+  <div class="container col-xxl-8">
+    {% if count_user_grades %}
+      <h3 class="fw-bold lh-1">
+        Количество оценок: {{ count_user_grades }}
+      </h3>
+      <h3 class="fw-bold lh-1">
+        Средняя оценка: {{ average|floatformat:2 }}
+      </h3>
+      <div class="row row-cols-2 mt-4">
+        <div class="col">
+          <h5 class="fw-bold">Наибольшая последняя оценка: {{ max_rating }}</h5>
+          {% include "includes/item_card.html" with item=item_card_max_rating %}
+        </div>
+        <div class="col">
+          <h5 class="fw-bold">Наименьшая последняя оценка: {{ min_rating }}</h5>
+          {% include "includes/item_card.html" with item=item_card_min_rating %}
+        </div>
+      </div>
+    {% else %}
+      {% include "includes/empty.html" %}
+    {% endif %}
+  </div>
+{% endblock content %}

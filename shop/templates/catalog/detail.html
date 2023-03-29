@@ -26,12 +26,12 @@
             {% endfor %}
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Предыдущий</span>
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Предыдущий</span>
           </button>
           <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Следующий</span>
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Следующий</span>
           </button>
         </div>
     </div>
@@ -46,12 +46,12 @@
         </p>
         <div>
           {% if number %}
-              <p class="lead">Средняя оценка товара: {{ average|floatformat:2 }}</p>
-              <p class="lead">Количество оценок: {{ number }}</p>
-              <p class="lead">Последний пользователь, поставивший максимальную оценку:
-              <span class="badge badge-pill text-bg-secondary">{{ user_maxrating }}</span></p>
-              <p class="lead">Последний пользователь, поставивший минимальную оценку:
-              <span class="badge badge-pill text-bg-secondary">{{ user_minrating }}</span></p>
+            <p class="lead">Средняя оценка товара: {{ average|floatformat:2 }}</p>
+            <p class="lead">Количество оценок: {{ number }}</p>
+            <p class="lead">Последний пользователь, поставивший максимальную оценку:
+            <span class="badge badge-pill text-bg-secondary">{{ user_maxrating }}</span></p>
+            <p class="lead">Последний пользователь, поставивший минимальную оценку:
+            <span class="badge badge-pill text-bg-secondary">{{ user_minrating }}</span></p>
           {% endif %}
           {% if request.user.is_authenticated %}
             {% if user_grade %}
