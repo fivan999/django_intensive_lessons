@@ -31,7 +31,7 @@ class UserRatedStatistics(LoginRequiredMixin, View):
     """статистика пользователя по оценкам"""
 
     def get(self, request) -> dict:
-        """дополняем контекст"""
+        """метод get"""
         context = {}
 
         sum_grades = 0
