@@ -1,6 +1,8 @@
-# django_intensive_lessons
+# Магазин
 [![Python package](https://github.com/fivan999/django_intensive_lessons/actions/workflows/python-package.yml/badge.svg?branch=main)](https://github.com/fivan999/django_intensive_lessons/actions/workflows/python-package.yml)
 [![Django CI](https://github.com/fivan999/django_intensive_lessons/actions/workflows/django.yml/badge.svg)](https://github.com/fivan999/django_intensive_lessons/actions/workflows/django.yml)
+## Суть проекта
+Проект представляет из себя мини-интернет магазин с товарами, категориями товаров и их тегами. Также есть пользователи, которые могут просматривать и оценивать эти товары.
 ## Установка и запуск
 
 ### Клонировать репозиторий
