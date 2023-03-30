@@ -25,21 +25,29 @@ from users.models import ShopUser
 class FormsTest(TestCase):
     """тестируем формы"""
 
-    fixtures = [
-        'fixtures/tests/feedback_tests.json',
-    ]
-
     feedback_form = FeedbackForm()
 
-    feedback_form_data = {'text': 'hello', 'email': 'testadmin@yandex.ru'}
+    feedback_form_data = {'text': 'hello', 'email': 'testuser2@yandex.ru'}
 
-    def tearDown(self) -> None:
-        """удаление тестовых данных"""
-        Feedback.objects.all().delete()
-        dir_name = str(settings.MEDIA_ROOT) + '/uploads/feedbacks/1'
-        if os.path.isdir(dir_name):
-            shutil.rmtree(dir_name)
-        super().tearDown()
+    def setUp(self) -> None:
+        """подготовка к тестированию, создание тестовых данных"""
+        self.test_user1 = ShopUser.objects.create(
+            email='testuser1@yandex.ru',
+            username='testuser1',
+            is_active=True,
+            is_superuser=True,
+            is_staff=True
+        )
+        self.test_user1.set_password('password')
+        self.test_user1.save()
+        self.test_user2 = ShopUser.objects.create(
+            email='testuser2@yandex.ru',
+            username='testuser2',
+            is_active=True
+        )
+        self.test_user2.set_password('password')
+        self.test_user2.save()
+        super().setUp()
 
     def test_form_not_in_feedback_context(self) -> None:
         """
@@ -52,10 +60,9 @@ class FormsTest(TestCase):
     def test_form_in_feedback_context(self) -> None:
         """тестируем передачу формы в контекст"""
         client = Client()
-        user = ShopUser.objects.get(pk=1)
         client.post(
             reverse('users:login'),
-            {'username': user.username, 'password': 'mutter77'},
+            {'username': self.test_user1.username, 'password': 'password'},
         )
         response = client.get(reverse('feedback:feedback'))
         self.assertIn('form', response.context)
@@ -83,10 +90,9 @@ class FormsTest(TestCase):
     def test_feedback_form_redirects_to_thanks(self) -> None:
         """тестируем редирект на страницу с благодарностью"""
         client = Client()
-        user = ShopUser.objects.get(id=1)
         response = client.post(
             reverse('users:login'),
-            {'username': user.username, 'password': 'mutter77'},
+            {'username': self.test_user1.username, 'password': 'password'},
         )
         response = client.post(
             reverse('feedback:feedback'), self.feedback_form_data
@@ -97,10 +103,9 @@ class FormsTest(TestCase):
         """тестируем создание фидбека"""
         start_count = Feedback.objects.count()
         client = Client()
-        user = ShopUser.objects.get(id=1)
         client.post(
             reverse('users:login'),
-            {'username': user.username, 'password': 'mutter77'},
+            {'username': self.test_user1.username, 'password': 'password'},
         )
         client.post(reverse('feedback:feedback'), self.feedback_form_data)
         end_count = Feedback.objects.count()
@@ -112,10 +117,9 @@ class FormsTest(TestCase):
         self.feedback_form_data['files'] = [
             SimpleUploadedFile('file1.txt', b'aboba'),
         ]
-        user = ShopUser.objects.get(id=1)
         client.post(
             reverse('users:login'),
-            {'username': user.username, 'password': 'mutter77'},
+            {'username': self.test_user1.username, 'password': 'password'},
         )
         client.post(reverse('feedback:feedback'), self.feedback_form_data)
         file_path = FeedbackFile.objects.get(pk=1).file.path
@@ -125,12 +129,20 @@ class FormsTest(TestCase):
     def test_admin_can_view_all_feedbacks(self, user_id: int) -> None:
         """админ может посмотреть фидбеки всех пользователей"""
         client = Client()
-        user = ShopUser.objects.get(id=1)
         client.post(
             reverse('users:login'),
-            {'username': user.username, 'password': 'mutter77'},
+            {'username': self.test_user1.username, 'password': 'password'},
         )
         response = client.get(
             reverse('feedback:user_feedbacks', kwargs={'user_id': user_id})
         )
         self.assertEqual(response.status_code, 200)
+
+    def tearDown(self) -> None:
+        """удаление тестовых данных"""
+        ShopUser.objects.all().delete()
+        Feedback.objects.all().delete()
+        dir_name = str(settings.MEDIA_ROOT) + '/uploads/feedbacks/1'
+        if os.path.isdir(dir_name):
+            shutil.rmtree(dir_name)
+        super().tearDown()

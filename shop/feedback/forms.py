@@ -33,11 +33,11 @@ class FeedbackForm(django.forms.Form):
 
     def clean_email(self) -> None:
         """валидируем email"""
-        if not users.models.ShopUser.objects.filter(
+        if users.models.ShopUser.objects.filter(
             email=self.cleaned_data['email']
         ).exists():
-            raise ValidationError('Пользователя с таким email не существует')
-        return self.cleaned_data['email']
+            return self.cleaned_data['email']
+        raise ValidationError('Пользователя с таким email не существует')
 
     def save(self, files: MultiValueDict) -> None:
         """сохраняем форму"""

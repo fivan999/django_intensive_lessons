@@ -8,6 +8,7 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
+from django.shortcuts import redirect, render
 
 from feedback.forms import FeedbackForm
 from feedback.models import Feedback
@@ -20,17 +21,20 @@ class FeedbackView(LoginRequiredMixin, FormView):
     success_url = reverse_lazy('feedback:thanks')
     form_class = FeedbackForm
 
-    def form_valid(self, form: FeedbackForm) -> HttpResponse:
-        """отправляем сообщение если форма валидная"""
-        send_mail(
-            'Feedback',
-            form.cleaned_data['text'],
-            settings.EMAIL,
-            [form.cleaned_data['email']],
-            fail_silently=False,
-        )
-        form.save(self.request.FILES)
-        return super().form_valid(form)
+    def post(self, request: HttpRequest) -> HttpResponse:
+        """обрабатываем форму"""
+        form = self.form_class(request.POST or None)
+        if form.is_valid():
+            send_mail(
+                'Feedback',
+                form.cleaned_data['text'],
+                settings.EMAIL,
+                [form.cleaned_data['email']],
+                fail_silently=False,
+            )
+            form.save(request.FILES)
+            return redirect(self.success_url)
+        return render(request, self.template_name, {'form': form})
 
 
 class UserFeedbacks(LoginRequiredMixin, ListView):
