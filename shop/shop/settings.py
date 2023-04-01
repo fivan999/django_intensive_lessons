@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'rating.apps.RatingConfig',
     'statistic.apps.StatisticConfig',
+    'basket.apps.BasketConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

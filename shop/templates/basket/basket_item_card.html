@@ -1,0 +1,5 @@
+{% extends "includes/item_card.html" %}
+
+{% block item_href %}
+  <a href="{% url 'basket:item_detail' item.id %}" class="btn btn-primary">Смотреть</a>
+{% endblock item_href %}

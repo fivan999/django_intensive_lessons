@@ -13,6 +13,7 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('feedback/', include('feedback.urls')),
     path('statistic/', include('statistic.urls')),
+    path('basket/', include('basket.urls')),
     path('auth/', include('users.urls')),
     path('auth/', include('django.contrib.auth.urls')),
 ]

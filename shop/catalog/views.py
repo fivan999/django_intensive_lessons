@@ -1,3 +1,5 @@
+from basket.models import Basket
+
 import catalog.models
 
 from django.contrib import messages
@@ -50,6 +52,11 @@ class ItemDetailView(FormMixin, DetailView):
                 minrating = grade.grade
             if self.request.user.id == grade.user.id:
                 context['user_grade'] = grade
+
+        if self.request.user.is_authenticated:
+            context['in_basket'] = Basket.objects.filter(
+                user__pk=self.request.user.id, item__pk=self.object.id
+            ).exists()
 
         context['number'] = number
         if number == 0:

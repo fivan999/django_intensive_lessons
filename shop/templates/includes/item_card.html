@@ -9,6 +9,8 @@
       <span class="badge rounded-pill text-bg-primary">{{ tag.name }}</span>
       {% endfor %}
     </p>
-    <a href="{% url 'catalog:item_detail' item.id %}" class="btn btn-primary">Смотреть</a>
+    {% block item_href %}
+      <a href="{% url 'catalog:item_detail' item.id %}" class="btn btn-primary">Смотреть</a>
+    {% endblock item_href %}
   </div>
 </div>

@@ -63,9 +63,17 @@
               <button type="submit" class="btn btn-primary">Оценить</button>
             </form>
           {% endif %}
-          <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <a class="btn btn-primary btn-lg px-4 me-md-2">Купить</a>
-          </div>
+          {% if request.user.is_authenticated %}
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+              <a class="btn btn-primary btn-lg px-4 me-md-2">Купить</a>
+              {% if in_basket %}
+                <a class="btn btn-primary btn-lg px-4 me-md-2" href="{% url 'basket:delete' pk=item.id %}">Удалить из корзины</a>
+              {% else %}
+                <a class="btn btn-primary btn-lg px-4 me-md-2" href="{% url 'basket:add' pk=item.id %}">Добавить в корзину</a>
+              {% endif %}
+            </div>
+          {% endif %}
        </div>
       </div>
     </div>

@@ -92,6 +92,11 @@ class Item(core.models.AbstractNameTextModel):
         verbose_name='дата изменения',
         help_text='Дата изменения товара',
     )
+    price = django.db.models.PositiveIntegerField(
+        verbose_name='цена',
+        help_text='Цена товара',
+        default=1000
+    )
 
     class Meta:
         verbose_name = 'товар'
